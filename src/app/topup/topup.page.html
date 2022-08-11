@@ -1,0 +1,306 @@
+<ion-header style=" background:#000000;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px ; color: #ffffff;">
+
+    <ion-icon (click)="index == 0 ? back() : previousStep()" style="font-size: 24px" slot="start"
+      name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 18px; font-weight: 600;">Top Up</div>
+    <ion-icon (click)="goprofile()" style="font-size: 25px;" name="menu-outline"></ion-icon>
+
+  </div>
+
+</ion-header>
+
+<ion-slides (ionSlideWillChange)="slideChanged($event)" #slides pager="false" [options]="slideOpts"
+  style="width: 100%; height: calc(100vh - 55px);">
+
+  <!-- SINEGR -->
+  <ion-slide style="width: 100%;">
+    <ion-content style="--background:#000000">
+
+      <div style="width: 100%; height: 100%; flex-direction: column; justify-content: center; padding: 20px 10px;">
+
+
+
+        <div style="color:#888888; font-weight: 500;font-size: 12px; margin-bottom: 10px;">Credit Balance</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+
+          <div>
+
+            <div style="color:#ffffff; font-weight: 550;font-size: 35px;">${{ (currentUser.amount / 100 || 0) | number :
+              '.2'
+              }}
+            </div>
+          </div>
+
+          <div>
+
+            <div style="background-color: #F0B900; padding: 5px 25px; border-radius: 20px; font-weight: 600;">{{today |
+              date
+              : 'dd.MM.yyyy' }}
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          style="width: 100%; display: flex;  justify-content: center;align-items: center;flex-direction: column; margin-bottom: 20px;">
+
+          <!-- <ion-toggle style="margin-bottom: 20px; background: #333333; border-radius: 20px;" slot="start" name="blackberry"
+            color="warning" checked></ion-toggle> -->
+          <div
+            style="background: #333333;border-radius: 20px; font-weight: 600; display: flex; background:  #F0B900; padding: 10px 50px;">
+
+            USDT
+
+            <!-- <div (click)=" select = 'USDT'" [ngClass]=" select == 'USDT' ? 'selected' : 'selectedx' " style=" width: 50%; height: 40px; border-radius: 10px; display: flex;
+               justify-content: center;align-items: center;">USDT</div> -->
+
+            <!-- <div (click)=" select = 'MYR'" [ngClass]=" select == 'MYR' ? 'selected' : 'selectedx' "
+              style=" width: 50%; height: 40px; display: flex;border-radius: 10px; justify-content: center;align-items: center;">
+              MYR</div> -->
+
+          </div>
+
+          <div *ngIf="select != 'USDT'" style="color: #888888; margin-top: 20px;">{{ select }} $1 = {{ returnRate() |
+            number }}</div>
+
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; padding-left: 20px;">
+
+          <div *ngFor="let x of data" (click)="nextStep(x.cash)"
+            style="position: relative; width: calc(((100vw - 60px) / 2)); justify-content: space-between; max-width: 175px; height: 93px; margin-bottom: 15px; background: url('/assets/icon/vector 2.png'); background-repeat: no-repeat;">
+
+            <div style="display: flex; align-items: center; padding: 10px 10px 0 10px;">
+              <div style="font-size: 12px; margin-right: 10px; font-weight: 550;"> TOP UP </div>
+              <div style=" color: black; font-size: 20px; font-weight: 600;">
+                ${{x.cash | number : '1.0-1' }}</div>
+            </div>
+
+            <img style="position: absolute; right: 30px; top: 35px;" src="/assets/icon/Coin.png" alt="">
+
+            <div style="background: #7f6b27; border-radius: 20px;font-size: 12px; width: 45px; color: #FFFFFF; display: flex; align-items: center;justify-content: center;
+            height: 18px; position:absolute ; left: 5px; bottom: 2px;">{{ select }}</div>
+            <!-- 
+            <div style="background: rgba(0, 0, 0, 0.5); border-radius: 20px;font-size: 12px; width: 45px; color: #FFFFFF; display: flex; align-items: center;justify-content: center;
+                  height: 18px; position:absolute ; left: 17px; bottom: 2px;">{{ select }}</div>
+
+            <div style=" color: #000000; position: absolute; top: 10px;left: 20px; font-size: 13px">Top up</div>
+
+            <div style=" color: black; position: absolute; top: 5px; right: 25px; font-size: 25px; font-weight: 600;">
+              $ {{x.cash | number : '1.0-1' }}</div>
+
+            <img style="position: absolute; left: 65px; top: 35px;" src="/assets/icon/Coin.png" alt=""> -->
+
+          </div>
+
+
+
+          <div (click)="nextStep(null)"
+            style="position: relative; width: calc(((100vw - 40px) / 2)); justify-content: center; display: flex; align-items: center; max-width: 175px; height: 93px; margin-bottom: 15px; background: url('/assets/icon/Blackter.png'); background-repeat: no-repeat;">
+
+            <div
+              style="display: flex; align-items: center; padding: 10px 10px 0 10px; position: absolute; top: 3px; left: 3px;">
+              <div style="font-size: 12px; margin-right: 10px; font-weight: 550; color: white;"> TOP UP </div>
+              <!-- <div style=" color: black; font-size: 20px; font-weight: 600;">
+                ${{x.cash | number : '1.0-1' }}</div> -->
+            </div>
+
+            <div style="color: #F0B900; font-size: 14px; font-weight: 600; position: absolute; margin-right: 20px;">
+              Custom Amount </div>
+
+
+            <div style="background: #7f6b27; border-radius: 20px;font-size: 12px; width: 45px; color: #FFFFFF; display: flex; align-items: center;justify-content: center;
+            height: 18px; position:absolute ; left: 5px; bottom: 2px;">{{ select }}</div>
+
+            <!-- 
+            <div style="background: rgba(0, 0, 0, 0.5); border-radius: 20px;font-size: 12px; width: 45px; color: #FFFFFF; display: flex; align-items: center;justify-content: center;
+                  height: 18px; position:absolute ; left: 17px; bottom: 2px;">{{ select }}</div>
+
+            <div style=" color: #000000; position: absolute; top: 10px;left: 20px; font-size: 13px">Top up</div>
+
+            <div style=" color: black; position: absolute; top: 5px; right: 25px; font-size: 25px; font-weight: 600;">
+              $ {{x.cash | number : '1.0-1' }}</div>
+
+            <img style="position: absolute; left: 65px; top: 35px;" src="/assets/icon/Coin.png" alt=""> -->
+
+          </div>
+
+          <!-- <div style="position: relative; width: calc(( 100%/2) - 20); height: 93px; margin-bottom: 15px;"
+            (click)="nextStep(null)">
+
+            <img style="width: 153px; height: 93px; " src="/assets/icon/Blackter.png" alt="">
+
+            <div style=" color: #ffffff; position: absolute; top: 10px;left: 8px; font-size: 13px">Top up</div>
+
+            <div style="background: rgba(255, 190, 46, 0.3); border-radius: 20px;font-size: 12px; width: 45px; color: #FFFFFF; display: flex; align-items: center;justify-content: center;
+           height: 18px; position:absolute ; right: 105px; top: 70px;">{{ select }}</div>
+
+            <div style="position:absolute; left: 10px; top: 35px; color: #F0B900; font-weight: 700; font-size: 17px;">
+              Custom
+              Amount</div>
+
+          </div> -->
+
+
+
+
+        </div>
+
+      </div>
+    </ion-content>
+  </ion-slide>
+
+  <ion-slide style="width: 100%;">
+    <ion-content style="--background:#000000;">
+
+      <div
+        style="width: 100%; height: 100%; flex-direction: column; justify-content: center;padding: 20px; overflow-y: auto;">
+
+        <div
+          style="display: flex; width: 100%; justify-content: center;align-items: center; flex-direction: column; margin-bottom: 20px;">
+
+          <img style=" width: 60% ; max-width:450px; margin-bottom: 25px;" src="/assets/icon/topup details.png" alt="">
+
+          <div style=" display: flex; flex-direction: column;font-size: 13px; text-align: start;">
+
+            <ol style="padding: 0 14px;">
+              <li style="color: #888888; margin-bottom: 10px;">Choose the amount that you want to top up (minimum $1000)
+                or custom amount.
+              </li>
+              <li style="color: #888888; margin-bottom: 10px;">We only accept <span style="font-weight: 600"> USDT
+                </span>.</li>
+              <li style="color: #888888; margin-bottom: 10px;">Kindly transfer to the TRC20 address provided.</li>
+              <li style="color: #888888; margin-bottom: 10px;"> <span style="font-weight: 600;"> Warning: </span> No
+                refund if you transfer
+                to the wrong account.
+              </li>
+              <li style="color: #888888; margin-bottom: 10px;"> Please transfer to this USDT Account:
+                <span style="font-weight: 550; color: white;">TLg4SyAE2LUUBRtuR1YAVQyqRZKRdCA351</span> <span
+                  style="font-size: 11px; text-decoration: underline; margin-left: 3px; font-style: italic; color: #F0B900;"
+                  (click)="copy2('TLg4SyAE2LUUBRtuR1YAVQyqRZKRdCA351')">COPY </span>
+
+              </li>
+
+            </ol>
+
+
+            <!-- <div style="color: #888888;font-weight: 500; margin: 10px 0px;">
+              1) .</div>
+
+            <div style="color: #888888;font-weight: 500; margin: 10px 0px;">
+              2) </div>
+
+            <div style="color: #888888;font-weight: 500; margin: 10px 0px;">
+              3) </div>
+
+            <div style="color: #888888;font-weight: 500; margin: 10px 0px;">
+              3) </div> -->
+
+
+          </div>
+
+        </div>
+
+
+
+        <div style="width: 100%; color: #ffffff;">
+
+          <div style="margin-bottom: 10px; text-align: start;">Upload your bank transfer receipt photo*</div>
+
+          <label for="topupfiles" class="btn">
+            <div
+              style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px; border-radius: 15px; align-items: center; margin-bottom: 20px;">
+
+
+              <div style="display: flex; align-items: center;">
+                <img *ngIf="invoiceDetails['picture'] != null"
+                  style="width: 50px; height: 50px; margin-right: 5px; object-fit: cover;"
+                  [src]="invoiceDetails['picture']" alt="">
+
+                <img *ngIf="invoiceDetails['picture'] == null"
+                  style="width: 50px; height: 50px; margin-right: 5px; object-fit: cover;"
+                  [src]="'assets/icon/upload.png'" alt="">
+
+                <input style="display: none" id="topupfiles" class="inputclass" accept="image/*" type="file"
+                  (change)="uploadReceipt($event, 600)">
+                <div style="font-size: 12px">Upload photo</div>
+
+              </div>
+
+
+
+
+            </div>
+
+          </label>
+
+
+          <div style="margin: 20px 0px; text-align: start;">Top Up Amount*</div>
+
+          <div style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px;border: 3px solid rgba(162, 162, 162, 0.461);
+           border-radius: 8px; align-items: center; height: 35px;">
+            <ion-input [(ngModel)]="invoiceDetails['amount']"
+              style="font-size: 14px;margin: 5px;color: #FFFFFF; text-align: start;" class="ion-no-padding"
+              type="number" placeholder="$999999">
+            </ion-input>
+          </div>
+
+          <!-- <div style="margin: 20px 0px; text-align: start;">Currency</div>
+
+         
+
+
+          <div *ngIf="select != 'USDT'" style="margin: 20px 0px; text-align: start;">Rate</div>
+
+          <div *ngIf="select != 'USDT'" style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px;border: 3px solid rgba(162, 162, 162, 0.461);
+           border-radius: 8px; align-items: center; height: 35px;">
+
+            <div style="font-size: 14px;margin: 5px;color: #FFFFFF; text-align: start;"> {{ returnRate() }} </div>
+          </div> -->
+
+          <!-- <div style="margin: 20px 0px; text-align: start;">Total Credit</div>
+
+          <div style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px;border: 3px solid rgba(162, 162, 162, 0.461);
+           border-radius: 8px; align-items: center; height: 35px;">
+            <div style="font-size: 14px;margin: 5px;color: #FFFFFF; text-align: start;"> {{ returnRate() *
+              (invoiceDetails['amount'] || 0) }} </div>
+          </div> -->
+
+
+
+          <!-- <div style="margin: 20px 0px; text-align: start;">Remarks</div>
+
+          <div style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px;border: 3px solid rgba(162, 162, 162, 0.461);
+           border-radius: 8px; align-items: center;  margin-bottom: 40px;">
+            <ion-textarea [(ngModel)]="invoiceDetails['remark']"
+              style="font-size: 14px;margin: 5px;color: #FFFFFF; text-align: start;" rows="5" class="ion-no-padding"
+              type="text" placeholder="Remark">
+            </ion-textarea>
+          </div> -->
+
+
+
+        </div>
+
+
+
+      </div>
+    </ion-content>
+  </ion-slide>
+</ion-slides>
+
+<ion-footer *ngIf="index == 1" style=" background:#000000;">
+
+  <div style="width: 100%;display: flex; justify-content: center; padding: 20px;">
+
+    <div (click)="topUp()"
+      style="background: #F0B900; text-align: center; border-radius: 8px; width: 80%;font-weight: 700; padding: 10px 0px ;">
+      Submit</div>
+
+  </div>
+
+</ion-footer>

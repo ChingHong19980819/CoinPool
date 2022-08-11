@@ -1,0 +1,199 @@
+<ion-header style=" background:#000000;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px; color: #ffffff;">
+
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 20px; font-weight: 600;">Account Verification</div>
+    <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
+
+  </div>
+
+</ion-header>
+
+<ion-content style="--background: #000000;">
+
+
+  <div style="width: 100%; height: 100%; flex-direction: column; justify-content: center;padding: 20px;">
+
+    <div style="display: flex; align-items: center; width: 100%; justify-content: center;">
+      <img src="/assets/icon/Frame.png" alt="">
+    </div>
+
+    <div style="color: #ffffff; margin-bottom: 20px;">
+
+      <div style="font-size: 13px; margin: 20px 0px;">Enter your mobile number</div>
+
+      <div style="display:flex;width: 100%; font-size: 18px;">
+
+        <div style="border-bottom: 1px solid #F0B900; margin-right: 15px; font-size: 14px; padding-bottom: 4px;">+60
+        </div>
+        <ion-input [(ngModel)]="verification.phone" [readonly]="currentUser['status'] == 'verified'"
+          style="color: #FFFFFF;border-bottom: 1px solid #F0B900; font-size: 14px; --padding-bottom: 4px;"
+          class="ion-no-padding" type="text" placeholder="123456789"></ion-input>
+
+      </div>
+
+    </div>
+
+    <div style="color: #ffffff;">
+
+      <div style="margin-bottom: 10px; font-size: 13px;">Upload your identity card photo (front & back)</div>
+
+      <div (click)="currentUser['status'] != 'verified' ? askAction('front') : ''"
+        style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px; border-radius: 15px; align-items: center; margin-bottom: 20px;">
+
+        <!-- <div style="width: 50px; margin-right: 10px;"><img src="assets/icon/upload.png" alt=""></div>
+        <div style="font-size: 12px;">Front Photo</div> -->
+
+        <div style="display: flex; align-items: center;">
+
+          <img *ngIf="verification['front'] != null"
+            style="width: 50px; height: 50px; margin-right: 5px; object-fit: cover;" [src]="verification['front']"
+            alt="">
+
+          <img *ngIf="verification['front'] == null"
+            style="width: 50px; height: 50px; margin-right: 5px; object-fit: cover;" [src]="'assets/icon/upload.png'"
+            alt="">
+
+
+          <div style="font-size: 12px">Front Photo</div>
+
+        </div>
+
+      </div>
+
+      <input style="display: none" id="files" class="inputclass" accept="image/*" type="file"
+        (change)="uploadPhoto($event, 'front')">
+
+      <div (click)="currentUser['status'] != 'verified' ? askAction('back') : ''"
+        style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px; border-radius: 15px; align-items: center; margin-bottom: 20px;">
+
+        <div style="display: flex; align-items: center;">
+          <img *ngIf="verification['back'] != null"
+            style="width: 50px; height: 50px; margin-right: 5px; object-fit: cover;" [src]="verification['back']"
+            alt="">
+
+          <img *ngIf="verification['back'] == null"
+            style="width: 50px; height: 50px; margin-right: 5px; object-fit: cover;" [src]="'assets/icon/upload.png'"
+            alt="">
+
+
+          <div style="font-size: 12px">Back Photo</div>
+
+        </div>
+
+      </div>
+
+      <input style="display: none" id="files2" class="inputclass" accept="image/*" type="file"
+        (change)="uploadPhoto($event, 'back')">
+
+
+
+    </div>
+
+    <ion-icon style="font-size: 24px; color: transparent; height: 180px;" slot="start" name="add"></ion-icon>
+
+
+
+
+    <div style="width: 100%;display: flex; justify-content: center;">
+
+      <div *ngIf="currentUser['status'] != 'verified'" (click)="tootp()"
+        style="background: #F0B900; text-align: center; border-radius: 8px; width: 80%;font-weight: 700; padding: 10px 0px ;">
+        Send Email</div>
+
+      <div *ngIf="currentUser['status'] == 'verified'"
+        style="background: #dbc78f; text-align: center; border-radius: 8px; width: 80%;font-weight: 700; padding: 10px 0px ;">
+        Verified</div>
+
+    </div>
+
+
+    <ion-modal [isOpen]="getEmail" backdropDismiss="false" handle="false" class="modal-class" #modal
+      [initialBreakpoint]="0.45">
+      <ng-template>
+
+        <ion-content style="--background:#2E2E2E">
+
+          <div style="display: flex; justify-content: center; padding: 8px;">
+            <div style="width: 55px; height: 7px; background-color: #FFBE2E; border-radius: 4px;"> </div>
+          </div>
+
+          <div
+            style="color: #ffffff; display: flex; align-items: center;justify-items: center; flex-direction: column ;width: 100%; height: 100%;">
+
+
+
+
+            <div style="color:#FFBE2E; font-weight: 600; font-size: 22px; margin: 20px;">Email Verification</div>
+            <div style="text-align: center; width: 80%;margin-bottom: 3px; font-size: 13px;">We have sent an email
+              to your email account!</div>
+
+            <div style="text-align: center; width: 80%;margin-bottom: 10px; font-size: 13px;">Kindly check your email at
+              {{ email }}</div>
+
+
+            <div style="width: 100%; position: relative; margin-top: 15px; margin-bottom: 35px;">
+              <ion-input #inputId id="codeinput" (keypress)="numberOnlyValidation($event)" maxlength="4"
+                style="width: 100vw; text-align: center; position: absolute; opacity: 0; height: 40px; --background:red; color: #111423; "
+                [(ngModel)]="veri_code"></ion-input>
+
+              <div style="position: relative; display: flex; justify-content: center;">
+
+                <img style="width: 120px; width: 120px; object-fit: contain;" src="assets/icon/email.jpg" alt="">
+
+                <!-- <div
+                  style="position: absolute; top: 10px; display: flex; align-items: center; justify-content: center; width: 100%;">
+                  <div
+                    style="width: 100%; display: flex; align-items: center; justify-content: center; padding-left: 10px; height: 20px; color: #ffffff;">
+                    <div
+                      style=" font-size: 16px; font-weight: 550; width: calc((210px - 45px) / 4); height: calc((210px - 45px) / 4); border-radius: 100%; border: 2px solid #FFBE2E; color: black; display: flex; justify-content: center; align-items: center; background: #ffffff; margin-right: 10px;">
+                      {{ veri_code[0] }}
+                    </div>
+                    <div
+                      style="font-size: 16px; font-weight: 550; width: calc((210px - 45px) / 4); height: calc((210px - 45px) / 4); border-radius: 100%; border: 2px solid #FFBE2E; color: black; display: flex; justify-content: center; align-items: center; background: #ffffff; margin-right: 10px;">
+                      {{ veri_code[1] }}
+                    </div>
+                    <div
+                      style="font-size: 16px; font-weight: 550; width: calc((210px - 45px) / 4); height: calc((210px - 45px) / 4); border-radius: 100%; border: 2px solid #FFBE2E; color: black; display: flex; justify-content: center; align-items: center; background: #ffffff; margin-right: 10px;">
+                      {{ veri_code[2] }}
+                    </div>
+                    <div
+                      style="font-size: 16px; font-weight: 550; width: calc((210px - 45px) / 4); height: calc((210px - 45px) / 4); border-radius: 100%; border: 2px solid #FFBE2E; color: black; display: flex; justify-content: center; align-items: center; background: #ffffff; margin-right: 10px;">
+                      {{ veri_code[3] }}
+                    </div>
+                  </div>
+                </div> -->
+
+                <!-- <div
+                  style="width: 100%; z-index: 100; display: flex; align-items: center; justify-content: center; height: 40px; padding-left:10px;  color: #111423;">
+                  <div [ngStyle]="{'margin-right': i == 4? '0' : '10px'}"
+                    *ngFor="let item of veri_code.split('') , let i = index"
+                    style="width: calc((210px - 45px) / 4); text-align: center; font-size: 23px; margin-right: 10px;">
+                    {{item}}
+                  </div>
+                </div> -->
+              </div>
+
+            </div>
+
+
+            <div (click)="goHome()" class="ion-activatable ripple-parent"
+              style="background-color: #FFBE2E; padding: 10px; border-radius: 10px;">
+              <div style="font-size: 12px; color: black; font-weight: 550;"> PROCEED </div>
+              <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+            </div>
+            <!-- <div style=" margin-top: 65px;">Din't receive email? <span (click)="sendCode()"
+                style="color: #FFBE2E; font-weight: 600;">Send Email</span></div> -->
+          </div>
+
+
+
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,162 @@
+<ion-header style=" background:#000000;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px; color: #ffffff;">
+
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 18px; font-weight: 600;">My Wallets</div>
+    <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
+
+  </div>
+
+</ion-header>
+
+<ion-content style="--background:#000000;">
+
+  <div style="width: 100%; flex-direction: column; justify-content: center;padding: 20px; overflow-y: auto;">
+
+    <div
+      [ngStyle]="{'background': currentUser['amount'] < 100000 ? 'url(/assets/icon/red.png) no-repeat center center/cover' : currentUser['amount'] >= 5000000 && currentUser['amount'] < 10000000 ? 'url(/assets/icon/gold.png) no-repeat center center/cover' : currentUser['amount'] >= 100000 && currentUser['amount'] < 5000000 ? 'url(/assets/icon/silver.png) no-repeat center center/cover' : 'url(/assets/icon/platinum.png) no-repeat center center/cover'}"
+      style="width:100%; height: 210px; border-radius: 10px;display: flex; justify-content: space-between; flex-direction: column; margin-bottom: 20px; padding: 20px;">
+
+      <div style="display: flex; justify-content: space-between;width: 100%;">
+
+        <div>
+
+          <div style="display:flex; align-items: center;">
+            <ion-icon style="width: 30px;height: 30px;margin: 0px 5px 5px 0px;" name="person-circle"></ion-icon>
+            <div style="font-weight: 600;">{{currentUser['name']}}</div>
+          </div>
+
+          <div style="font-size:12px;">Member ID:{{ code }}</div>
+
+        </div>
+
+        <img style="width: 40px;height: 35px;" src="/assets/icon/coin logo.png" alt="">
+      </div>
+
+      <div
+        style="display: flex; justify-content: space-between; width: 100%; justify-self: flex-end; align-items: center;">
+
+        <div>
+          <div style="color: #895D06;">Coinpool Wallet</div>
+          <div style="font-size: 25px; font-weight: 700;">${{currentUser['amount'] / 100 | number : '.2'}}</div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <!-- platinum.png
+    silver.png -->
+
+
+    <div style="width: 100%;display: flex; justify-content: space-evenly; margin-bottom: 30px;">
+
+      <div (click)="gotopup()" style="background: #F0B900; border-radius: 25px; display: flex;justify-content: center;align-items: center; width: 123px;
+      height: 50px; font-weight: 600;  font-size: 18px">Top Up</div>
+
+      <div (click)="gowithdraw()" style="background: #F0B900; border-radius: 25px; display: flex;justify-content: center;align-items: center; width: 123px;
+      height: 50px; font-weight: 600; font-size: 18px;">Withdraw</div>
+
+    </div>
+
+    <div
+      style="display: flex;align-items: center;justify-content: space-between;padding: 20px 0px 10px 0px; color: #ffffff;">
+
+      <ion-icon style="font-size: 24px; width: 70px;color: transparent" slot="start" name="add"></ion-icon>
+
+      <div style="font-size: 20px; font-weight: 600;">History</div>
+
+      <div (click)="picker.open()" style="display: flex; color: #F0B900; ">
+        <input matInput readonly="true" [(ngModel)]="selectedDate" (dateChange)="getOrders()"
+          style="cursor: pointer; font-size: 12px; outline: none; width: 70px; background-color: transparent; border: none;  color: #F0B900;"
+          [matDatepicker]="picker" placeholder="Choose a date">
+
+        <mat-datepicker #picker></mat-datepicker>
+
+        <ion-icon name="caret-down-outline"></ion-icon>
+
+      </div>
+    </div>
+
+    <div style="background: linear-gradient(180deg, rgba(77, 63, 63, 0.896) 3.65%, rgba(70, 71, 79, 0.08) 100%);
+       width: 100%; height: 100%; border-radius: 25px;padding: 20px;">
+
+      <div *ngIf="passOrders.length == 0"
+        style="display: flex; justify-content: center; align-items: center; color: white;"> No
+        transaction yet.. </div>
+
+      <div *ngFor="let x of passOrders"
+        style="display: flex;flex-direction: column; align-items: center; margin-bottom: 20px; ">
+
+        <div style="display:flex; justify-content: space-between; width: 100%; align-items: center;">
+
+          <div style="display: flex; align-items: center;">
+
+            <img style="width: 50px; height: 50px; margin-right: 10px;" src="{{x.coinpicture}}" alt="">
+
+            <div>
+              <div style="color:#ffffff;">{{x.coinname}}</div>
+              <div style="color: #888888;">{{ selectedDate | date : 'dd.MM.yyyy' }}</div>
+            </div>
+
+
+          </div>
+
+          <div style="color: #7BFFB2;"> + $ {{x.investamount + (x.investamount *
+            (x.percentage / 100)) | number : '.2'}} USD</div>
+
+        </div>
+
+
+        <div style="display: flex; justify-content: space-between;width: 100%; align-items: center; margin: 20px 0px;">
+
+          <div style="background: #888888; width: 10px; height: 10px; border-radius: 100%; "></div>
+          <div style="width: 100%; height: 2px; background: #888888;"></div>
+          <div style="background: #888888; width: 10px; height: 10px; border-radius: 100%;"></div>
+
+        </div>
+
+
+      </div>
+
+      <div *ngFor="let x of withdraws"
+        style="display: flex;flex-direction: column; align-items: center; margin-bottom: 20px; ">
+
+        <div style="display:flex; justify-content: space-between; width: 100%; align-items: center;">
+
+          <div style="display: flex; align-items: center;">
+
+            <img style="width: 50px; height: 50px; margin-right: 10px;" src="assets/icon/withdraw.png" alt="">
+
+            <div>
+              <div style="color:#ffffff;">{{'WITHDRAW'}}</div>
+              <div style="color: #888888;">{{ selectedDate | date : 'dd.MM.yyyy' }}</div>
+            </div>
+
+
+          </div>
+
+          <div style="color: white;"> -$ {{ x.amount / 100 | number : '.2' }} USD </div>
+
+        </div>
+
+
+        <div style="display: flex; justify-content: space-between;width: 100%; align-items: center; margin: 20px 0px;">
+
+          <div style="background: #888888; width: 10px; height: 10px; border-radius: 100%; "></div>
+          <div style="width: 100%; height: 2px; background: #888888;"></div>
+          <div style="background: #888888; width: 10px; height: 10px; border-radius: 100%;"></div>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+
+  </div>
+</ion-content>

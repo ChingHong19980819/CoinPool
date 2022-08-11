@@ -1,0 +1,107 @@
+<ion-header style=" background:#000000;">
+
+  <div
+    style="display: flex;align-items: center;justify-content: space-between;padding: 20px 0px 40px 0px; color: #ffffff;padding: 20px;">
+
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 20px; font-weight: 600;">Guideline</div>
+    <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
+
+  </div>
+
+</ion-header>
+
+<ion-slides (ionSlideDidChange)="slideChanged($event)" #slides [options]="slideOpts"
+  style="width: 100%; height: calc(100vh - 55px);">
+
+  <!-- SINGER -->
+  <ion-slide style="width: 100%; background-color: #000000;">
+    <ion-content style="--background: #000000;">
+      <div style="flex-direction: column; justify-content: center; padding-bottom: 45px;">
+
+        <div style="display: flex; width: 100%; justify-content: center;align-items: center; flex-direction: column;">
+          <img style=" width: 100% ; max-width:450px; margin-bottom: 25px;" src="/assets/icon/Guideline.png" alt="">
+        </div>
+
+
+
+        <div style="color: #ffffff; width: 100%; padding: 20px; ">
+
+
+          <div (click)="playVideo(item.path)" *ngFor="let item of videos"
+            style="background: #2A2B2F;border-radius: 18px; margin-bottom: 20px;">
+            <img style="border-radius: 10px 10px 0px 0px" src="{{ item.picture }}" alt="">
+            <div style="padding: 10px 15px; color: #F0B900; text-align: start;"> {{ item.name }}</div>
+          </div>
+        </div>
+      </div>
+    </ion-content>
+  </ion-slide>
+
+  <ion-slide>
+    <ion-content style="width: 100%; --background: #000000;">
+      <div style="width: 100%; height: 100%;">
+        <video controls autoplay loop poster="assets/icon/loading.gif" id="videoPlayer"
+          style="width: 100%; height: 100%; object-fit: contain;" src="{{videoPath}}" webkit-playsinline="true"
+          playsinline="true"></video>
+      </div>
+      <!-- <div>
+        <div style="width: 100vw; display: flex; align-items: center; justify-content: center; padding: 10px;">
+          <div style="width: calc(100% - 20px); display: flex; align-items: center; padding: 10px; border-radius: 20px; background-color: #eeeeee;">
+            <ion-icon name="search" style="font-size: 20px; color: #666666; margin-right: 10px;"></ion-icon>
+            <ion-input [(ngModel)]="keyword" class="ion-no-padding" type="text" placeholder="Search..." style="width: calc(100% - 30px); font-size: 15px;"></ion-input>
+            <ion-icon *ngIf="keyword" (click)="keyword = ''" name="close" style="font-size: 20px; color: #666666; margin-left: 10px;"></ion-icon>
+          </div>
+        </div>
+        <div style="width: 100%; padding: 10px;">
+          <div *ngFor="let item of filterKeyword(filterVideos)" (click)="selectVideo(item)"
+            style="padding: 10px; margin-bottom: 15px; border-bottom: 1px solid #eeeeee; font-size: 15px; font-weight: 600; color: #525252;">
+            {{item.name}}</div>
+        </div>
+      </div> -->
+
+    </ion-content>
+  </ion-slide>
+
+
+
+</ion-slides>
+
+<!-- <ion-slides>
+  <ion-slide style="width: 100vw; height: 100vh;">
+    <ion-content style="--background:#000000;">
+      
+    </ion-content>
+  </ion-slide> -->
+
+<!-- <ion-slide style="width: 100vw; height: 100vh;">
+    <ion-content style="--background:#000000;">
+
+
+
+      <div style="flex-direction: column; justify-content: center; overflow-y: auto; padding-bottom: 45px;">
+
+        <div style="display: flex; width: 100%; justify-content: center;align-items: center; flex-direction: column;">
+          <img style=" width: 100% ; max-width:450px; margin-bottom: 25px;" src="/assets/icon/Guideline.png" alt="">
+        </div>
+
+
+
+        <div style="color: #ffffff; width: 100%; padding: 20px; ">
+
+
+          <div *ngFor="let item of videos" style="background: #2A2B2F;border-radius: 18px; margin-bottom: 20px;">
+            <img style="border-radius: 10px 10px 0px 0px" src="{{ item.picture }}" alt="">
+            <div style="padding: 10px 15px; color: #F0B900; text-align: start;"> {{ item.name }}</div>
+          </div>
+        </div>
+      </div>
+    </ion-content>
+  </ion-slide> -->
+
+<!-- <ion-slide>
+    <ion-content style="--background:#000000;">
+    </ion-content>
+  </ion-slide> -->
+
+<!-- </ion-slides> -->

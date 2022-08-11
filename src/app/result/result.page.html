@@ -1,0 +1,211 @@
+<ion-header style=" background:#000000;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px; color: #ffffff;">
+
+    <div style="font-size: 24px; width: 90px;">
+      <ion-icon (click)="back()" slot="start" name="chevron-back-outline"></ion-icon>
+    </div>
+
+
+    <div style="font-size: 18px; font-weight: 600;">Result</div>
+
+    <div (click)="picker.open()" style="display:flex; color: #F0B900;">
+
+      <input matInput readonly="true" [(ngModel)]="selectedDate" (dateChange)="getOrders()"
+        style="cursor: pointer; font-size: 12px; outline: none; width: 70px; background-color: transparent; border: none;  color: #F0B900;"
+        [matDatepicker]="picker" placeholder="Choose a date">
+
+      <mat-datepicker #picker></mat-datepicker>
+
+
+      <!-- <div style=" font-weight: 600;font-size: 15px; margin-right: 5px;">{{today | date : 'dd.MM.yyyy' }}</div> -->
+
+      <ion-icon name="caret-down-outline"></ion-icon>
+
+    </div>
+
+    <!-- <div
+            style="border: 1px solid #eeeeee00; margin-top: 10px; height: 38px; padding: 8px; width: 100%; border-radius: 5px; background-color: #292C3DAD; display: flex; align-items: center;"
+            appearance="fill" (click)="picker.open()">
+            <ion-icon style="color: #ffffff; margin-right: 3px;" name="calendar-outline"></ion-icon>
+            <input matInput readonly="true"
+              style="color: #ffffff; cursor: pointer; font-size: 12px; outline: none; background-color: transparent; border: none;"
+              [(ngModel)]="user.dob" [matDatepicker]="picker" placeholder="Choose a date">
+            <mat-datepicker #picker></mat-datepicker>
+          </div> -->
+
+
+  </div>
+
+</ion-header>
+<ion-content style="--background:black;">
+
+  <div style="width: 100%; flex-direction: column; justify-content: center;padding: 20px; overflow-y: auto;">
+
+
+
+    <div
+      [ngStyle]="{'background': currentUser['amount'] < 100000 ? 'url(/assets/icon/red.png) no-repeat center center/cover' : currentUser['amount'] >= 5000000 && currentUser['amount'] < 10000000 ? 'url(/assets/icon/gold.png) no-repeat center center/cover' : currentUser['amount'] >= 100000 && currentUser['amount'] < 5000000 ? 'url(/assets/icon/silver.png) no-repeat center center/cover' : 'url(/assets/icon/platinum.png) no-repeat center center/cover'}"
+      style="width:100%; height: 210px; border-radius: 10px;justify-content: space-between; display: flex;flex-direction: column;
+     margin-bottom: 20px; padding: 20px;">
+
+      <div style="display: flex; justify-content: space-between;width: 100%;">
+
+        <div>
+          <div style="font-weight: 700;">Welcome,</div>
+          <div style="font-weight: 600;">{{currentUser.name}}!</div>
+        </div>
+
+        <img style="width: 40px;height: 35px;" src="/assets/icon/coin logo.png" alt="">
+      </div>
+
+      <div style="display: flex; width: 100%; justify-content: center; flex-direction: column;">
+
+        <div style="margin-bottom: 15px;">
+          <div style="color: #895D06;">Available Balance</div>
+          <div style="font-size: 25px; font-weight: 700;">${{(currentUser.amount / 100 || 0) | number : '.2'}}</div>
+        </div>
+
+        <div>
+          <div style="color: #895D06;">Today Profit</div>
+          <div style="font-size: 25px; font-weight: 700;">${{ (earnedAmount || 0)| number : '.2'}}</div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <div>
+
+      <div
+        style="display: flex;align-items: center;justify-content: space-between; padding: 20px 0px 0 0px; color: #ffffff;">
+
+        <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
+
+        <div style="font-size: 18px; font-weight: 600;">Watchlist</div>
+
+        <ion-icon (click)="shareLink()" style="font-size: 23px;" name="share-social-outline"></ion-icon>
+
+      </div>
+
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: flex-end; margin-top: 10px; margin-bottom: 10px;">
+      <div style="color: white; font-size: 14px; margin-right: 5px; font-weight: 550;"> Show Result </div>
+
+      <ion-toggle (ionChange)="updateShow($event)" style="--background	: white; height: 20px; width: 40px;"
+        color="warning" [(ngModel)]="show">
+      </ion-toggle>
+    </div>
+
+
+
+    <div
+      style="display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; border-radius: 25px;">
+
+      <div (click)="goDetails(x['coinid'])" *ngFor="let x of passOrders; let i = index"
+        style="width: 100%; margin-bottom: 20px; border: 1px solid #888888;
+      background: linear-gradient(180deg, rgba(160, 160, 148, 0.31) 0%, rgba(20, 21, 26, 0.31) 55.73%); border-radius: 15px;">
+
+        <div style="display:flex; width: 100%; height: 100%; align-items: center;">
+
+          <img style="width: 35px; height: 35px; object-fit: cover;margin: 10px;" src="{{x.coinpicture}}" alt="">
+
+          <div
+            style="width: 100%; margin-left: 10px; display: flex; align-items: center; justify-content: space-between;">
+
+            <div style="width: 100%; display: flex; align-items: center; justify-content: space-between;">
+              <div
+                style="margin-right: 10px; display:flex; align-items: flex-start;flex-direction: column; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                <div style="color:#ffffff;font-size: 16px;">${{x.investamount / 100 || 0 | number : '.2'}}</div>
+
+                <div style="color:#ffffff;font-size: 16px;">{{x.coinname}}</div>
+              </div>
+
+
+              <div
+                style="margin-right: 10px; display:flex; align-items: center; justify-content: center; flex-direction: column;">
+                <div style="color: #7BFFB2;font-size: 16px;">${{(x.investamount * (x.percentage / 100)) / 100 | number :
+                  '.2'}}
+                </div>
+                <div *ngIf="x.percentage >= 0"
+                  style="color: #7BFFB2;font-size: 11px; display: flex; align-items: center;">
+                  <img style="height: 5px; width: 5px; object-fit: cover; margin-right: 4px;" src="assets/icon/up.png"
+                    alt="">
+                  <div> {{x.percentage | number : '.2'}} % </div>
+                </div>
+                <div *ngIf="x.percentage < 0"
+                  style="color: #FF7B7B;font-size: 11px; display: flex; align-items: center;">
+                  <img style="height: 5px; width: 5px; object-fit: cover; margin-right: 4px;" src="assets/icon/down.png"
+                    alt="">
+                  <div> {{x.percentage | number : '.2'}} % </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- <div style="display: flex; justify-content: space-between;width: 100%; align-items: center;">
+
+              <div style="background: #010101; opacity: .5; width: 10px; height: 10px; border-radius: 100%; "></div>
+              <div style="width: 100%; height: 2px; background: #010101; opacity: .5;"></div>
+              <div style="background: #010101; opacity: .5; width: 10px; height: 10px; border-radius: 100%;"></div>
+            </div>  -->
+
+          </div>
+
+          <div style="width: 80px;border-radius: 0px 10px 10px 0px; height: 60px; padding: 5px;display: flex; align-items: center;
+            justify-content: center; background:#F0B900">
+            <div style="font-size: 14px; font-weight: 700; color: #000000">${{(x.investamount + (x.investamount *
+              ((x.percentage || 0) / 100))) / 100
+              | number}}</div>
+            <!-- <ion-icon style="color: #000000; font-size: 25px;" name="chevron-forward-outline"></ion-icon> -->
+
+          </div>
+
+
+        </div>
+
+        <!-- <div *ngIf="platformwidth() < 300" style="display:flex; width: 100%; height: 100%; align-items: center;">
+
+          <img style="width: 35px; height: 35px; object-fit: cover;margin: 10px;" src="{{x.picture}}" alt="">
+
+          <div
+            style="width: 100%; margin-left: 10px; display: flex; align-items: center; justify-content: space-between;">
+
+            <div style="width: 100%; display: flex; align-items: center;">
+              <div
+                style="margin-right: 10px; display:flex; align-items: flex-start;max-width: 40px;  flex-direction: column; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                <div style="color:#ffffff;font-size: 16px;">{{x.name}}</div>
+                <div style="color: #888888;font-size: 11px;">Date</div>
+              </div>
+
+
+              <div
+                style="margin-right: 10px; display:flex; align-items: center; justify-content: center; flex-direction: column;">
+                <div style="color: #7BFFB2;font-size: 16px;">${{x.current_value | number}}</div>
+                <div style="color: #7BFFB2;font-size: 11px;">{{x.current_value | number}}</div>
+              </div>
+            </div>
+
+        
+          </div>
+
+          <div style=" width: 60px;border-radius: 0px 10px 10px 0px; height: 60px; padding: 5px;display: flex; align-items: center;
+            justify-content: center; background:#F0B900">
+            <div style="font-size: 14px; font-weight: 700; color: #000000">${{11700 | number }}</div>
+            <ion-icon style="color: #000000; font-size: 25px;" name="chevron-forward-outline"></ion-icon>
+
+          </div>
+
+
+        </div> -->
+
+
+      </div>
+
+    </div>
+
+
+  </div>
+</ion-content>

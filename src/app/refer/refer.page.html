@@ -1,0 +1,79 @@
+<ion-header style=" background:#000000;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px; color: #ffffff;">
+
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 20px; font-weight: 600;">Refer Friends</div>
+    <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
+
+  </div>
+
+</ion-header>
+<ion-content>
+
+  <div
+    style="background:black;width: 100%; height: 100%; flex-direction: column; justify-content: center;padding: 20px; overflow-y: auto;">
+
+    <div style="display: flex; width: 100%; justify-content: center;align-items: center; flex-direction: column;">
+
+      <img style=" width: 90% ; max-width:450px; margin-bottom: 25px;" src="/assets/icon/Refer.png" alt="">
+
+      <div
+        style=" border: 1.5px solid #F0B900; border-radius: 20px; padding: 10px; font-size: 12px; color: #F0B900;font-weight: 500; margin-right: 10px; text-align: center;">
+        {{ 'https://appcoinpool.web.app/signup?code=' + referralCode }}</div>
+
+      <div style=" display: flex; justify-content: center; align-items: center; margin-top: 10px;">
+
+        <div (click)="shareLink()"
+          style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 20px; text-align: center;">
+          SHARE</div>
+
+        <div (click)="copy2('https://coinpool?code=' + referralCode )"
+          style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 20px; text-align: center; margin-left: 5px;">
+          Copy</div>
+
+      </div>
+
+    </div>
+
+    <div>Your Friends</div>
+
+    <div style="color: #ffffff; width: 100%; display: flex;flex-wrap: wrap;">
+
+      <div *ngFor="let x of referralList"
+        style="border-radius: 10px; width: calc(( 100%/2) - 20px );height: 162px; background: #9797972B; 
+        display: flex; justify-content: center; margin: 10px;padding: 10px; flex-direction: column;align-items: center; padding: 10px;">
+
+        <div style="width: 70px; height: 70px; border-radius: 100%; margin-bottom: 20px;"><img style="width: 70px; height: 70px;
+        border-radius: 100%;" src="assets/icon/personyellow.png" alt="">
+        </div>
+
+        <div style="display: 5px; align-items: center; justify-content: center;">
+
+          <div style="text-align: center;color: #F0B900; margin-bottom: 5px; font-size: 12px;">{{x.name}}</div>
+          <div style="text-align: center;color: #F0B900; margin-bottom: 5px; font-size: 12px;">{{selectedDate}}
+          </div>
+          <div *ngIf="x.amounttoday > 0"
+            style="text-align: center;color: #F0B900; margin-bottom: 5px; font-size: 12px;">Total Trade
+            Today ( {{ x.amounttoday / 100 | number : '.2' }} )</div>
+          <div *ngIf="!(x.amounttoday > 0)"
+            style="text-align: center;color: #F0B900; margin-bottom: 5px; font-size: 12px;">No trade yet
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+
+
+  </div>
+
+
+
+
+
+
+</ion-content>

@@ -1,0 +1,258 @@
+<ion-slides (ionSlideDidChange)="slideChanged($event)" #slides [options]="slideOpts"
+  style="width: 100%; height: calc(100vh - 55px);">
+
+  <!-- SINGER -->
+  <ion-slide style="width: 100%; background-color: #000000;">
+    <ion-content style="
+    --background: linear-gradient(
+      180deg,
+      rgb(0, 0, 0) 70%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  ">
+      <div style="
+      display: flex;
+      justify-content: center;
+      height: 100vh;
+      width: 100%;
+      background: url('/assets/icon/golden-cube-background-abstract-gold-geometric-reflection-glitter-3d-illustration 2.png') no-repeat center center fixed; 
+
+      -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+    ">
+        <div style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+      ">
+          <img style="width: 278px; height: 49px" src="/assets/icon/Logo.png" alt="" />
+
+          <div style="
+          color: #ffffff;
+          font-size: 20px;
+          font-weight: 900;
+          width: 100%;
+          height: 10%;
+          align-items: center;
+          justify-content: center;
+          display: flex;
+          margin-bottom: 40px;
+        ">
+            <div>Sign up</div>
+          </div>
+
+          <div style="
+          width: 100%;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        ">
+            <div style="
+            display: flex;
+            align-items: center;
+            justify-items: center;
+            flex-direction: column;
+            width: 80%;
+          ">
+
+              <div style="
+              display: flex;
+              align-items: center;
+              width: 100%;
+              padding: 12px 5px;
+              background-color: #d9d9d90d;
+              border: 2px solid rgb(67, 63, 54);
+              border-radius: 10px;
+              ">
+                <!-- <ion-icon style="color: #FFFFFF; font-size: 16px;" name="mail-outline"></ion-icon> -->
+                <ion-input [(ngModel)]="user.name"
+                  style="font-size: 14px; margin: 5px; color: #ffffff; text-align: start;" class="ion-no-padding"
+                  type="text" placeholder="Name *">
+                </ion-input>
+              </div>
+
+              <div style="
+              display: flex;
+              align-items: center;
+              width: 100%;
+              padding: 12px 5px;
+              background-color: #d9d9d90d;
+              border: 2px solid rgb(67, 63, 54);
+              border-radius: 10px;
+              margin-top: 20px;
+              ">
+                <!-- <ion-icon style="color: #FFFFFF; font-size: 16px;" name="mail-outline"></ion-icon> -->
+                <ion-input [(ngModel)]="user.email"
+                  style="font-size: 14px; margin: 5px; color: #ffffff; text-align: start;" class="ion-no-padding"
+                  type="email" placeholder="Email *">
+                </ion-input>
+              </div>
+
+
+              <div style="
+              display: flex;
+              align-items: center;
+              width: 100%;
+              padding: 12px 5px;
+              background-color: #d9d9d90d;
+              border: 2px solid rgb(67, 63, 54);
+              border-radius: 10px;
+              margin-top: 20px;
+            ">
+                <!-- <ion-icon style="color: #FFFFFF; font-size: 16px;" name="mail-outline"></ion-icon> -->
+                <ion-input [(ngModel)]="user.password"
+                  style="font-size: 14px; margin: 5px; color: #ffffff; text-align: start;" class="ion-no-padding"
+                  type="password" placeholder="Password *">
+                </ion-input>
+              </div>
+
+              <div style="
+              display: flex;
+              align-items: center;
+              width: 100%;
+              padding: 12px 5px;
+              background-color: #d9d9d90d;
+              border: 2px solid rgb(67, 63, 54);
+              border-radius: 10px;
+              margin-top: 20px;
+            ">
+                <!-- <ion-icon style="color: #FFFFFF; font-size: 16px;" name="mail-outline"></ion-icon> -->
+                <ion-input [(ngModel)]="user.comfirmPassword"
+                  style="font-size: 14px; margin: 5px; color: #ffffff; text-align: start;" class="ion-no-padding"
+                  type="password" placeholder="Comfirm Password *">
+                </ion-input>
+              </div>
+
+              <div style="
+              display: flex;
+              align-items: center;
+              width: 100%;
+              padding: 12px 5px;
+              background-color: #d9d9d90d;
+              border: 2px solid rgb(67, 63, 54);
+              border-radius: 10px;
+              margin-top: 20px;
+            ">
+                <!-- <ion-icon style="color: #FFFFFF; font-size: 16px;" name="mail-outline"></ion-icon> -->
+                <ion-input [(ngModel)]="user.ustd"
+                  style="font-size: 14px; margin: 5px; color: #ffffff; text-align: start;" class="ion-no-padding"
+                  type="text" placeholder="USDT Account (optional)">
+                </ion-input>
+              </div>
+
+
+              <!-- <div style="
+              margin-right: 10px;
+              border-radius: 2px;
+              height: 30px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              background: #292c3d;
+            " appearance="fill" (click)="picker.open()">
+            <input matInput style="
+                color: white;
+                cursor: pointer;
+                font-size: 12px;
+                text-align: center;
+                outline: none;
+                background-color: transparent;
+                border: none;
+              " [(ngModel)]="selectedDate" [matDatepicker]="picker" placeholder="Choose a date" />
+            <mat-datepicker #picker></mat-datepicker>
+          </div> -->
+
+              <div style="
+              display: flex;
+              align-items: center;
+              width: 100%;
+              padding: 12px 5px;
+              background-color: #d9d9d90d;
+              border: 2px solid rgb(67, 63, 54);
+              border-radius: 10px;
+              margin-top: 20px;
+            ">
+                <div style="font-size: 14px; margin: 5px; color: #ffffff; margin:5px; text-align: start;"> {{
+                  user['code'] }}
+                </div>
+              </div>
+            </div>
+
+            <!-- <div style="display: flex; align-items: center; justify-content: flex-end; width: 80%; margin-top: 10px;">
+        <div style="color: #FFFFFF; font-size: 12px;">Forgot password?
+        </div>
+      </div> -->
+
+            <div (click)="nextPage()" style="
+            border-radius: 10px;
+            margin-top: 40px;
+            padding: 15px 5px;
+            width: 80%;
+            background-color: #f0b900;
+            font-size: 18px;
+            border-top: 1px solid #ffbea8;
+            color: #000000;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0px 3px 6px rgb(0, 0, 0, 0.1);
+          ">
+              Submit
+            </div>
+          </div>
+        </div>
+      </div>
+    </ion-content>
+  </ion-slide>
+
+  <ion-slide>
+    <ion-content style="--background: black;">
+
+      <div
+        style="background:black;width: 100%; height: 100%; justify-content: center; align-items: center; display: flex; padding: 20px;">
+
+        <div style="display:flex;align-items: center; justify-content: center;  flex-direction: column; ">
+
+          <img style="width: 278px; height: 30px; object-fit: contain;" src="/assets/icon/Logo.png" alt="">
+
+          <div style="color: #FFFFFF; font-size: 20px; font-weight: 900; width: 100%; height: 60%;display: flex; align-items: center;
+           flex-direction: column;">
+
+            <div style="margin: 30px 0px;">
+              Terms of Service
+            </div>
+
+            <div style="font-size:13px; text-align: center;">
+              {{text}}
+            </div>
+
+          </div>
+          <div style="height: 150px;"></div>
+          <div style="display: flex; width: 100%;justify-content: space-between; align-items: center; ">
+
+            <div (click)="navBack()" style="color: #F0B900">Cancle</div>
+            <div (click)="userSignUp()" style="background: #F0B900;padding: 10px 20px; border-radius: 10px;">Accept
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+
+      </div>
+    </ion-content>
+
+  </ion-slide>
+
+
+
+</ion-slides>

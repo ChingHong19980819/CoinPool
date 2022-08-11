@@ -1,0 +1,107 @@
+<ion-header style=" background:#000000;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px;color: #ffffff;">
+
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 20px; font-weight: 600;">Profile</div>
+    <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
+
+  </div>
+
+</ion-header>
+
+<ion-content>
+  <div
+    style="background:linear-gradient(180deg, rgba(0,0,0,1) 1%, rgba(0,0,0,0) 100%);width: 100%; height: 100%; flex-direction: column;">
+
+    <div style="background: black; height: 100%; color: #FFFFFF;padding: 20px; ">
+
+      <div
+        style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #505050;">
+
+        <div style="display: flex; align-items: center; margin-bottom: 30px;">
+
+          <div style=" width: 50px; height: 50px; border-radius: 100%;margin-right: 5px;">
+            <img style=" width: 50px; height: 50px; border-radius: 100%;" src="{{'assets/icon/person.png'}}" alt="">
+          </div>
+
+          <div>
+
+            <div style="font-weight:600;">
+              {{ currentUser['name'] }}
+            </div>
+
+            <div>
+              {{ currentUser['email'] }}
+            </div>
+
+          </div>
+
+        </div>
+
+        <ion-icon (click)="goupdate()" style="color: #F0B900; font-size: 25px;margin-bottom: 30px;" name="pencil">
+        </ion-icon>
+
+
+      </div>
+
+      <!-- <div (click)="gowallet()" style="display: flex;align-items: center;
+  ">
+      <div style="font-size: 15px;letter-spacing: 0.5px;;">Wallet Balance</div>
+      
+    </div> -->
+
+      <div (click)=" gowallet()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
+
+        <img style="width: 18 px; color:#F0B900;" src="/assets/icon/Vector.png" alt="">
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px ;">My Wallets</div>
+
+      </div>
+
+      <div (click)="gorefer()" style="display: flex;align-items: center; margin: 20px 0px;height: 40px;">
+
+        <ion-icon style="font-size: 20px; color:#F0B900;" name="link-outline"></ion-icon>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Refer Friends</div>
+
+      </div>
+
+      <div (click)="gorecordhistory()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
+
+        <img style="width: 18px; color:#F0B900;" src="/assets/icon/Vector (1).png" alt="">
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Help Center</div>
+
+      </div>
+
+      <div style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
+
+        <ion-icon style="font-size: 20px; color:#F0B900;" name="shield-checkmark"></ion-icon>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Privacy Policy</div>
+
+      </div>
+
+      <div (click)="goverify()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
+
+        <ion-icon style="font-size: 20px; color:#F0B900;" name="person-outline"></ion-icon>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Account Verification</div>
+
+      </div>
+
+      <div (click)="goguide()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
+
+        <ion-icon style="font-size: 20px; color:#F0B900;" name="newspaper-outline"></ion-icon>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Guide Lines</div>
+
+      </div>
+
+      <div (click)="signout()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
+
+        <ion-icon style="font-size: 20px; color:#F0B900;" name="power-outline"></ion-icon>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Sign Out</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-content>

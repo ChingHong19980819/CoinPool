@@ -1,0 +1,79 @@
+<ion-content style="--background: #14151A">
+  <div style="width: 100vw; padding: 20px">
+    <div
+      style="width: 100%; display: flex; align-items: center; margin-bottom: 20px; justify-content: center; position: relative;">
+      <ion-icon (click)="back()" style="color: #CCD2E3; position: absolute; left: 0; font-size: 22px;"
+        src="assets/icon/close.svg"></ion-icon>
+      <div style="color: white; font-size: 14px; font-weight: 600;"> Result Detail </div>
+      <div style="position: absolute; right: 0; color: white; font-weight: 600; font-size: 14px; color: #F0B900;">
+        {{ showDate }} </div>
+    </div>
+
+    <img (click)="goPicture(data.photo_prove)" src="{{data.photo_prove}}" alt="">
+
+
+    <div style="margin: 20px 0px 10px 0; text-align: start; color: white;">Total Investment</div>
+
+    <div style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px;border: 3px solid rgba(162, 162, 162, 0.461);
+     border-radius: 8px; align-items: center; height: 35px;">
+      <div style="font-size: 14px;margin: 5px;color: #FFFFFF; text-align: start;">
+
+        {{ (data.sum || 0) / 100 }} USD
+      </div>
+    </div>
+
+    <div style="margin: 20px 0px 10px 0; text-align: start; color: white;">Percentage</div>
+
+    <div style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px;border: 3px solid rgba(162, 162, 162, 0.461);
+     border-radius: 8px; align-items: center; height: 35px;">
+      <div style="font-size: 14px;margin: 5px;color: #FFFFFF; text-align: start;">
+        {{ data.percentage }} %
+      </div>
+    </div>
+
+    <div style="margin: 20px 0px 10px 0; text-align: start; color: white;">Total Earned</div>
+
+    <div style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px;border: 3px solid rgba(162, 162, 162, 0.461);
+     border-radius: 8px; align-items: center; height: 35px;">
+      <div style="font-size: 14px;margin: 5px;color: #FFFFFF; text-align: start;" class="ion-no-padding">
+        {{ (((data.sum || 0) * data.percentage / 100)) / 100 }} USD
+      </div>
+    </div>
+
+
+    <!-- 
+    <div style="color: white;">
+       : {{ (data.sum || 0) / 100 }} USD
+    </div>
+    <div style="color: white;">
+      Percentage : {{ data.percentage }} %
+    </div>
+
+    <div style="color: white;">
+      Total Earned : {{ (((data.sum || 0) * data.percentage / 100)) / 100 }} USD
+    </div> -->
+    <!-- <div *ngFor="let x of lists"
+      style="width:100%; background: linear-gradient(180deg, rgba(255, 249, 230, 0.31) 0%, rgba(255, 255, 255, 0.0899) 66.67%); border-radius: 20px;  margin-bottom: 20px;">
+      <div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start;  padding: 20px;">
+
+        <div style="width: 100%; display: flex; align-items: center; flex-wrap: wrap;">
+          <img (click)="goPicture(y)" *ngFor="let y of x['pictures']"
+            style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px; margin-bottom: 10px; border-radius: 5px"
+            src="{{y}}" alt="">
+        </div>
+        <div style="width: 100%; display: flex; align-items:center; margin-bottom: 5px;">
+          <img src="assets/icon/in.png" style="width: 40px; margin-right: 10px" alt="">
+          <div style="color:#ffffff; font-size: 12px; font-weight: 500">{{x.in | currency: 'RM '}}</div>
+        </div>
+
+        <div style="width: 100%; display: flex; align-items:center; margin-bottom: 10px;">
+          <img src="assets/icon/out.png" style="width: 40px; margin-right: 10px;" alt="">
+          <div style="color:#ffffff; font-size: 12px; font-weight: 500">{{x.out | currency: 'RM '}}</div>
+        </div>
+
+        <div style="color:#929292; font-size: 11px">{{x.date | date: 'dd MMM yyyy'}}</div>
+
+      </div>
+    </div> -->
+  </div>
+</ion-content>

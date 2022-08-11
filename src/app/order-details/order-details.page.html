@@ -1,0 +1,189 @@
+<ion-header style="background:#000000;">
+
+  <div
+    style="display: flex;align-items: center;justify-content: space-between;padding: 20px; color: #ffffff;padding: 20px;">
+
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 18px; font-weight: 600;">Place Order</div>
+    <ion-icon (click)="toprofile()" style="font-size: 25px;" name="menu-outline"></ion-icon>
+
+  </div>
+
+</ion-header>
+
+<ion-content style="--background:#000000;">
+
+  <div style="width: 100%; height: 100%; flex-direction: column; justify-content: center; overflow-y: auto;">
+
+    <div style="padding: 20px;">
+
+      <div style="color:#888888; font-weight: 500;font-size: 12px; margin-bottom: 10px;">Available Balance</div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+
+        <div>
+          <div style="color:#ffffff; font-weight: 550;font-size: 35px;">${{ (currentUser.amount / 100 || 0) | number :
+            '.2' }}
+          </div>
+        </div>
+
+        <div>
+
+          <div style="background-color: #F0B900; padding: 5px 25px; border-radius: 20px; font-weight: 600;">{{start |
+            date : 'dd.MM.yyyy' }}
+          </div>
+
+        </div>
+
+      </div>
+
+      <div style="width: 100%;display: flex; overflow-x: auto; margin-bottom: 20px; ">
+
+        <div *ngFor='let eve of coinList; let i = index; let last = last'
+          style="width: 150px; height: 90px;display: flex; margin: 10px 10px 20px 10px;  ">
+
+          <div (click)="changeCoin(eve)"
+            [ngStyle]="{'background': selected.name == eve.name ? 'linear-gradient(180deg, #FFDC66 0%, rgba(22, 23, 27, 0) 100%)' : 'linear-gradient(180deg, #595956 0%, rgba(22, 23, 27, 0) 100%)'  }"
+            style='width: 100px; height: 80px; border-radius:5px;color: #ffffff; padding: 5px; display: flex; flex-direction: column;'>
+
+            <div
+              style="display:flex;flex-direction: column; align-items: center; justify-content: space-between;  margin-bottom: 15px;">
+
+              <img style="width: 25px; height: 25px; margin-right: 5px;" src="{{eve.picture}}" alt="">
+
+              <div style="font-size: 15px;font-weight: 700;">{{eve.cryptocurrency}}</div>
+
+              <div style="font-size: 13px;font-weight: 500; color: #888888;">{{eve.name}}</div>
+
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+
+      <div style="position: relative; display: flex; align-items: center;margin-bottom: 20px;">
+
+        <ion-range [(ngModel)]="rangevalue" (ionChange)="rangeChange($event)" class="rangeF" min="0" max="100"
+          style="width: 100%; z-index: 100;">
+
+        </ion-range>
+
+        <div style="width: 25px; z-index: -1; height: 25px; border-radius: 100%; left: calc( 0% );
+           background-color: #F0B900; position: absolute; z-index: 1000;">
+        </div>
+
+        <div [ngStyle]="{'background': rangevalue >= '25'? '#F0B900 ' : ' #ffffff' }"
+          style="width: 25px; height: 25px; border-radius: 100%;left: calc( 25% - 12.5px); position: absolute; z-index: 1000;">
+        </div>
+
+        <div [ngStyle]="{'background': rangevalue >= '50'? '#F0B900 ' : ' #ffffff' }" style="width: 25px; height: 25px; border-radius: 100%; left: calc( 50% - 12.5px);
+          background-color: #F0B900;  position: absolute; z-index: 1000;">
+        </div>
+
+
+        <div [ngStyle]="{'background': rangevalue >= '75' ? '#F0B900 ' : ' #ffffff' }" style="width: 25px; height: 25px; border-radius: 100%; left: calc( 75% - 12.5px);
+          background-color: #F0B900;  position: absolute; z-index: 1000;">
+        </div>
+
+        <div [ngStyle]="{'background': rangevalue >= '100' ? '#F0B900 ' : ' #ffffff' }" style="width: 25px; height: 25px; border-radius: 100%; left: calc( 100% - 25px); 
+          background-color: #F0B900;position: absolute; z-index: 1000;">
+        </div>
+
+
+
+      </div>
+
+      <div style="position: relative; display: flex; align-items: center; color: #ffffff;">
+
+        <div
+          style="width: 40px ; height: 25px; border-radius: 100%; left: calc( 0% + 5px );position: absolute; z-index: 1000;">
+          0%
+        </div>
+
+        <div
+          style="width: 40px; height: 25px; border-radius: 100%;left: calc( 25% - 12.5px);position: absolute; z-index: 1000;">
+          25%
+        </div>
+
+        <div
+          style="width: 40px; height: 25px; border-radius: 100%; left: calc( 50% - 12.5px);position: absolute; z-index: 1000;">
+          50%
+        </div>
+
+
+        <div
+          style="width: 40px; height: 25px; border-radius: 100%; left: calc( 75% - 12.5px);position: absolute; z-index: 1000;">
+          75%
+        </div>
+
+        <div
+          style="width: 50px; height: 25px; border-radius: 100%; left: calc( 100% - 30px); position: absolute; z-index: 1000;">
+          100%
+        </div>
+      </div>
+
+      <div
+        style="display: flex; align-items: center; justify-content: center; flex-direction: column; margin: 20px 0px;">
+
+        <div style="color: #ffffff;margin: 20px 0px;">Amount: ${{ roundTo((selected.amount / 100), 2) || 0 | number :
+          '.2' }}</div>
+
+        <div (click)="goplaceorder()" style="border: 3px solid #F0B900;border-radius: 5px;padding: 5px 10px; width: 60%;font-size: 22px; color: #F0B900; display: flex;align-items: center;
+      justify-content: center; text-align: center;">Custom Amount</div>
+
+      </div>
+
+    </div>
+    <div style="width:100%;display: flex; align-items: center; justify-content: center; flex-direction: column;">
+
+      <div style="background: linear-gradient(180deg, rgba(50, 41, 41, 0.896) 3.65%, rgba(70, 71, 79, 0.08) 100%);
+       width: 100%;max-width: 500px; height: 100%; border-radius: 25px; padding: 20px">
+
+        <div *ngFor="let x of coinList"
+          style="display: flex;flex-direction: column; align-items: center; margin-bottom: 20px; ">
+
+          <div style="display:flex; justify-content: space-between; width: 100%; align-items: center;">
+
+            <div style="display: flex; align-items: center;">
+
+              <img style="width: 25px; height: 25px; margin-right: 5px;" src="{{x.picture}}" alt="">
+
+              <div style="color:#ffffff;">{{x.name}}</div>
+
+            </div>
+
+            <div style="color: #ffffff;">${{roundTo((x.amount / 100), 2) || 0 | number : '.2'}}</div>
+
+          </div>
+
+        </div>
+
+        <!-- 
+        <div *ngIf="passOrders.length == 0"
+          style="display: flex; justify-content: center; align-items: center; color : white;">
+          No Transactions..
+        </div> -->
+
+        <div style="width: 100%; text-align: center; color: white; font-size: 14px;"> Total: $ {{ sumAmount() | number :
+          '.2'
+          }} </div>
+
+        <div (click)="buyOrder()" style="margin-top: 15px; background:#F0B900; border-radius: 5px; padding: 10px; width: 100%;font-size: 16px; font-weight: 550; color: #000000; display: flex;align-items: center;
+        justify-content: center; margin-bottom: 15px;">Place Order</div>
+
+      </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+  </div>
+</ion-content>

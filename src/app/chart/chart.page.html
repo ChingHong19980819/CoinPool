@@ -1,0 +1,18 @@
+<ion-header style=" background:#000000;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px;color: #ffffff;">
+
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 18px; font-weight: 600;">{{ coin }} / {{ currency }} </div>
+    <div style="width: 10px;"></div>
+    <!-- <ion-icon (click)="goprofile()" style="font-size: 25px;" name="menu-outline"></ion-icon> -->
+
+  </div>
+
+</ion-header>
+
+<ion-content style="--background: black;">
+  <canvas #donutChart id="myChart2" style="width: 100vw; height: 100vw;">
+  </canvas>
+
+</ion-content>

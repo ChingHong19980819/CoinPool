@@ -1,0 +1,48 @@
+<ion-content style="--background:#2E2E2E">
+
+  <div
+    style="color: #ffffff; display: flex; align-items: center;justify-items: center; flex-direction: column ;width: 100%; height: 100%;">
+
+
+
+
+    <div style="color:#FFBE2E; font-weight: 600; font-size: 22px; margin: 20px;">OTP Verification</div>
+    <div style="width: 80%;margin-bottom: 10px;">We will send you a one time password on this <span
+        style="font-weight: 600;">Mobile
+        Number</span></div>
+    <div style="font-weight: 600;">+60154252289</div>
+
+    <div style="display: flex;">
+
+      <div style="width:45px; height: 45px;border-radius: 100%; border: #FFBE2E; background: #ffffff;margin: 10px;">
+      </div>
+      <div style="width:45px; height: 45px;border-radius: 100%; border: #FFBE2E; background: #ffffff;margin: 10px;">
+      </div>
+      <div style="width:45px; height: 45px;border-radius: 100%; border: #FFBE2E; background: #ffffff;margin: 10px;">
+      </div>
+      <div style="width:45px; height: 45px;border-radius: 100%; border: #FFBE2E; background: #ffffff;margin: 10px;">
+      </div>
+
+    </div>
+
+    <div *ngIf="counter != 0"> Resend Code in {{ counter }} seconds!</div>
+
+    <div *ngIf="counter == 0" style=" margin: 10px;">Din't receive OTP? <span (click)="sendCode()"
+        style="color: #FFBE2E; font-weight: 600;">Send OTP</span></div>
+
+    <div style="width: 100%;display: flex; justify-content: center; ">
+
+      <div (click)="verifyPhone()"
+        style="background: #F0B900; text-align: center; border-radius: 8px; width: 80%;font-weight: 700; padding: 10px 0px; margin-top: 20px;">
+        Submit</div>
+
+    </div>
+
+
+
+
+  </div>
+
+
+
+</ion-content>

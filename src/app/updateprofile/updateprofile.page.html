@@ -1,0 +1,89 @@
+<ion-header style=" background:#000000;">
+
+  <div style="height: 60px; width: 100%; display: flex; align-items: center; justify-content: space-between;
+  color: #ffffff; padding: 15px">
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 22px; font-weight: 600;">Edit Profile</div>
+    <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
+  </div>
+
+</ion-header>
+
+<ion-content style="--background:#000000;">
+
+  <!-- header -->
+  <div style=" border-radius: 0px 0px 10px 10px; height: 180px; ">
+
+    <!-- profile pic -->
+    <div style="display: flex; width: 100%; justify-content: center;align-items: center;">
+
+      <div style="display: flex; align-items: center; margin-bottom: -240px;">
+
+        <div
+          style="width: 100%; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center;">
+          <label id="button" for="files"
+            style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <canvas id="canvas" style="display: none;"></canvas>
+
+            <img style="width: 100%; height: 100%; object-fit: cover; border-radius: 100%;"
+              src="{{'assets/icon/person.png'}}" alt="">
+
+            <input #uploadEl style="display: none" id="files" class="inputclass" accept="image/*" type="file"
+              (change)="fileChange($event, '', 1000)">
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- main body -->
+  <div style="padding: 30px 20px; margin-top: 80px;color: #ffffff;">
+
+    <div style="margin-bottom: 20px;">
+      <div style="margin-bottom: 8px;font-size: 13px;font-weight: 700;">Username</div>
+      <ion-input class="ion-no-padding" [(ngModel)]="currentUser.name" type="text" placeholder="Smith" style="height: 36px;font-size: 13px;color:#ffffff;border-radius: 5px;
+      border: 1px solid #afafaf; --padding-start: 10px;--padding-end: 10px">
+      </ion-input>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <div style="margin-bottom: 8px;font-size: 13px;font-weight: 700;">Email</div>
+      <ion-input class="ion-no-padding" [disabled]="true" [(ngModel)]="currentUser.email" type="text"
+        placeholder="Randomuser@gmail.com" style="height: 36px;font-size: 13px;color:#ffffff;
+      border-radius: 5px;border: 1px solid #afafaf;
+        --padding-start: 10px;--padding-end: 10px">
+      </ion-input>
+    </div>
+
+
+    <div style="margin-bottom: 20px;">
+      <div style="margin-bottom: 8px;font-size: 13px;font-weight: 700;">Phone Number</div>
+      <ion-input [(ngModel)]="currentUser.phone" [disabled]="true" class="ion-no-padding" type="text"
+        placeholder="011-1111111" style="height: 36px;font-size: 13px;color:#ffffff;
+      border-radius: 5px;border: 1px solid #afafaf; --padding-start: 10px;--padding-end: 10px">
+      </ion-input>
+    </div>
+
+    <!-- <div style="margin-bottom: 20px;">
+      <div style="margin-bottom: 8px;font-size: 13px;font-weight: 700;">Address</div>
+      <ion-input [(ngModel)]="user.address" class="ion-no-padding" type="text" style="height: 36px;font-size: 13px;color:#ffffff;border-radius: 5px;border: 1px solid #afafaf;
+        --padding-start: 10px;--padding-end: 10px">
+      </ion-input>
+    </div> -->
+
+
+    <div style="width: 100%;display: flex; justify-content: center; ">
+
+      <div (click)="updateProfile()"
+        style="background: #F0B900; text-align: center; border-radius: 8px; width: 80%;font-weight: 700; padding: 10px 0px; margin-top: 20px;">
+        Update</div>
+
+    </div>
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "vsingqr",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
