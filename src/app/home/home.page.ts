@@ -26,7 +26,6 @@ export class HomePage {
   chart;
 
 
-
   time = [
     { time: '6/24/2022' },
     { time: '7/24/2022' },
@@ -68,6 +67,52 @@ export class HomePage {
   chartInfo = []
   selectedDate
 
+  // lang = 'English'
+
+  lang = localStorage.getItem('coinpool_language') || 'English'
+
+  langua = {
+    ["Hello"]: {
+      Chinese: "你好",
+      English: "Hello",
+    }, ["Your Available Balance"]: {
+      Chinese: "您的可用余额？",
+      English: "Your Available Balance",
+    }, ["Total invested"]: {
+      Chinese: "总投资",
+      English: "Total invested",
+    }, ["Top up"]: {
+      Chinese: "充值",
+      English: "Top up",
+    }, ["Place Order"]: {
+      Chinese: "下订单",
+      English: "Place Order",
+    }, ["Result"]: {
+      Chinese: "成绩",
+      English: "Result",
+    }, ["Hour"]: {
+      Chinese: "小时",
+      English: "Hour",
+    }, ["Minutes"]: {
+      Chinese: "分钟",
+      English: "Minutes",
+    }, ["Sec"]: {
+      Chinese: "秒",
+      English: "Sec",
+    }, ["Total Pool Funds"]: {
+      Chinese: "资金池",
+      English: "Total Pool Funds",
+    }, ["Daily Pool"]: {
+      Chinese: "每日资金池",
+      English: "Daily Pool",
+    },
+
+
+  }
+
+
+
+
 
   constructor(private nav: NavController,
     private acctivatedRoute: ActivatedRoute,
@@ -76,34 +121,39 @@ export class HomePage {
   ngOnInit() {
     cc.setApiKey('f5e033a36d80db094b3cf8414214f67a2fc84b4ff1c1010161cd7865955ae4ea')
 
+    // this.lang = !localStorage.getItem('language') ? 'English' : localStorage.getItem('language')
+
     var cutOff = new Date(firebase.firestore.Timestamp.now().toMillis()).setHours(16, 0, 0, 0)
 
     if (parseInt(this.datePipe.transform(firebase.firestore.Timestamp.now().toMillis(), 'HHmmss')) >= 160000) {
-      this.selectedDate = this.datePipe.transform(cutOff, 'yyyy-MM-dd')
+      this.selectedDate = this.datePipe.transform(new Date(cutOff).setDate(new Date(cutOff).getDate() + 1), 'yyyy-MM-dd');
     } else {
-      this.selectedDate = this.datePipe.transform(new Date(cutOff).setDate(new Date(cutOff).getDate() - 1), 'yyyy-MM-dd');
+      this.selectedDate = this.datePipe.transform(cutOff, 'yyyy-MM-dd')
+
     }
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.acctivatedRoute.queryParams.subscribe((a) => {
-          this.carpoolService.pleasewait('Please wait..', 'Getting your data..')
-          this.http.post(baseUrl + '/getUserInfo', { userid: user.uid }).subscribe((a) => {
-            this.currentUser = a['data']
-            this.carpoolService.swalclose()
-            console.log(this.currentUser)
-          })
+
+        })
+
+        this.carpoolService.pleasewait('Please wait..', 'Getting your data..')
+        this.http.post(baseUrl + '/getUserInfo', { userid: user.uid }).subscribe((a) => {
+          this.currentUser = a['data']
+          this.carpoolService.swalclose()
         })
 
 
         this.getChartData()
 
-        this.http.post(baseUrl + '/totalInvestment', { userid: user.uid }).subscribe((res) => {
+        this.http.post(baseUrl + '/totalInvestment', { userid: user.uid, date: this.datePipe.transform(this.selectedDate, 'dd-MM-yyyy') }).subscribe((res) => {
           this.totalSelfInvestment = res['data']
         })
 
+
         this.http.post(baseUrl + '/getCoinList', { userid: user.uid }).subscribe((a) => {
-          this.coinList = a['data']
+          this.coinList = a['data'].sort((v, d) => v['orders'] - d['orders'])
           cc.priceMulti(this.coinList.map(cl => cl['crypto']), [...new Set(this.coinList.map(cl => cl['currency']))])
             .then(prices => {
               this.coinList = this.coinList.map(cl => ({ ...cl, current_value: prices[cl['crypto']]['USD'] }))
@@ -145,7 +195,7 @@ export class HomePage {
   back() { }
 
   godetails(eve) {
-    console.log(eve)
+
   }
 
   resultCountDown() {
@@ -179,18 +229,15 @@ export class HomePage {
 
     this.carpoolService.pleasewait('Please wait.....', 'Generating data...')
 
-    var start = new Date(this.selectedDate).setHours(16, 0, 0, 0)
-    var end = new Date(start).setDate(new Date(start).getDate() + 1);
+    let date = this.datePipe.transform(this.selectedDate, 'dd-MM-yyyy')
 
-    this.http.post(baseUrl + '/getOrdersDailyChart', { start: start, end: end }).subscribe((res) => {
+    this.http.post(baseUrl + '/getOrdersDailyChart', { date: date }).subscribe((res) => {
       this.carpoolService.swalclose()
       this.chartInfo = res['data']
-      console.log(res['data'])
 
       this.totalInvestment = this.chartInfo.reduce((a, b) => a + b['sum'], 0)
 
-      this.chartInfo = this.chartInfo.map((value, index) => ({ ...value, percentage: (value.sum / this.totalInvestment) * 100 }))
-      console.log(this.chartInfo)
+      this.chartInfo = this.chartInfo.map((value, index) => ({ ...value, percentage: ((value.sum / this.totalInvestment) * 100) }))
 
       if (this.chart) {
         this.chart.destroy()
@@ -204,7 +251,7 @@ export class HomePage {
           datasets: [
             {
               label: '# of Votes',
-              data: this.chartInfo.length > 0 ? this.chartInfo.map(c => c['sum']) : [1],
+              data: this.chartInfo.length > 0 ? this.chartInfo.map(c => c['sum'] / 100) : [1],
               backgroundColor: this.chartInfo.length > 0 ? this.chartInfo.map(c => c['color']) : ['#fffcfc'],
               borderColor: [
                 '#666666',
@@ -236,4 +283,14 @@ export class HomePage {
         })
     }, 3000)
   }
+
+
+  doRefresh(event) {
+    this.ngOnInit()
+
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
+  }
+
 }

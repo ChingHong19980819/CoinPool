@@ -4,14 +4,14 @@
 
     <ion-icon (click)="index == 0 ? back() : previousStep()" style="font-size: 24px" slot="start"
       name="chevron-back-outline"></ion-icon>
-    <div style="font-size: 18px; font-weight: 600;">Top Up</div>
+    <div style="font-size: 18px; font-weight: 600;"> {{langua['Top up'][lang]}}</div>
     <ion-icon (click)="goprofile()" style="font-size: 25px;" name="menu-outline"></ion-icon>
 
   </div>
 
 </ion-header>
 
-<ion-slides (ionSlideWillChange)="slideChanged($event)" #slides pager="false" [options]="slideOpts"
+<ion-slides (ionSlideWillChange)="slideChanged($event)" #slides pager="false"
   style="width: 100%; height: calc(100vh - 55px);">
 
   <!-- SINEGR -->
@@ -22,13 +22,14 @@
 
 
 
-        <div style="color:#888888; font-weight: 500;font-size: 12px; margin-bottom: 10px;">Credit Balance</div>
+        <div style="color:#888888; font-weight: 500;font-size: 12px; margin-bottom: 10px;">
+          {{langua['Credit Balance'][lang]}}</div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
 
           <div>
 
             <div style="color:#ffffff; font-weight: 550;font-size: 35px;">${{ (currentUser.amount / 100 || 0) | number :
-              '.2'
+              '.2-2'
               }}
             </div>
           </div>
@@ -75,7 +76,8 @@
             style="position: relative; width: calc(((100vw - 60px) / 2)); justify-content: space-between; max-width: 175px; height: 93px; margin-bottom: 15px; background: url('/assets/icon/vector 2.png'); background-repeat: no-repeat;">
 
             <div style="display: flex; align-items: center; padding: 10px 10px 0 10px;">
-              <div style="font-size: 12px; margin-right: 10px; font-weight: 550;"> TOP UP </div>
+              <div style="font-size: 12px; margin-right: 10px; font-weight: 550;">
+                {{langua['Top up'][lang]}}</div>
               <div style=" color: black; font-size: 20px; font-weight: 600;">
                 ${{x.cash | number : '1.0-1' }}</div>
             </div>
@@ -104,13 +106,14 @@
 
             <div
               style="display: flex; align-items: center; padding: 10px 10px 0 10px; position: absolute; top: 3px; left: 3px;">
-              <div style="font-size: 12px; margin-right: 10px; font-weight: 550; color: white;"> TOP UP </div>
+              <div style="font-size: 12px; margin-right: 10px; font-weight: 550; color: white;">
+                {{langua['Top up'][lang]}} </div>
               <!-- <div style=" color: black; font-size: 20px; font-weight: 600;">
                 ${{x.cash | number : '1.0-1' }}</div> -->
             </div>
 
             <div style="color: #F0B900; font-size: 14px; font-weight: 600; position: absolute; margin-right: 20px;">
-              Custom Amount </div>
+              {{langua['Custom Amount'][lang]}}</div>
 
 
             <div style="background: #7f6b27; border-radius: 20px;font-size: 12px; width: 45px; color: #FFFFFF; display: flex; align-items: center;justify-content: center;
@@ -167,21 +170,35 @@
 
           <div style=" display: flex; flex-direction: column;font-size: 13px; text-align: start;">
 
+
             <ol style="padding: 0 14px;">
-              <li style="color: #888888; margin-bottom: 10px;">Choose the amount that you want to top up (minimum $1000)
-                or custom amount.
+              <li style="color: #888888; margin-bottom: 10px;">
+                {{langua['Choose the amount that you want to top up (minimum $100) or custom amount.'][lang]}}
               </li>
-              <li style="color: #888888; margin-bottom: 10px;">We only accept <span style="font-weight: 600"> USDT
+              <li style="color: #888888; margin-bottom: 10px;">
+                {{langua['Crypto platform charges a fee for transfer/withdrawal. Users must pay the service fee and
+                transfer the correct amount selected in Coinpool.'][lang]}}
+              </li>
+              <li style="color: #888888; margin-bottom: 10px;">{{langua['We only accept'][lang]}} <span
+                  style="font-weight: 600"> USDT
                 </span>.</li>
-              <li style="color: #888888; margin-bottom: 10px;">Kindly transfer to the TRC20 address provided.</li>
-              <li style="color: #888888; margin-bottom: 10px;"> <span style="font-weight: 600;"> Warning: </span> No
-                refund if you transfer
-                to the wrong account.
+              <li style="color: #888888; margin-bottom: 10px;"> {{langua['Kindly transfer to the TRC20 address
+                provided.'][lang]}}</li>
+              <li style="color: #888888; margin-bottom: 10px;"> {{langua['Your top up request will be processed by admin
+                in 48 hours.'][lang]}}</li>
+              <li style="color: #888888; margin-bottom: 10px;"> <span style="font-weight: 600;">
+                  {{langua['Warning'][lang]}}: </span>
+                {{langua['No refund if you transferto the wrong account.'][lang]}}
+
+
               </li>
-              <li style="color: #888888; margin-bottom: 10px;"> Please transfer to this USDT Account:
-                <span style="font-weight: 550; color: white;">TLg4SyAE2LUUBRtuR1YAVQyqRZKRdCA351</span> <span
+              <li style="color: #888888; margin-bottom: 10px;"> {{langua['Please transfer to this USDT
+                Account:'][lang]}}
+                <span
+                  style="font-weight: 550; color: white; margin-top: 5px; font-size: 12px;">TLg4SyAE2LUUBRtuR1YAVQyqRZKRdCA351</span>
+                <span
                   style="font-size: 11px; text-decoration: underline; margin-left: 3px; font-style: italic; color: #F0B900;"
-                  (click)="copy2('TLg4SyAE2LUUBRtuR1YAVQyqRZKRdCA351')">COPY </span>
+                  (click)="copy2('TLg4SyAE2LUUBRtuR1YAVQyqRZKRdCA351')">{{langua['COPY'][lang]}}</span>
 
               </li>
 
@@ -209,7 +226,8 @@
 
         <div style="width: 100%; color: #ffffff;">
 
-          <div style="margin-bottom: 10px; text-align: start;">Upload your bank transfer receipt photo*</div>
+          <div style="margin-bottom: 10px; text-align: start;">{{langua['Upload your bank transfer receipt
+            photo'][lang]}}*</div>
 
           <label for="topupfiles" class="btn">
             <div
@@ -226,8 +244,8 @@
                   [src]="'assets/icon/upload.png'" alt="">
 
                 <input style="display: none" id="topupfiles" class="inputclass" accept="image/*" type="file"
-                  (change)="uploadReceipt($event, 600)">
-                <div style="font-size: 12px">Upload photo</div>
+                  (change)="uploadReceipt($event)">
+                <div style="font-size: 12px"> {{langua['Upload photo'][lang]}}</div>
 
               </div>
 
@@ -239,7 +257,7 @@
           </label>
 
 
-          <div style="margin: 20px 0px; text-align: start;">Top Up Amount*</div>
+          <div style="margin: 20px 0px; text-align: start;"> {{langua['Top Up Amount'][lang]}}*</div>
 
           <div style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px;border: 3px solid rgba(162, 162, 162, 0.461);
            border-radius: 8px; align-items: center; height: 35px;">
@@ -299,7 +317,7 @@
 
     <div (click)="topUp()"
       style="background: #F0B900; text-align: center; border-radius: 8px; width: 80%;font-weight: 700; padding: 10px 0px ;">
-      Submit</div>
+      {{langua['Submit'][lang]}}</div>
 
   </div>
 

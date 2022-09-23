@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 declare var Chart
 declare var luxon
+import { IonRouterOutlet } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chart',
@@ -13,7 +15,8 @@ export class ChartPage implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private nav: NavController
+    private nav: NavController,
+    private outlet: IonRouterOutlet, private router: Router
   ) { }
 
   chart;
@@ -26,7 +29,6 @@ export class ChartPage implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((a) => {
-      console.log(a)
       this.coin = a['coin']
       this.currency = a['currency']
     })
@@ -53,9 +55,6 @@ export class ChartPage implements OnInit {
       }
 
     })
-
-    console.log(133)
-
   }
 
   getRandomData(dateStr, count) {
@@ -90,7 +89,7 @@ export class ChartPage implements OnInit {
   }
 
   back() {
-    this.nav.pop()
+    this.outlet.canGoBack() ? this.nav.pop() : this.router.navigate(['home'], { replaceUrl: true });
   }
 
 }

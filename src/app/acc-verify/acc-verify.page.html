@@ -3,7 +3,7 @@
   <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px; color: #ffffff;">
 
     <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
-    <div style="font-size: 20px; font-weight: 600;">Account Verification</div>
+    <div style="font-size: 20px; font-weight: 600;">{{langua['Account Verification'][lang]}} </div>
     <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
 
   </div>
@@ -19,7 +19,7 @@
       <img src="/assets/icon/Frame.png" alt="">
     </div>
 
-    <div style="color: #ffffff; margin-bottom: 20px;">
+    <!-- <div style="color: #ffffff; margin-bottom: 20px;">
 
       <div style="font-size: 13px; margin: 20px 0px;">Enter your mobile number</div>
 
@@ -28,18 +28,19 @@
         <div style="border-bottom: 1px solid #F0B900; margin-right: 15px; font-size: 14px; padding-bottom: 4px;">+60
         </div>
         <ion-input [(ngModel)]="verification.phone" [readonly]="currentUser['status'] == 'verified'"
-          style="color: #FFFFFF;border-bottom: 1px solid #F0B900; font-size: 14px; --padding-bottom: 4px;"
-          class="ion-no-padding" type="text" placeholder="123456789"></ion-input>
+          style="color: white; border-bottom: 1px solid #F0B900; font-size: 14px; --padding-bottom: 4px;"
+          class="ion-no-padding" type="text"></ion-input>
 
       </div>
 
-    </div>
+    </div> -->
 
     <div style="color: #ffffff;">
 
-      <div style="margin-bottom: 10px; font-size: 13px;">Upload your identity card photo (front & back)</div>
+      <div style="margin-bottom: 10px; font-size: 13px;">{{langua['Upload your identity card photo (front &
+        back)'][lang]}} </div>
 
-      <div (click)="currentUser['status'] != 'verified' ? askAction('front') : ''"
+      <div
         style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px; border-radius: 15px; align-items: center; margin-bottom: 20px;">
 
         <!-- <div style="width: 50px; margin-right: 10px;"><img src="assets/icon/upload.png" alt=""></div>
@@ -47,7 +48,7 @@
 
         <div style="display: flex; align-items: center;">
 
-          <img *ngIf="verification['front'] != null"
+          <img (click)="goPicture(verification['front'])" *ngIf="verification['front'] != null"
             style="width: 50px; height: 50px; margin-right: 5px; object-fit: cover;" [src]="verification['front']"
             alt="">
 
@@ -56,7 +57,14 @@
             alt="">
 
 
-          <div style="font-size: 12px">Front Photo</div>
+          <div>
+            <div style="font-size: 12px">{{langua['Front Photo'][lang]}}</div>
+            <div (click)="currentUser['status'] != 'verified' ? askAction('front') : ''"
+              style="font-size: 12px; color: #FFBE2E;">{{langua['Click to Upload
+              photo'][lang]}}</div>
+
+          </div>
+
 
         </div>
 
@@ -65,11 +73,11 @@
       <input style="display: none" id="files" class="inputclass" accept="image/*" type="file"
         (change)="uploadPhoto($event, 'front')">
 
-      <div (click)="currentUser['status'] != 'verified' ? askAction('back') : ''"
+      <div
         style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px; border-radius: 15px; align-items: center; margin-bottom: 20px;">
 
         <div style="display: flex; align-items: center;">
-          <img *ngIf="verification['back'] != null"
+          <img (click)="goPicture(verification['back'])" *ngIf="verification['back'] != null"
             style="width: 50px; height: 50px; margin-right: 5px; object-fit: cover;" [src]="verification['back']"
             alt="">
 
@@ -77,8 +85,14 @@
             style="width: 50px; height: 50px; margin-right: 5px; object-fit: cover;" [src]="'assets/icon/upload.png'"
             alt="">
 
+          <div>
+            <div style="font-size: 12px">{{langua['Back Photo'][lang]}}</div>
+            <div (click)="currentUser['status'] != 'verified' ? askAction('back') : ''"
+              style="font-size: 12px; color: #FFBE2E;">{{langua['Click to Upload
+              photo'][lang]}}</div>
 
-          <div style="font-size: 12px">Back Photo</div>
+          </div>
+
 
         </div>
 
@@ -100,11 +114,11 @@
 
       <div *ngIf="currentUser['status'] != 'verified'" (click)="tootp()"
         style="background: #F0B900; text-align: center; border-radius: 8px; width: 80%;font-weight: 700; padding: 10px 0px ;">
-        Send Email</div>
+        {{langua['Submit'][lang]}} </div>
 
       <div *ngIf="currentUser['status'] == 'verified'"
         style="background: #dbc78f; text-align: center; border-radius: 8px; width: 80%;font-weight: 700; padding: 10px 0px ;">
-        Verified</div>
+        {{langua['Verified'][lang]}}</div>
 
     </div>
 
@@ -125,11 +139,14 @@
 
 
 
-            <div style="color:#FFBE2E; font-weight: 600; font-size: 22px; margin: 20px;">Email Verification</div>
-            <div style="text-align: center; width: 80%;margin-bottom: 3px; font-size: 13px;">We have sent an email
-              to your email account!</div>
+            <div style="color:#FFBE2E; font-weight: 600; font-size: 22px; margin: 20px;">{{langua['Email
+              Verification'][lang]}}</div>
+            <div style="text-align: center; width: 80%;margin-bottom: 3px; font-size: 13px;">{{langua['We have sent an
+              email
+              to your email account!'][lang]}}</div>
 
-            <div style="text-align: center; width: 80%;margin-bottom: 10px; font-size: 13px;">Kindly check your email at
+            <div style="text-align: center; width: 80%;margin-bottom: 10px; font-size: 13px;">{{langua['Kindly check
+              your email at'][lang]}}
               {{ email }}</div>
 
 
@@ -180,7 +197,7 @@
 
             <div (click)="goHome()" class="ion-activatable ripple-parent"
               style="background-color: #FFBE2E; padding: 10px; border-radius: 10px;">
-              <div style="font-size: 12px; color: black; font-weight: 550;"> PROCEED </div>
+              <div style="font-size: 12px; color: black; font-weight: 550;"> {{langua['PROCEED'][lang]}} </div>
               <ion-ripple-effect type="unbounded"></ion-ripple-effect>
             </div>
             <!-- <div style=" margin-top: 65px;">Din't receive email? <span (click)="sendCode()"

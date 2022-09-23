@@ -3,7 +3,7 @@
   <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px;color: #ffffff;">
 
     <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
-    <div style="font-size: 20px; font-weight: 600;">Profile</div>
+    <div style="font-size: 20px; font-weight: 600;"> {{langua['Profile'][lang]}}</div>
     <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
 
   </div>
@@ -22,13 +22,14 @@
         <div style="display: flex; align-items: center; margin-bottom: 30px;">
 
           <div style=" width: 50px; height: 50px; border-radius: 100%;margin-right: 5px;">
-            <img style=" width: 50px; height: 50px; border-radius: 100%;" src="{{'assets/icon/person.png'}}" alt="">
+            <img style=" width: 50px; height: 50px; border-radius: 100%;"
+              src="{{ currentUser['photo'] || 'assets/icon/person.png'}}" alt="">
           </div>
 
           <div>
 
             <div style="font-weight:600;">
-              {{ currentUser['name'] }}
+              {{ currentUser['user_name'] ? 'CP - ' + currentUser['user_name'] : currentUser['name'] }}
             </div>
 
             <div>
@@ -53,50 +54,72 @@
 
       <div (click)=" gowallet()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
 
-        <img style="width: 18 px; color:#F0B900;" src="/assets/icon/Vector.png" alt="">
-        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px ;">My Wallets</div>
+        <img style="width: 20px; color:#F0B900;" src="/assets/icon/Vector.png" alt="">
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px ;">{{langua['My Wallets'][lang]}} </div>
+
+      </div>
+
+      <div (click)=" resulthistory()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
+
+        <img style="width: 20px; color:#F0B900;" src="/assets/icon/result.png" alt="">
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px ;">{{langua['Result History'][lang]}} </div>
 
       </div>
 
       <div (click)="gorefer()" style="display: flex;align-items: center; margin: 20px 0px;height: 40px;">
 
         <ion-icon style="font-size: 20px; color:#F0B900;" name="link-outline"></ion-icon>
-        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Refer Friends</div>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">{{langua['Refer Friends'][lang]}} </div>
 
       </div>
 
       <div (click)="gorecordhistory()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
 
         <img style="width: 18px; color:#F0B900;" src="/assets/icon/Vector (1).png" alt="">
-        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Help Center</div>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">{{langua['Help Center'][lang]}}</div>
 
       </div>
 
-      <div style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
+      <div (click)="goprivacy()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
 
         <ion-icon style="font-size: 20px; color:#F0B900;" name="shield-checkmark"></ion-icon>
-        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Privacy Policy</div>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">{{langua['Privacy Policy'][lang]}}</div>
 
       </div>
 
       <div (click)="goverify()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
 
         <ion-icon style="font-size: 20px; color:#F0B900;" name="person-outline"></ion-icon>
-        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Account Verification</div>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">{{langua['Account Verification'][lang]}}
+        </div>
 
       </div>
 
       <div (click)="goguide()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
 
         <ion-icon style="font-size: 20px; color:#F0B900;" name="newspaper-outline"></ion-icon>
-        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Guide Lines</div>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">{{langua['Guideline'][lang]}}</div>
+
+      </div>
+
+      <div (click)="golanguage()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
+
+        <ion-icon style="font-size: 20px; color:#F0B900;" name="newspaper-outline"></ion-icon>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Language / 切换语言</div>
 
       </div>
 
       <div (click)="signout()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
 
         <ion-icon style="font-size: 20px; color:#F0B900;" name="power-outline"></ion-icon>
-        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">Sign Out</div>
+        <div style="font-size: 15px;letter-spacing: 0.5px;margin-left: 15px;">{{langua['Sign Out'][lang]}}</div>
+
+      </div>
+
+      <div (click)="signout()" style="display: flex;align-items: center;margin: 20px 0px;height: 40px;">
+
+        <!-- <ion-icon style="font-size: 20px; color:#F0B900;" name="power-outline"></ion-icon> -->
+        <div style="font-size: 10px;letter-spacing: 0.5px;margin-left: 15px;">ver 1.0.11</div>
 
       </div>
 

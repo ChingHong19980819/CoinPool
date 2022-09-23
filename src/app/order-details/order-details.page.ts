@@ -11,6 +11,8 @@ import { DatePipe } from '@angular/common';
 import { CarpoolService } from '../carpool.service';
 import * as lodash from 'lodash'
 import { PlaceorderPage } from '../placeorder/placeorder.page';
+import { IonRouterOutlet } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-details',
@@ -24,30 +26,80 @@ export class OrderDetailsPage implements OnInit {
   selected = { name: 'Bitcoin' } as any;
   balls = ['', '', '', '']
   rangevalue = [] as any;
-  currentUser = {}
+  currentUser: any = {}
   coinList = []
   passOrders = []
   start
+  interval4
+  orderCountDownDate
+  maxValue = 100
+  totalUp = 0
+  totalDown = 0
+  coinId;
+  summary;
+
+  picture;
+
+  lang = localStorage.getItem('coinpool_language') || 'English'
+
+  langua = {
+    ["Summary"]: {
+      Chinese: "总结",
+      English: "Summary",
+    }, ["Custom Amount"]: {
+      Chinese: "自定义金额",
+      English: "Custom Amount",
+    }, ["Min"]: {
+      Chinese: "最低金额",
+      English: "Min",
+    }, ["Total"]: {
+      Chinese: "总数",
+      English: "Total",
+    }, ["Available Balance"]: {
+      Chinese: "可用额度",
+      English: "Available Balance",
+    }, ["Place Order"]: {
+      Chinese: "下单",
+      English: "Place Order",
+    }
+  }
+
+
   constructor(private nav: NavController,
     private http: HttpClient,
     private datePipe: DatePipe,
+    private outlet: IonRouterOutlet,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private carpoolService: CarpoolService, private modal: ModalController) { }
 
   ngOnInit() {
 
     // console.log(this.roundTo(123.456, 2))
+    this.lastOrderCountDown()
+
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.http.post(baseUrl + '/getUserInfo', { userid: user.uid }).subscribe((a) => {
           this.currentUser = a['data']
         })
 
-        this.getOrders()
-        this.http.post(baseUrl + '/getCoinList', {}).subscribe((a) => {
-          this.coinList = a['data'].map(c => ({ ...c, amount: 0, percentage: 0, transactionid: user.uid + Date.now() + c['name'] }))
-          this.selected['name'] = this.coinList[0]['name']
-          this.selected['id'] = this.coinList[0]['id']
+        this.activatedRoute.queryParams.subscribe((params) => {
+          this.coinId = params['id']
+          this.http.post(baseUrl + '/getCoinList', {}).subscribe((a) => {
+            this.coinList = a['data'].filter(d => d['id'] == this.coinId)
+            this.selected['name'] = this.coinList[0]['name']
+            this.picture = this.coinList[0]['picture']
+            this.selected['id'] = this.coinList[0]['id']
+            this.selected['transactionid'] = user.uid + Date.now() + this.coinList[0]['name']
+          })
+
+          this.showCalendar(this.currentMonth, this.currentYear);
         })
+
+
+        this.getOrders()
+
 
 
 
@@ -55,6 +107,8 @@ export class OrderDetailsPage implements OnInit {
     })
 
   }
+
+  amount
 
   async goplaceorder() {
 
@@ -66,7 +120,6 @@ export class OrderDetailsPage implements OnInit {
     await modal.present();
 
     const data = await modal.onWillDismiss();
-    console.log(data.data)
     if (data.data) {
       this.rangevalue = data.data / (this.currentUser['amount'] / 100) * 100
     }
@@ -80,13 +133,12 @@ export class OrderDetailsPage implements OnInit {
   }
 
   test() {
-    console.log(this.rangevalue);
 
   }
 
 
   back() {
-    this.nav.pop()
+    this.outlet.canGoBack() ? this.nav.pop() : this.router.navigate(['order'], { replaceUrl: true });
   }
 
   toprofile() {
@@ -94,20 +146,25 @@ export class OrderDetailsPage implements OnInit {
   }
 
   buyOrder() {
-    let orderDetails = this.coinList.filter(c => c['amount'] > 0)
 
-    if (orderDetails.length == 0) {
+    if (this.amount == 0) {
       this.carpoolService.showMessage('Please fill in all information!', '', 'error')
       return
     }
 
-    if (orderDetails.reduce((a, b) => a + b['amount'], 0) > this.currentUser['amount']) {
+    if ((this.amount * 100) > this.currentUser['amount']) {
       this.carpoolService.showMessage("You don't have enough credit to proceed!", '', 'error')
       return
     }
 
+
+    if ((this.amount * 100) < 10000) {
+      this.carpoolService.showMessage("The minimun place order amount is 100!", '', 'error')
+      return
+    }
+
+
     this.carpoolService.swal_button('Confirmation', 'Do you want to proceed?', 'warning').then((ans) => {
-      console.log(ans)
       if (ans == 'Confirm') {
         this.carpoolService.pleasewait('Please wait..', 'Submitting your application!')
 
@@ -115,26 +172,30 @@ export class OrderDetailsPage implements OnInit {
         let tradeInDate
 
         if (parseInt(this.datePipe.transform(firebase.firestore.Timestamp.now().toMillis(), 'HHmmss')) >= 160000) {
-          tradeInDate = cutOff
+          tradeInDate = new Date(cutOff).setDate(new Date(cutOff).getDate() + 1);
         } else {
-          tradeInDate = new Date(cutOff).setDate(new Date(cutOff).getDate() - 1);
+          tradeInDate = cutOff
         }
 
-        this.http.post(baseUrl + '/buyOrders', { orders: orderDetails.map(od => ({ transactionid: od['transactionid'], tradeindate: this.datePipe.transform(tradeInDate, 'dd-MM-yyyy'), coinid: od['id'], date: firebase.firestore.Timestamp.now().toMillis(), coin: od['name'], amount: this.roundTo(od['amount'], 2), userid: firebase.auth().currentUser.uid })) }).subscribe((res) => {
+        this.http.post(baseUrl + '/buyOrders', { orders: [{ transactionid: this.selected['transactionid'], tradeindate: this.datePipe.transform(tradeInDate, 'dd-MM-yyyy'), coinid: this.coinId, date: firebase.firestore.Timestamp.now().toMillis(), coin: this.selected['name'], amount: (this.roundTo(this.amount, 2) * 100), userid: firebase.auth().currentUser.uid }] }).subscribe((res) => {
           this.carpoolService.swalclose()
           if (res['success'] == true) {
             // this.currentUser['amount'] -= this.selected.amount
             // this.getOrders()
-            this.carpoolService.showMessage('Success', 'Your transaction is completed successfully', 'success')
             setTimeout(() => {
+              this.carpoolService.showMessage('Success', 'Your transaction is completed successfully', 'success')
               this.nav.navigateRoot('home')
-            }, 2000);
+            }, 0);
           }
           else {
-            this.carpoolService.showMessage('Error', res['message'], 'error')
+            setTimeout(() => {
+              this.carpoolService.showMessage('Error', res['message'], 'error')
+            }, 0)
           }
         }, error => {
-          this.carpoolService.swalclose()
+          setTimeout(() => {
+            this.carpoolService.swalclose()
+          }, 0)
         })
       }
     })
@@ -143,13 +204,25 @@ export class OrderDetailsPage implements OnInit {
   }
 
   rangeChange(eve) {
+    this.amount = this.roundTo((((this.currentUser['amount'] / 100) * eve.detail.value) / 100), 2)
+    // if (this.coinList.find(c => c['id'] == this.selected['id'])) {
+    //   this.coinList.find(c => c['id'] == this.selected['id'])['percentage'] = eve.detail.value
+    //   this.coinList.find(c => c['id'] == this.selected['id'])['amount'] = this.roundTo((this.currentUser['amount'] * this.rangevalue / 100), 2)
+    //   this.selected['amount'] = this.roundTo((this.currentUser['amount'] * this.rangevalue / 100), 2)
+    // }
+  }
 
-    if (this.coinList.find(c => c['id'] == this.selected['id'])) {
-      this.coinList.find(c => c['id'] == this.selected['id'])['percentage'] = eve.detail.value
-      this.coinList.find(c => c['id'] == this.selected['id'])['amount'] = this.currentUser['amount'] * this.rangevalue / 100
-      this.selected['amount'] = this.currentUser['amount'] * this.rangevalue / 100
+
+  changePercentage(e) {
+    if ((e.detail.value) > (this.currentUser['amount']) / 100) {
+      this.amount = 0;
+      setTimeout(() => {
+        this.amount = (this.currentUser['amount']) / 100;
+        this.rangevalue = this.amount / (this.currentUser['amount'] / 100) * 100
+      }, 1);
+    } else {
+      this.rangevalue = this.amount / (this.currentUser['amount'] / 100) * 100
     }
-
   }
 
   changeCoin(selected) {
@@ -162,25 +235,22 @@ export class OrderDetailsPage implements OnInit {
   getOrders() {
 
     var cutOff = new Date(firebase.firestore.Timestamp.now().toMillis()).setHours(16, 0, 0, 0)
-    this.start;
-    var end
+    var date
 
     if (parseInt(this.datePipe.transform(firebase.firestore.Timestamp.now().toMillis(), 'HHmmss')) >= 160000) {
-      this.start = cutOff
-      end = new Date(cutOff).setDate(new Date(cutOff).getDate() + 1);
+      date = this.datePipe.transform(new Date(cutOff).setDate(new Date(cutOff).getDate() + 1), 'dd-MM-yyyy')
     } else {
-      this.start = new Date(cutOff).setDate(new Date(cutOff).getDate() - 1);
-      end = cutOff
+      date = this.datePipe.transform(new Date(cutOff), 'dd-MM-yyyy')
     }
 
-    this.http.post(baseUrl + '/getOrdersByUid', { userid: firebase.auth().currentUser.uid, start: this.start, end: end, date: this.datePipe.transform(this.start, 'dd-MM-yyyy') }).subscribe((res) => {
+    this.http.post(baseUrl + '/getOrdersByUid', { userid: firebase.auth().currentUser.uid, date: date }).subscribe((res) => {
       this.passOrders = res['data']
 
       this.passOrders = lodash.chain(this.passOrders)
         // Group the elements of Array based on `color` property
         .groupBy("coinid")
         // `key` is group's name (color), `value` is the array of objects
-        .map((value, key) => ({ coinid: key, coinname: value[0]['coinname'], coinpicture: value[0]['coinpicture'], percentage: 2, investamount: value[0]['sum'] }))
+        .map((value, key) => ({ coinid: key, coinname: value[0]['coinname'], coinpicture: value[0]['coinpicture'], percentage: value[0]['percentage'], investamount: value[0]['sum'] / 100 }))
         .value()
     })
 
@@ -196,6 +266,112 @@ export class OrderDetailsPage implements OnInit {
     return Math.round(num * factor) / factor;
   };
 
+  lastOrderCountDown() {
+    // Update the count down every 1 second
+    this.interval4 = setInterval(() => {
+      this.orderCountDownDate = new Date().setHours(16, 0, 0, 0)
 
+      if (parseInt(this.datePipe.transform(Date.now(), 'HHmmss')) >= 160000) {
+        this.orderCountDownDate = new Date(this.orderCountDownDate).setDate(new Date(this.orderCountDownDate).getDate() + 1);
+      }
+
+    }, 1000);
+  }
+
+  ionViewWillLeave() {
+    clearInterval(this.interval4)
+  }
+
+
+  ionViewDidEnter() {
+
+  }
+
+  today2 = new Date();
+  currentMonth = this.today2.getMonth();
+  currentYear = this.today2.getFullYear();
+  monthToShow = ''
+  yearToShow = ''
+  months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+
+  dates = []
+  results = []
+
+  next() {
+    this.currentYear = (this.currentMonth === 11) ? this.currentYear + 1 : this.currentYear;
+    this.currentMonth = (this.currentMonth + 1) % 12;
+    this.showCalendar(this.currentMonth, this.currentYear);
+  }
+
+  previous() {
+    this.currentYear = (this.currentMonth === 0) ? this.currentYear - 1 : this.currentYear;
+    this.currentMonth = (this.currentMonth === 0) ? 11 : this.currentMonth - 1;
+    this.showCalendar(this.currentMonth, this.currentYear);
+  }
+
+
+  async showCalendar(month, year) {
+
+    this.dates = []
+
+    let firstDay = (new Date(year, month)).getDay();
+    let daysInMonth = 32 - new Date(year, month, 32).getDate();
+    this.monthToShow = this.months[month]
+    this.yearToShow = year
+    // console.log(this.monthToShow, this.yea)
+
+    await this.getResult()
+    let date: any = 1;
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 7; j++) {
+        if (i === 0 && j < firstDay) {
+          this.dates.push('')
+        }
+        else if (date > daysInMonth) {
+          break;
+        }
+        else {
+          this.dates.push(this.returnTwoDigits(date))
+          date++;
+        }
+      }
+    }
+
+    this.dates = this.dates.map(d => ({ date: d, percentage: d != '' ? ((this.results.filter(rs => rs['coinid'] == this.coinId).find(r => r['resultdate'].startsWith(d)) || {})['percentage'] || '') : '' }))
+  }
+
+
+  returnTwoDigits(x) {
+    return (x.toString().length == 1 ? '0' : '') + x
+  }
+
+  getResult() {
+    return new Promise((resolve, reject) => {
+      this.http.post(baseUrl + '/getResultByMonth', { coinid: this.coinId, month: (this.returnTwoDigits(this.currentMonth + 1) + '-' + this.currentYear) }).subscribe((res) => {
+        if (res['success'] == true) {
+          this.results = res['data']
+          this.totalUp = this.results.filter(rs => rs['percentage'] >= 0).length
+          this.totalDown = this.results.filter(rs => rs['percentage'] < 0).length
+
+          this.summary = this.results.reduce((h, l) => h + l['percentage'], 0)
+          resolve(true)
+        } else {
+          this.results = []
+          this.totalUp = this.results.filter(rs => rs['percentage'] >= 0).length
+          this.totalDown = this.results.filter(rs => rs['percentage'] < 0).length
+          this.summary = this.results.reduce((h, l) => h + l['percentage'], 0)
+          resolve(true)
+        }
+      }, error => {
+        this.results = []
+        this.totalUp = this.results.filter(rs => rs['percentage'] >= 0).length
+        this.totalDown = this.results.filter(rs => rs['percentage'] < 0).length
+        this.summary = this.results.reduce((h, l) => h + l['percentage'], 0)
+        resolve(true)
+      })
+    })
+
+  }
 
 }

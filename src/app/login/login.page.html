@@ -23,7 +23,7 @@
           border-radius: 10px; ">
             <!-- <ion-icon style="color: #FFFFFF; font-size: 16px;" name="mail-outline"></ion-icon> -->
             <ion-input [(ngModel)]="user['email']" style="font-size: 14px;margin: 5px;color: #FFFFFF;"
-              class="ion-no-padding" type="text" placeholder="Username">
+              class="ion-no-padding" type="text" placeholder="Email">
             </ion-input>
           </div>
 
@@ -32,15 +32,22 @@
           border-radius: 10px; margin-top: 20px; ">
             <!-- <ion-icon style="color: #FFFFFF; font-size: 16px;" name="mail-outline"></ion-icon> -->
             <ion-input [(ngModel)]="user['password']" style="font-size: 14px;margin: 5px;color: #FFFFFF;"
-              class="ion-no-padding" type="password" placeholder="Enter Password">
+              class="ion-no-padding" [type]=" showPassword == true ? 'text' : 'password'" placeholder="Enter Password">
             </ion-input>
+            <ion-icon *ngIf="showPassword == false" (click)="showPassword = !showPassword" style="color: white;"
+              name="eye-outline"></ion-icon>
+            <ion-icon *ngIf="showPassword == true" (click)="showPassword = !showPassword" style="color: white;"
+              name="eye-off-outline">
+            </ion-icon>
           </div>
 
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: flex-end; width: 80%; margin-top: 10px;">
+        <div (click)="forgot()"
+          style="display: flex; align-items: center; justify-content: flex-end; width: 80%; margin-top: 10px;">
           <div style="color: #FFFFFF; font-size: 12px;">Forgot password?
           </div>
+
         </div>
 
         <div (click)="login()" class="ion-activatable ripple-parent" style="border-radius: 10px;margin-top: 40px; padding: 15px 5px;width: 80%;
@@ -50,9 +57,10 @@
           <ion-ripple-effect type="unbounded"></ion-ripple-effect>
 
         </div>
-        <!-- 
-        <div style="color: #FFFFFF; margin-top: 10px;">New User? <span (click)="gosignup()" style="color: #F0B900;">Sign
-            Up</span></div> -->
+
+        <div style="color: #FFFFFF; margin-top: 15px; font-size: 14px;">New User ? <span (click)="gosignup()"
+            style="color: #F0B900;">Sign
+            Up</span></div>
 
       </div>
 

@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { Camera } from '@awesome-cordova-plugins/camera/ngx';
+import { Market } from '@ionic-native/market/ngx';
+import { SafariViewController } from '@awesome-cordova-plugins/safari-view-controller/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,7 +22,7 @@ import { Camera } from '@awesome-cordova-plugins/camera/ngx';
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DatePipe, SocialSharing, Camera],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DatePipe, SocialSharing, Camera, Market, SafariViewController],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

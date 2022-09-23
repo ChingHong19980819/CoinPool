@@ -8,6 +8,10 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import { HttpClient } from '@angular/common/http';
 import { baseUrl } from 'src/environments/environment.prod';
+import { IonRouterOutlet } from '@ionic/angular';
+import { Router } from '@angular/router';
+
+
 @Component({
   selector: 'app-result-list',
   templateUrl: './result-list.page.html',
@@ -15,9 +19,9 @@ import { baseUrl } from 'src/environments/environment.prod';
 })
 export class ResultListPage implements OnInit {
 
-  constructor(private modalCtrl: ModalController, private nav: NavController, private http: HttpClient, private activatedRoute: ActivatedRoute) { }
+  constructor(private modalCtrl: ModalController, private outlet: IonRouterOutlet, private router: Router, private nav: NavController, private http: HttpClient, private activatedRoute: ActivatedRoute) { }
 
-  data = {}
+  data: any = {}
 
   id;
   date;
@@ -48,7 +52,7 @@ export class ResultListPage implements OnInit {
   }
 
   back() {
-    this.nav.pop()
+    this.outlet.canGoBack() ? this.nav.pop() : this.router.navigate(['result'], { replaceUrl: true });
   }
 
 }

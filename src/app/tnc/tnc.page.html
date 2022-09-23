@@ -1,53 +1,100 @@
-<ion-content>
+<ion-content style="--background:black;">
 
-  <div
-    style="background:black;width: 100%; height: 100%; justify-content: center; align-items: center; display: flex; padding: 20px;">
+  <div style="background:black;width: 100%; height: 100%; display: flex; flex-direction: column; padding: 20px;">
+    <div style="height: 20vh; display: flex; justify-content: center; align-items: center;">
+      <img style="width: 278px; object-fit: contain;" src="/assets/icon/Logo.png" alt="">
+    </div>
+    <div style="color: white; height: 60vh; overflow: auto;">
+      <div style="margin-bottom: 20px;">
+        Terms of Service
+      </div>
 
-    <div style="display:flex;align-items: center; justify-content: center;  flex-direction: column; ">
+      <div style="font-size:15px; text-align: left; font-weight: 550; margin-bottom: 10px;">
+        Privacy Policy for Coinpool Fund
+      </div>
 
-      <img style="width: 278px; height: 30px; object-fit: contain;" src="/assets/icon/Logo.png" alt="">
+      <div style="font-size:12px; text-align: justify; font-weight: 550;margin-bottom: 15px; color: #888888;">
 
-      <div style="color: #FFFFFF; font-size: 20px; font-weight: 900; width: 100%; height: 60%;display: flex; align-items: center;
-       flex-direction: column;">
+        At Www.coinpool.com, accessible from Www.coinpool.com, one of our main priorities is the privacy of our
+        visitors. This Privacy Policy document contains types of information that is collected and recorded by
+        Www.coinpool.com and how we use it.
 
-        <div style="margin: 30px 0px;">
-          Terms of Service
-        </div>
+        If you have additional questions or require more information about our Privacy Policy, do not hesitate to
+        contact us.
 
-        <div style="font-size:13px; text-align: center;">
-          {{text}}
-        </div>
+        This Privacy Policy applies only to our online activities and is valid for visitors to our website with
+        regards to the information that they shared and/or collect in Www.coinpool.com. This policy is not applicable
+        to any information collected offline or via channels other than this website. Our Privacy Policy was created
+        with the help of the Free Privacy Policy Generator.
 
       </div>
-      <div style="height: 150px;"></div>
-      <div style="display: flex; width: 100%;justify-content: space-between; align-items: center; ">
 
-        <div style="color: #F0B900">Cancle</div>
-        <div style="background: #F0B900;padding: 10px 20px; border-radius: 10px;">Accept</div>
+      <div style="font-size:15px; text-align: left; font-weight: 550; margin-bottom: 10px;">
+        Consent
+      </div>
+
+      <div style="font-size:12px; text-align: justify; font-weight: 550;margin-bottom: 15px; color: #888888;">
+
+        By using our website, you hereby consent to our Privacy Policy and agree to its terms.
+
 
       </div>
+
+      <div style="font-size:15px; text-align: left; font-weight: 550; margin-bottom: 10px;">
+        Information We Collect
+      </div>
+
+      <div style="font-size:12px; text-align: justify; font-weight: 550;margin-bottom: 15px; color: #888888;">
+
+        The personal information that you are asked to provide, and the reasons why you are asked to provide it, will
+        be made clear to you at the point we ask you to provide your personal information.
+
+        If you contact us directly, we may receive additional information about you such as your name, email address,
+        phone number, the contents of the message and/or attachments you may send us, and any other information you
+        may choose to provide.
+
+        When you register for an Account, we may ask for your contact information, including items such as name,
+        company name, address, email address, and telephone number.
+      </div>
+
+      <div style="font-size:15px; text-align: left; font-weight: 550; margin-bottom: 10px;">
+        How we use your information
+      </div>
+
+      <div style="font-size:13px; text-align: left; font-weight: 550; margin-bottom: 10px;">
+        We use the information we collect in various ways, including to:
+
+
+      </div>
+
+      <ol style="padding: 0 14px; font-size: 12px;">
+        <li style="color: #888888; margin-bottom: 10px;text-align: justify">Provide, operate, and maintain our website
+        </li>
+        <li style="color: #888888; margin-bottom: 10px;text-align: justify">Improve, personalize, and expand our website
+        </li>
+        <li style="color: #888888; margin-bottom: 10px;text-align: justify">Understand and analyze how you use our
+          website
+
+        </li>
+        <li style="color: #888888; margin-bottom: 10px;text-align: justify">Develop new products, services, features,
+          and functionality
+
+        </li>
+        <li style="color: #888888; margin-bottom: 10px; text-align: justify">Communicate with you, either directly or
+          through one of our
+          partners, including for customer service, to provide you with updates and other information relating to the
+          website, and for marketing and promotional purposes</li>
+        <li style="color: #888888; margin-bottom: 10px;text-align: justify">Send you emails</li>
+        <li style="color: #888888; margin-bottom: 10px;text-align: justify">Find and prevent fraud</li>
+      </ol>
+
 
     </div>
+    <div
+      style="display: flex; width: 100%; margin-top: 30px; justify-content: space-between; align-items: center; padding: 0 10px;">
 
-
-
-
+      <div style="color: #F0B900">Cancle</div>
+      <div style="background: #F0B900;padding: 10px 20px; border-radius: 10px; font-weight: 550;">Accept</div>
+    </div>
   </div>
 </ion-content>
-
-
-<!-- <ion-content class="ion-padding">
-  <ion-button id="open-modal" expand="block">Open Sheet Modal</ion-button>
-
-  <ion-modal handle="false" class="modal-class" #modal trigger="open-modal" [initialBreakpoint]="0.25"
-    [breakpoints]="[0, 0.25, 0.5, 0.75]">
-    <ng-template>
-      <ion-content id="hellomodal" style="--background: #2E2E2E;">
-        <div style="display: flex; justify-content: center; padding: 8px;">
-          <div style="width: 55px; height: 7px; background-color: #FFBE2E; border-radius: 4px;"> </div>
-        </div>
-
-      </ion-content>
-    </ng-template>
-  </ion-modal>
-</ion-content> -->

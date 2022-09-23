@@ -14,7 +14,7 @@
         <div *ngIf=" platformwidth() > 300 ">
 
           <div style="background-color: #F0B900; padding: 5px 25px; border-radius: 20px; font-weight: 600;">
-            {{showDate }}
+            {{ showDate }}
           </div>
 
         </div>
@@ -23,7 +23,7 @@
 
           <div
             style="background-color: #F0B900; border-radius: 20px; font-weight: 600; width: 100px; text-align: center;">
-            {{today | date : 'dd.MM.yyyy' }}
+            {{ showDate }}
           </div>
 
         </div>
@@ -40,33 +40,39 @@
   <div style="width: 100%; flex-direction: column; justify-content: center;padding: 20px; overflow-y: auto;">
 
 
-    <div style="display: flex;width: 100%; margin-bottom: 20px; justify-content: center;">
+    <div style="display: flex;width: 100%; margin-bottom: 10px; justify-content: center;">
       <div style="display: flex;width: 100%;max-width: 600px;  ">
 
-        <div style="color: #ffffff; font-size: 20px;">Congratulations to <span style="font-weight: 600;">{{
+        <div style="color: #ffffff; font-size: 16px;">Congratulations to <span style="font-weight: 600;">{{
             currentUser['name'] }}</span>
         </div>
 
       </div>
     </div>
 
-    <div style="display: flex;width: 100%; margin-bottom: 20px;justify-content: center;">
+    <div *ngIf="platformwidth() <= 650" style="display: flex;width: 100%; justify-content: center;">
 
-      <div style="width: 100%;max-width: 600px; display: flex;align-items: center;justify-content: center;">
+      <div style="width: 100%;max-width: 600px; display: flex;align-items: flex-start;justify-content: center;">
 
         <div style="width: 80%; display: flex; flex-wrap: wrap;">
-          <div *ngIf="show == true" [ngStyle]="{'color': totalEarn() >= 0 ? '#2DFF84' : '#F07A7A' }"
-            style="font-size: 35px; font-weight: 900; width: 100%;"> {{ totalEarn() >= 0 ? '+' : '-' }}
-            $ {{ totalEarn() / 100 | number : '.2' }}</div>
+          <div *ngIf="show == true" [ngStyle]="{'color': earnedAmount >= 0 ? '#2DFF84' : '#F07A7A' }"
+            style="font-size: 24px; font-weight: 900; width: 100%;"> {{ earnedAmount >= 0 ? '+' : '-' }}
+            $ {{ earnedAmount | number : '.2-2' }}</div>
 
-          <div *ngIf="show == false" [ngStyle]="{'color': totalEarn() >= 0 ? '#2DFF84' : '#F07A7A' }"
-            style="font-size: 35px; font-weight: 900; width: 100%;"> {{ totalEarn() >= 0 ? '+' : '-' }}
+          <div *ngIf="show == false" [ngStyle]="{'color': earnedAmount >= 0 ? '#2DFF84' : '#F07A7A' }"
+            style="font-size: 24px; font-weight: 900; width: 100%;"> {{ earnedAmount >= 0 ? '+' : '-' }}
             $ {{ '******' }}</div>
 
-          <div [ngStyle]="{'color': totalEarn() >= 0 ? '#2DFF84' : '#F07A7A' }"
-            style="background-color: rgba(255, 255, 255, 0.209); margin-top: 15px; font-size: 18px; font-weight: 700; width: fit-content; padding: 10px 20px; border-radius: 20px;">
-            <div> {{ totalPercentage() >= 0 ? '+' : '-' }}
-              {{ totalPercentage() | number : '.2' }} % </div>
+          <div [ngStyle]="{'color': (results.length == 0 || totalPercentage() >= 0) ? '#2DFF84' : '#F07A7A' }"
+            style="background-color: rgba(255, 255, 255, 0.209); margin-top: 10px; font-size: 14px; font-weight: 700; width: fit-content; padding: 5px 15px; border-radius: 20px;">
+            <div> {{ totalPercentage() >= 0 ? '+' : results.length == 0 ? '+' : '' }}
+              {{ (results.length == 0 ? 0 : totalPercentage()) | number : '.2-2' }} % </div>
+          </div>
+
+          <div *ngIf="platformwidth() <= 650" (click)="toJournal()"
+            style="background-color: rgba(255, 255, 255, 0.209); color: white; margin-top: 10px; margin-bottom: 10px; font-size: 14px; font-weight: 700; width: fit-content; padding: 5px 15px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 13px; color: #ffffff; margin-right: 5px"> Show our journal</div>
+            <ion-icon style="font-size: 12px; color: #ffffff" slot="start" name="chevron-forward-outline"></ion-icon>
           </div>
         </div>
 
@@ -74,53 +80,103 @@
 
         <div style=" width:50%; max-width: 400px; color: #ffffff;">
           <img style="width:100% ;" src="/assets/icon/share gold.png" alt="">
-          <div style="text-align: center; font-size: 14px;">Referral ID: {{ code }}</div>
+          <div style="text-align: center; font-size: 12px; margin-top: -10px">Referral ID: {{ code }}</div>
         </div>
 
+
+
       </div>
+
+
+
+
+
+    </div>
+
+    <div *ngIf="platformwidth() > 650" style="display: flex;width: 100%; justify-content: center;">
+
+      <div style="width: 50%; max-width: 600px; display: flex;align-items: center;justify-content: center;">
+
+        <div style="width: 80%; ">
+          <div *ngIf="show == true" [ngStyle]="{'color': earnedAmount >= 0 ? '#2DFF84' : '#F07A7A' }"
+            style="font-size: 24px; font-weight: 900; width: 100%;"> {{ earnedAmount >= 0 ? '+' : '-' }}
+            $ {{ earnedAmount | number : '.2-2' }}</div>
+
+          <div *ngIf="show == false" [ngStyle]="{'color': earnedAmount >= 0 ? '#2DFF84' : '#F07A7A' }"
+            style="font-size: 24px; font-weight: 900; width: 100%;"> {{ earnedAmount >= 0 ? '+' : '-' }}
+            $ {{ '******' }}</div>
+
+          <div [ngStyle]="{'color': (results.length == 0 || totalPercentage() >= 0) ? '#2DFF84' : '#F07A7A' }"
+            style="background-color: rgba(255, 255, 255, 0.209); margin-top: 10px; font-size: 14px; font-weight: 700; width: fit-content; padding: 5px 15px; border-radius: 20px;">
+            <div> {{ totalPercentage() >= 0 ? '+' : results.length == 0 ? '+' : '' }}
+              {{ (results.length == 0 ? 0 : totalPercentage()) | number : '.2-2' }} % </div>
+          </div>
+
+          <div *ngIf="platformwidth() > 650" (click)="toJournal()"
+            style="background-color: rgba(255, 255, 255, 0.209); color: white; margin-top: 10px; margin-bottom: 10px; font-size: 14px; font-weight: 700; width: fit-content; padding: 5px 15px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 13px; color: #ffffff; margin-right: 5px"> Show our journal</div>
+            <ion-icon style="font-size: 12px; color: #ffffff" slot="start" name="chevron-forward-outline"></ion-icon>
+          </div>
+        </div>
+
+
+
+        <div style=" width:50%; max-width: 400px; margin-bottom: 30px; color: #ffffff;">
+          <img style="width:100% ;" src="/assets/icon/share gold.png" alt="">
+          <div style="text-align: center; font-size: 12px; margin-top: -10px">Referral ID: {{ code }}</div>
+        </div>
+
+
+
+      </div>
+
+
+
+
 
     </div>
 
 
     <div *ngIf="platformwidth() <= 650">
+
+
+
       <div
-        style="width:100%; display: flex; align-items: center; justify-content: center; color: #888888;margin-bottom: 10px; padding: 0px 20px;">
+        style="width:100%; display: flex; align-items: center; justify-content: center; color: #888888;margin-bottom: 10px; margin-top: 15px; padding: 0px 20px;">
 
         <div style="display: flex;width: 100%;max-width: 600px; justify-content: space-between; align-items: center;">
-          <div>Invested</div>
-          <div>Profit Earned</div>
+          <div style="font-size: 14px; color: #888888">Invested</div>
+          <div style="font-size: 14px; color: #888888">Profit Earned</div>
         </div>
-
-
       </div>
+
 
       <div *ngFor="let x of results"
         style="display: flex; align-items: center;justify-content: center; flex-direction: column;">
 
-        <div style="width: 100%; max-width: 600px; height: 90px; border-radius: 20px; display: flex; justify-content: space-between;
+        <div *ngIf="x.result == true" style="width: 100%; max-width: 600px; height: 90px; border-radius: 20px; display: flex; justify-content: space-between;
              background: linear-gradient(180deg, rgba(255, 249, 230, 0.444) 0%, rgba(255, 255, 255, 0.209) 66.67%);margin-bottom: 15px;
              padding: 20px 10px; color: #ffffff;">
-
           <div>
 
-            <div style="display:flex; align-items: flex-end;">
+            <div style="display:flex; align-items: center;">
 
               <div style="display: flex; align-items: center;">
-                <img style=" width:25px;height: 25px; margin-right: 5px;" src="{{x.picture}}" alt="">
-                <div>{{x.name}}</div>
+                <img style=" width:25px;height: 25px; margin-right: 5px;" src="{{x.coinpicture}}" alt="">
+                <div style="font-size: 14px; color: #ffffff; font-weight: 500;">{{x.coinname}}</div>
               </div>
 
               <div *ngIf="x.percentage >= 0"
-                style="color: #7BFFB2;font-size: 11px; display: flex; align-items: center; margin-bottom: 4px; margin-left: 5px;">
+                style="color: #7BFFB2;font-size: 11px; display: flex; align-items: center; margin-left: 10px;">
                 <img style="height: 5px; width: 5px; object-fit: cover; margin-right: 4px;" src="assets/icon/up.png"
                   alt="">
-                <div> {{x.percentage | number : '.2'}} % </div>
+                <div> {{x.percentage | number : '.2-2'}} % </div>
               </div>
               <div *ngIf="x.percentage < 0"
-                style="color: #FF7B7B;font-size: 11px; display: flex; align-items: center; margin-bottom: 4px; margin-left: 5px;">
+                style="color: #FF7B7B;font-size: 11px; display: flex; align-items: center; margin-left: 10px;">
                 <img style="height: 5px; width: 5px; object-fit: cover; margin-right: 4px;" src="assets/icon/down.png"
                   alt="">
-                <div> {{x.percentage | number : '.2'}} % </div>
+                <div> {{x.percentage | number : '.2-2'}} % </div>
               </div>
 
               <!-- <div *ngIf="x.percentage > 0"
@@ -137,14 +193,14 @@
               <ion-icon style=" width:25px;height: 25px; margin-right: 5px; color: transparent" slot="start" name="add">
               </ion-icon>
 
-              <div style="position: relative; width: 100px;">
-                <div [ngStyle]="{'width': returnWidth(x.percentage)}" *ngIf="x.percentage > 0"
+              <div style="position: relative; width: 100px;" *ngIf="x.percentage > 0">
+                <div [ngStyle]="{'width': returnWidth(x.percentage)}"
                   style="background: linear-gradient(270deg, #C7FFDD 0%, #2DFF84 100%);border-radius: 0px 20px 20px 0px;height: 14px;">
                 </div>
               </div>
 
-              <div style="position: relative; width: 100px;">
-                <div [ngStyle]="{'width': returnWidth(x.percentage)}" *ngIf="x.percentage < 0"
+              <div style="position: relative; width: 100px;" *ngIf="x.percentage < 0">
+                <div [ngStyle]="{'width': returnWidth2(x.percentage)}"
                   style="background: linear-gradient(90deg, rgba(0,36,13,1) 0%, rgba(255,123,123,1) 0%, rgba(255,241,241,1) 100%); border-radius: 0px 20px 20px 0px; height: 14px;">
                 </div>
               </div>
@@ -158,18 +214,99 @@
 
           </div>
 
-          <div *ngIf=" platformwidth() > 500 ">
-            <img src="/assets/icon/Stonks +.png" alt="">
+
+
+          <div
+            style="border-radius: 30px; width: 100px; height: 35px; background: #000000; display: flex; align-items: center; justify-content: center;">
+            <div *ngIf="show == true && x.percentage >= 0"
+              [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
+              style="font-weight: 700; font-size: 14px;"> $ {{
+              returnShortNum((((x.investamount * x.percentage) / 100) / 2) || 0) }} </div>
+            <div *ngIf="show == true && x.percentage < 0"
+              [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
+              style="font-weight: 700; font-size: 14px;"> $ {{
+              returnShortNum((((x.investamount * x.percentage) / 100)) || 0) }} </div>
+
+            <div *ngIf="show == false" [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
+              style="font-weight: 700; font-size: 16px;"> $ {{
+              '****' }} </div>
           </div>
+
+
+
+        </div>
+
+      </div>
+
+
+      <div *ngFor="let x of notradeOrders"
+        style="display: flex; align-items: center;justify-content: center; flex-direction: column;">
+
+        <div *ngIf="x.result == true" style="width: 100%; max-width: 600px; height: 90px; border-radius: 20px; display: flex; justify-content: space-between;
+             background: linear-gradient(180deg, rgba(255, 249, 230, 0.444) 0%, rgba(255, 255, 255, 0.209) 66.67%);margin-bottom: 15px;
+             padding: 20px 10px; color: #ffffff;">
+
+          <div>
+
+            <div style="display:flex; align-items: flex-end;">
+
+              <div style="display: flex; align-items: center;">
+                <img style=" width:25px;height: 25px; margin-right: 5px;" src="{{x.picture}}" alt="">
+                <div>{{x.name}}</div>
+              </div>
+
+              <div *ngIf="x.percentage >= 0"
+                style="color: #7BFFB2;font-size: 11px; display: flex; align-items: center; margin-bottom: 4px; margin-left: 5px;">
+                <img style="height: 5px; width: 5px; object-fit: cover; margin-right: 4px;" src="assets/icon/up.png"
+                  alt="">
+                <div> {{x.percentage | number : '.2-2'}} % </div>
+              </div>
+              <div *ngIf="x.percentage < 0"
+                style="color: #FF7B7B;font-size: 11px; display: flex; align-items: center; margin-bottom: 4px; margin-left: 5px;">
+                <img style="height: 5px; width: 5px; object-fit: cover; margin-right: 4px;" src="assets/icon/down.png"
+                  alt="">
+                <div> {{x.percentage | number : '.2-2'}} % </div>
+              </div>
+
+            </div>
+
+            <div style="display:flex; align-items: center;">
+
+              <ion-icon style=" width:25px;height: 25px; margin-right: 5px; color: transparent" slot="start" name="add">
+              </ion-icon>
+
+              <div style="position: relative; width: 100px;" *ngIf="x.percentage > 0">
+                <div [ngStyle]="{'width': returnWidth(x.percentage)}"
+                  style="background: linear-gradient(270deg, #C7FFDD 0%, #2DFF84 100%);border-radius: 0px 20px 20px 0px;height: 14px;">
+                </div>
+              </div>
+
+              <div style="position: relative; width: 100px;" *ngIf="x.percentage < 0">
+                <div [ngStyle]="{'width': returnWidth2(x.percentage)}"
+                  style="background: linear-gradient(90deg, rgba(0,36,13,1) 0%, rgba(255,123,123,1) 0%, rgba(255,241,241,1) 100%); border-radius: 0px 20px 20px 0px; height: 14px;">
+                </div>
+              </div>
+
+
+
+
+            </div>
+
+
+
+
+          </div>
+
+
 
           <div
             style="border-radius: 30px; width: 100px; height: 40px; background: #000000; display: flex; align-items: center; justify-content: center;">
-            <div *ngIf="show == true" [ngStyle]="{'color': x.amount_earned >= 0 ? '#2DFF84' : '#F07A7A' }"
-              style="font-weight: 700; font-size: 20px;"> {{ x.amount_earned >= 0 ? '+' : '-' }} $ {{
-              ((x.amount_earned + x.amount_charged) / 100) || 0 | number : '.2' }} </div>
+            <div *ngIf="show == true" [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
+              style="font-weight: 700; font-size: 20px;"> $ {{
+              returnShortNum(((x.investamount + x.percentage) / 100) || 0) }} </div>
 
-            <div *ngIf="show == false" [ngStyle]="{'color': x.amount_earned >= 0 ? '#2DFF84' : '#F07A7A' }"
-              style="font-weight: 700; font-size: 20px;"> {{ x.amount_earned >= 0 ? '+' : '-' }} $ {{
+            <div *ngIf="show == false" [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
+              style="font-weight: 700; font-size: 20px;"> $ {{
               '****' }} </div>
           </div>
 
@@ -182,91 +319,180 @@
 
     <div *ngIf="platformwidth() > 650" style=" display: flex; justify-content: center;">
 
-      <div
-        style="min-width: 600px; min-height: calc(100vh - 355px); padding: 0 30px; border-radius: 10px 10px 0 0; background: linear-gradient(180deg, rgba(255, 249, 230, 0.444) 0%, rgba(255, 255, 255, 0.209) 66.67%); ">
-        <div
-          style="width:100%; display: flex; align-items: center; justify-content: center; color: #888888;margin-bottom: 10px; padding: 0px 20px;">
+      <div>
 
+        <div
+          style="min-width: 600px; min-height: calc(100vh - 355px); padding: 0 30px; border-radius: 10px 10px 0 0; background: linear-gradient(180deg, rgba(255, 249, 230, 0.444) 0%, rgba(255, 255, 255, 0.209) 66.67%); ">
           <div
-            style="display: flex;width: 100%;max-width: 600px; justify-content: space-between; align-items: center; margin-top: 15px;">
-            <div>Invested</div>
-            <div>Profit Earned</div>
+            style="width:100%; display: flex; align-items: center; justify-content: center; color: #888888;margin-bottom: 10px; padding: 0px 20px;">
+
+            <div
+              style="display: flex;width: 100%;max-width: 600px; justify-content: space-between; align-items: center; margin-top: 15px;">
+              <div style="font-size: 14px; color: #888888">Invested</div>
+              <div style="font-size: 14px; color: #888888">Profit Earned</div>
+            </div>
           </div>
 
+          <div *ngFor=" let x of results"
+            style="display: flex; align-items: center;justify-content: center; flex-direction: column;">
 
-
-        </div>
-
-        <div *ngFor="let x of results"
-          style="display: flex; align-items: center;justify-content: center; flex-direction: column;">
-
-          <div style="width: 100%; max-width: 600px; height: 90px; border-radius: 20px; display: flex; justify-content: space-between;
+            <div *ngIf="x.result == true" style="width: 100%; max-width: 600px; height: 90px; border-radius: 20px; display: flex; justify-content: space-between;
              margin-bottom: 15px;
              padding: 20px 10px; color: #ffffff;">
 
-            <div>
+              <div>
 
-              <div style="display:flex; align-items: flex-end;">
+                <div style="display:flex; align-items: flex-end;">
 
-                <div style="display: flex; align-items: center;">
-                  <img style=" width:25px;height: 25px; margin-right: 5px;" src="{{x.picture}}" alt="">
-                  <div>{{x.name}}</div>
-                </div>
+                  <div style="display: flex; align-items: center;">
+                    <img style=" width:25px;height: 25px; margin-right: 5px;" src="{{x.coinpicture}}" alt="">
+                    <div>{{x.coinname}}</div>
+                  </div>
 
-                <div *ngIf="x.percentage > 0"
-                  style="margin-left: 15px; font-size: 12px; margin-bottom: 3px; color: #2DFF84;">{{x.percentage}} %
-                </div>
-
-                <div *ngIf="x.percentage < 0"
-                  style="margin-left: 15px; font-size: 12px; margin-bottom: 3px; color: #FF7B7B;">{{x.percentage}} %
-                </div>
-              </div>
-
-              <div style="display:flex; align-items: center;">
-
-                <ion-icon style=" width:25px;height: 25px; margin-right: 5px; color: transparent" slot="start"
-                  name="add">
-                </ion-icon>
-
-                <div style="position: relative; width: 100px;">
-                  <div [ngStyle]="{'width': returnWidth(x.percentage)}" *ngIf="x.percentage > 0"
-                    style="background: linear-gradient(270deg, #C7FFDD 0%, #2DFF84 100%);border-radius: 0px 20px 20px 0px;height: 14px;">
+                  <div *ngIf="x.percentage >= 0"
+                    style="color: #7BFFB2;font-size: 11px; display: flex; align-items: center; margin-bottom: 4px; margin-left: 5px;">
+                    <img style="height: 5px; width: 5px; object-fit: cover; margin-right: 4px;" src="assets/icon/up.png"
+                      alt="">
+                    <div> {{x.percentage | number : '.2-2'}} % </div>
+                  </div>
+                  <div *ngIf="x.percentage < 0"
+                    style="color: #FF7B7B;font-size: 11px; display: flex; align-items: center; margin-bottom: 4px; margin-left: 5px;">
+                    <img style="height: 5px; width: 5px; object-fit: cover; margin-right: 4px;"
+                      src="assets/icon/down.png" alt="">
+                    <div> {{x.percentage | number : '.2-2'}} % </div>
                   </div>
                 </div>
 
-                <div style="position: relative; width: 100px;">
-                  <div [ngStyle]="{'width': returnWidth(x.percentage)}" *ngIf="x.percentage < 0"
-                    style="background: linear-gradient(90deg, rgba(0,36,13,1) 0%, rgba(255,123,123,1) 0%, rgba(255,241,241,1) 100%); border-radius: 0px 20px 20px 0px; height: 14px;">
+                <div style="display:flex; align-items: center;">
+
+                  <ion-icon style=" width:25px;height: 25px; margin-right: 5px; color: transparent" slot="start"
+                    name="add">
+                  </ion-icon>
+
+                  <div style="position: relative; width: 100px;" *ngIf="x.percentage > 0">
+                    <div [ngStyle]="{'width': returnWidth(x.percentage)}"
+                      style="background: linear-gradient(270deg, #C7FFDD 0%, #2DFF84 100%);border-radius: 0px 20px 20px 0px;height: 14px;">
+                    </div>
                   </div>
+
+                  <div style="position: relative; width: 100px;" *ngIf="x.percentage < 0">
+                    <div [ngStyle]="{'width': returnWidth2(x.percentage)}"
+                      style="background: linear-gradient(90deg, rgba(0,36,13,1) 0%, rgba(255,123,123,1) 0%, rgba(255,241,241,1) 100%); border-radius: 0px 20px 20px 0px; height: 14px;">
+                    </div>
+                  </div>
+
                 </div>
 
+
+
+              </div>
+
+              <div>
+                <img *ngIf="x.percentage >= 0" style="width: 100px;" src="/assets/icon/Stonks +.png" alt="">
+                <img *ngIf="x.percentage < 0" style="width: 100px;" src="/assets/icon/Stonks -.png" alt="">
+              </div>
+
+              <div
+                style="border-radius: 30px; width: 100px; height: 40px; background: #000000; display: flex; align-items: center; justify-content: center;">
+                <div *ngIf="show == true && x.percentage >= 0"
+                  [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
+                  style="font-weight: 700; font-size: 20px;"> $ {{
+                  returnShortNum((((x.investamount * x.percentage) / 100) / 2) || 0) }} </div>
+
+                <div *ngIf="show == true && x.percentage < 0"
+                  [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
+                  style="font-weight: 700; font-size: 20px;"> $ {{
+                  returnShortNum((((x.investamount * x.percentage) / 100)) || 0) }} </div>
+
+                <div *ngIf="show == false" [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
+                  style="font-weight: 700; font-size: 20px;"> $ {{
+                  '****' }} </div>
               </div>
 
 
 
             </div>
-
-            <div>
-              <img *ngIf="x.percentage > 0" src="/assets/icon/Stonks +.png" alt="">
-              <img *ngIf="x.percentage < 0" src="/assets/icon/Stonks -.png" alt="">
-            </div>
-
-            <div
-              style="border-radius: 30px; width: 100px; height: 40px; background: #000000; display: flex; align-items: center; justify-content: center;">
-              <div *ngIf="show == true" [ngStyle]="{'color': x.amount_earned >= 0 ? '#2DFF84' : '#F07A7A' }"
-                style="font-weight: 700; font-size: 20px;"> {{ x.amount_earned >= 0 ? '+' : '-' }} $ {{
-                ((x.amount_earned + x.amount_charged) / 100) || 0 | number : '.2' }} </div>
-
-              <div *ngIf="show == false" [ngStyle]="{'color': x.amount_earned >= 0 ? '#2DFF84' : '#F07A7A' }"
-                style="font-weight: 700; font-size: 20px;"> {{ x.amount_earned >= 0 ? '+' : '-' }} $ {{
-                '****' }} </div>
-            </div>
-
-
 
           </div>
 
+          <div *ngFor="let x of notradeOrders"
+            style="display: flex; align-items: center;justify-content: center; flex-direction: column;">
+
+            <div *ngIf="x.result == true" style="width: 100%; max-width: 600px; height: 90px; border-radius: 20px; display: flex; justify-content: space-between;
+           margin-bottom: 15px;
+           padding: 20px 10px; color: #ffffff;">
+
+              <div>
+
+                <div style="display:flex; align-items: flex-end;">
+
+                  <div style="display: flex; align-items: center;">
+                    <img style=" width:25px;height: 25px; margin-right: 5px;" src="{{x.picture}}" alt="">
+                    <div>{{x.name}}</div>
+                  </div>
+
+                  <div *ngIf="x.percentage >= 0"
+                    style="color: #7BFFB2;font-size: 11px; display: flex; align-items: center; margin-bottom: 4px; margin-left: 5px;">
+                    <img style="height: 5px; width: 5px; object-fit: cover; margin-right: 4px;" src="assets/icon/up.png"
+                      alt="">
+                    <div> {{x.percentage | number : '.2-2'}} % </div>
+                  </div>
+                  <div *ngIf="x.percentage < 0"
+                    style="color: #FF7B7B;font-size: 11px; display: flex; align-items: center; margin-bottom: 4px; margin-left: 5px;">
+                    <img style="height: 5px; width: 5px; object-fit: cover; margin-right: 4px;"
+                      src="assets/icon/down.png" alt="">
+                    <div> {{x.percentage | number : '.2-2'}} % </div>
+                  </div>
+                </div>
+
+                <div style="display:flex; align-items: center;">
+
+                  <ion-icon style=" width:25px;height: 25px; margin-right: 5px; color: transparent" slot="start"
+                    name="add">
+                  </ion-icon>
+
+                  <div style="position: relative; width: 100px;" *ngIf="x.percentage > 0">
+                    <div [ngStyle]="{'width': returnWidth(x.percentage)}"
+                      style="background: linear-gradient(270deg, #C7FFDD 0%, #2DFF84 100%);border-radius: 0px 20px 20px 0px;height: 14px;">
+                    </div>
+                  </div>
+
+                  <div style="position: relative; width: 100px;" *ngIf="x.percentage < 0">
+                    <div [ngStyle]="{'width': returnWidth2(x.percentage)}"
+                      style="background: linear-gradient(90deg, rgba(0,36,13,1) 0%, rgba(255,123,123,1) 0%, rgba(255,241,241,1) 100%); border-radius: 0px 20px 20px 0px; height: 14px;">
+                    </div>
+                  </div>
+
+                </div>
+
+
+
+              </div>
+
+              <div>
+                <img *ngIf="x.percentage >= 0" style="width: 100px;" src="/assets/icon/Stonks +.png" alt="">
+                <img *ngIf="x.percentage < 0" style="width: 100px;" src="/assets/icon/Stonks -.png" alt="">
+              </div>
+
+              <div
+                style="border-radius: 30px; width: 100px; height: 40px; background: #000000; display: flex; align-items: center; justify-content: center;">
+                <div *ngIf="show == true" [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
+                  style="font-weight: 700; font-size: 20px;"> $ {{
+                  returnShortNum(((x.investamount + x.percentage) / 100) || 0) }} </div>
+
+                <div *ngIf="show == false" [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
+                  style="font-weight: 700; font-size: 20px;"> $ {{
+                  '****' }} </div>
+              </div>
+
+
+
+            </div>
+
+          </div>
         </div>
+
+
 
       </div>
 

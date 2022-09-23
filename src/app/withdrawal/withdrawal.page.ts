@@ -8,6 +8,8 @@ import 'firebase/firestore';
 import { HttpClient } from '@angular/common/http';
 import { baseUrl } from 'src/environments/environment.prod';
 import { CarpoolService } from '../carpool.service';
+import { IonRouterOutlet } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-withdrawal',
@@ -17,19 +19,80 @@ import { CarpoolService } from '../carpool.service';
 export class WithdrawalPage implements OnInit {
 
   select = 'new';
-  application = {
+  application: any = {
     address: '',
     network: ''
   }
 
   addresses = []
 
-  currentUser = {}
+  currentUser: any = {}
+
+  lang = localStorage.getItem('coinpool_language') || 'English'
+
+  langua = {
+    ["Withdrawal"]: {
+      Chinese: "提款",
+      English: "Withdrawal",
+    }, ["*Your request will process within 48 hour"]: {
+      Chinese: "*您的请求将在 48 小时内处理",
+      English: "*Your request will process within 48 hour",
+    }, ["*Withdrawal charges 6% of total amount"]: {
+      Chinese: "*提款费为总金额的6%",
+      English: "*Withdrawal charges 6% of total amount",
+    }, ["Receive Amount"]: {
+      Chinese: "收款金额",
+      English: "Receive Amount",
+    }, ["Available"]: {
+      Chinese: "可提取金额",
+      English: "Available",
+    }, ["Max"]: {
+      Chinese: "最大限度",
+      English: "Max",
+    }, ["Amount"]: {
+      Chinese: "数额",
+      English: "Amount",
+    }, ["Withdraw"]: {
+      Chinese: "提款",
+      English: "Withdraw",
+    }, ["Network"]: {
+      Chinese: "网络",
+      English: "Network",
+    }, ["Select Address"]: {
+      Chinese: "选择地址",
+      English: "Select Address",
+    }, ["Address"]: {
+      Chinese: "地址",
+      English: "Address",
+    }, ["Address Book"]: {
+      Chinese: "地址簿",
+      English: "Address Book",
+    }, ["New Address"]: {
+      Chinese: "新地址",
+      English: "New Address",
+    }, ["Send USDT"]: {
+      Chinese: "发送USDT",
+      English: "Send USDT",
+    }, ["Enter Address"]: {
+      Chinese: "输入地址",
+      English: "Enter Address",
+    }, ["Select Network"]: {
+      Chinese: "选择网络",
+      English: "Select Network",
+    }, ["Enter your amount"]: {
+      Chinese: "输入您的金额",
+      English: "Enter your amount",
+    }
+
+  }
+
+
 
   constructor(private nav: NavController,
     private alertController: AlertController,
     public modal: ModalController,
     private http: HttpClient,
+    private outlet: IonRouterOutlet, private router: Router,
     private carPool: CarpoolService) { }
 
   ngOnInit() {
@@ -41,6 +104,7 @@ export class WithdrawalPage implements OnInit {
 
         this.http.post(baseUrl + '/getAddress', { userid: user.uid }).subscribe((a) => {
           this.addresses = a['data'].map(asd => asd['address'])
+          this.addresses = ['123', '321']
         })
 
       }
@@ -48,7 +112,7 @@ export class WithdrawalPage implements OnInit {
   }
 
   back() {
-    this.nav.pop()
+    this.outlet.canGoBack() ? this.nav.pop() : this.router.navigate(['mywallet'], { replaceUrl: true });
   }
 
   async tonetwork() {
@@ -76,14 +140,17 @@ export class WithdrawalPage implements OnInit {
       return
     }
 
+    if ((this.application['amount'] * 100) <= 0) {
+      alert('Amount should greater than 0!')
+      return
+    }
+
     if ((this.application['amount'] * 100) > this.currentUser['amount']) {
       alert('Exceed the limit!')
       return
-
     }
 
-    this.carPool.swal_button('Please Confirm Your Withdraw Information', 'Address : ' + this.application['address'] + '\n\n' + 'Amount : RM' + this.application['amount'], 'warning').then((ans) => {
-      console.log(ans)
+    this.carPool.swal_button('Please Confirm Your Withdraw Information', 'Address : ' + this.application['address'] + '\n\n' + 'Amount : ' + this.application['amount'] + ' USDT', 'warning').then((ans) => {
       if (ans == 'Confirm') {
 
         this.carPool.pleasewait('Please wait..', 'Submiting your application...')
@@ -94,18 +161,22 @@ export class WithdrawalPage implements OnInit {
           amount: this.roundTo(this.application['amount'], 2),
           userid: firebase.auth().currentUser.uid
         }).subscribe((a) => {
-          this.carPool.swalclose()
 
           if (a['success'] == true) {
             this.nav.navigateRoot('home')
-            this.carPool.showMessage('Success', '', 'success')
+
+            setTimeout(() => {
+              this.carPool.showMessage('Success', '', 'success')
+
+            }, 0);
+
+
           } else {
             this.carPool.showMessage('Fail', a['message'], 'error')
           }
           // this.edit = false
         }, error => {
           this.carPool.swalclose()
-          console.log(error)
         })
 
       }

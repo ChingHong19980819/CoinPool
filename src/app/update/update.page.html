@@ -1,0 +1,41 @@
+<ion-content style="--background: black">
+  <div style="width: 100%; height: 100%;">
+
+    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+
+
+
+      <div style="width: 100%; padding: 20px; ">
+
+        <div style="display: flex; align-items: center; justify-content: center; width: 100%; margin-bottom: 100px;">
+          <img style="width: 278px; height: 49px; " src="/assets/icon/Logo.png" alt="">
+        </div>
+
+        <div class="line"
+          style="display: flex; align-items: center; justify-content: center; width: 100%; margin-bottom: 10px;">
+          <ion-icon style="font-size: 20px; color: white; margin-right: 5px; " name="arrow-up-circle-outline">
+          </ion-icon>
+          <h1 style="font-size: 16px; color: white; margin: 0  ">版本更新</h1>
+        </div>
+
+        <div
+          style="width: 100%; display: flex; align-items: flex-start; flex-direction: column; margin-top: 20px; margin-bottom: 20px;">
+          <div style="color: white; font-size: 14px; font-weight: 500; margin-bottom: 10px;">
+            &#8226; A new update is available and ready to install.
+          </div>
+          <div style="color: white; font-size: 14px; font-weight: 500; margin-bottom: 10px; ">
+            &#8226; 赏脸更新一下呗？新版好好用的喔～
+          </div>
+        </div>
+
+        <div class="ion-activatable ripple-parent" (click)="openMarket()"
+          style="width: 100%; display: flex; justify-content: center; align-items:center; background-color: #F0B900; padding: 10px; border-radius: 10px;">
+          <div style="color: #fff; font-size: 16px; font-weight: 600; text-align: center; width: 90%; ">Install now
+            立即更新
+          </div>
+          <ion-ripple-effect></ion-ripple-effect>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

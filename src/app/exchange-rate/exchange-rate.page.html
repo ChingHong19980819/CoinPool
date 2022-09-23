@@ -1,0 +1,85 @@
+<ion-header class="ion-no-border" style=" background:#e79f05;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px;color: #ffffff;">
+
+    <img style="width : 150px; object-fit: contain;" src="/assets/icon/logo 2.png" alt="">
+    <div style="width: 10px;"></div>
+    <!-- <ion-icon (click)="goprofile()" style="font-size: 25px;" name="menu-outline"></ion-icon> -->
+
+  </div>
+
+</ion-header>
+
+<ion-content style="--background: #23232b;">
+
+  <div
+    style="width: 100%; padding: 20px 10px; background-color: #292931; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; margin-bottom: 20px; ">
+    <div style="width: 100%; display: flex; align-items: center; justify-content: space-between; ">
+
+      <div style="width: 45%; background-color: #23232b; border-radius: 30px;">
+        <ion-select [(ngModel)]="from" interface="popover" placeholder="Select currency"
+          style="font-size: 14px; color: #ffffff; --width: 100%; --max-width: 100%;">
+          <ion-select-option style="width: 100%;" *ngFor="let void of currencies" [value]="void.currency">
+            {{ void.currency }}
+          </ion-select-option>
+        </ion-select>
+      </div>
+
+      <ion-icon style="color: #ffffff; font-size: 20px" name="shuffle"></ion-icon>
+
+      <div style="width: 45%; background-color: #23232b; border-radius: 30px;">
+        <ion-select [(ngModel)]="to" interface="popover" placeholder="Select currency"
+          style="font-size: 14px; color: #ffffff; --width: 100%; --max-width: 100%;">
+          <ion-select-option style="width: 100%;" *ngFor="let void of currencies" [value]="void.currency">
+            {{ void.currency }}
+          </ion-select-option>
+        </ion-select>
+      </div>
+    </div>
+
+    <div style="width: 100%; padding: 10px">
+
+      <ion-item lines="none" style="width: 100%; --background: none;  ">
+        <ion-label style="color: #ffffff" position="stacked">Enter rate</ion-label>
+        <ion-input style="color: #e79f05; text-align: center; font-weight: 500; font-size: 30px;" [(ngModel)]="amount">
+        </ion-input>
+      </ion-item>
+
+      <div
+        style="color: white; text-align: center; font-weight: bold; border-top: 1px solid #44444c; padding-top: 10px; margin-bottom: 20px">
+        {{from || 'USD'}}
+      </div>
+
+      <div style="color: #e79f05; text-align: center; font-weight: 500; font-size: 30px; margin-bottom: 10px">
+        {{returnExchangeRate() || 1 | number : '.2-2' }}
+      </div>
+
+      <div
+        style="color: white; text-align: center; font-weight: bold; border-bottom: 1px solid #44444c; padding-bottom: 20px; ">
+        {{to || 'USD'}}
+      </div>
+    </div>
+  </div>
+
+  <div style="width: 100%; background-color: #292931; ">
+
+
+    <div *ngFor="let item of currencies"
+      style="display: flex; align-items: center; justify-content: space-between; margin: 0 15px; padding: 10px; border-bottom: 0.5px solid #46464d;">
+      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div style="color: white; font-weight: bold; font-size: 16px; margin-bottom: 3px;">
+          {{ item.currency }}
+        </div>
+        <div style="color: #97979a; font-size: 14px">
+          {{ item.name }}
+        </div>
+      </div>
+
+      <div style="font-size: 14px; font-weight: 500; color: #ffffff;">
+        {{ item.rate }}
+      </div>
+
+    </div>
+
+  </div>
+</ion-content>

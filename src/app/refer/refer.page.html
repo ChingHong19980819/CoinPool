@@ -3,7 +3,7 @@
   <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px; color: #ffffff;">
 
     <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
-    <div style="font-size: 20px; font-weight: 600;">Refer Friends</div>
+    <div style="font-size: 20px; font-weight: 600;">{{langua['Refer Friends'][lang]}}</div>
     <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
 
   </div>
@@ -24,19 +24,19 @@
 
       <div style=" display: flex; justify-content: center; align-items: center; margin-top: 10px;">
 
-        <div (click)="shareLink()"
+        <!-- <div (click)="shareLink()"
           style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 20px; text-align: center;">
-          SHARE</div>
+          SHARE</div> -->
 
-        <div (click)="copy2('https://coinpool?code=' + referralCode )"
+        <div (click)="copyToClipboard(('https://appcoinpool.web.app/signup?code=' + referralCode))"
           style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 20px; text-align: center; margin-left: 5px;">
-          Copy</div>
+          {{langua['Copy'][lang]}} </div>
 
       </div>
 
     </div>
 
-    <div>Your Friends</div>
+    <div>{{langua['Your Friends'][lang]}}</div>
 
     <div style="color: #ffffff; width: 100%; display: flex;flex-wrap: wrap;">
 
@@ -54,10 +54,11 @@
           <div style="text-align: center;color: #F0B900; margin-bottom: 5px; font-size: 12px;">{{selectedDate}}
           </div>
           <div *ngIf="x.amounttoday > 0"
-            style="text-align: center;color: #F0B900; margin-bottom: 5px; font-size: 12px;">Total Trade
-            Today ( {{ x.amounttoday / 100 | number : '.2' }} )</div>
+            style="text-align: center;color: #F0B900; margin-bottom: 5px; font-size: 12px;">{{langua['Total Trade
+            Today'][lang]}} ( {{ x.amounttoday / 100 | number : '.2-2' }} )</div>
           <div *ngIf="!(x.amounttoday > 0)"
-            style="text-align: center;color: #F0B900; margin-bottom: 5px; font-size: 12px;">No trade yet
+            style="text-align: center;color: #F0B900; margin-bottom: 5px; font-size: 12px;"> {{langua['No trade
+            yet'][lang]}}
           </div>
         </div>
 

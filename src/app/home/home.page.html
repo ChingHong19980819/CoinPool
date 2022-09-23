@@ -14,6 +14,10 @@
 
 <ion-content>
 
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <div>
 
     <div style="width: 100%;height: 250px; padding: 20px 20px 0px 20px;
@@ -25,8 +29,8 @@
 
         <div style="display: flex;padding: 10px; align-items: center;">
 
-          <ion-icon (click)="back()" style="font-size: 25px; margin-right: 10px;" name="notifications-outline">
-          </ion-icon>
+          <!-- <ion-icon (click)="back()" style="font-size: 25px; margin-right: 10px;" name="notifications-outline">
+          </ion-icon> -->
 
           <ion-icon (click)="goprofile()" style="font-size: 25px" name="menu-outline"></ion-icon>
 
@@ -34,17 +38,19 @@
       </div>
 
       <div style="font-weight: 700">
-        <div style="font-size: 26px;color: #6E5015;">Hello, {{ currentUser['name'] }}</div>
-        <div style="font-size: 14px; color: #6E5015;">Your Available Balance</div>
+        <div style="font-size: 26px;color: #6E5015;">{{langua['Hello'][lang]}}, {{ currentUser['user_name'] ? 'CP - ' +
+          currentUser['user_name'] : currentUser['name'] }}</div>
+        <div style="font-size: 14px; color: #6E5015;"> {{langua['Your Available Balance'][lang]}}</div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-          <div style="font-size: 32px;">${{ (currentUser['amount'] / 100 || 0) | number : '.2' }}</div>
-          <div style="font-size: 12px; text-align: center;">(Total invested) <span
-              style="font-weight: 800;">${{(totalInvestment / 100 || 0) |
+          <div style="font-size: 32px;">${{ (currentUser['amount'] / 100 || 0) | number : '.2-2' }}</div>
+          <div style="font-size: 12px; text-align: center;">( {{langua['Total invested'][lang]}}) <span
+              style="font-weight: 800;">${{(totalSelfInvestment / 100 || 0) |
               number}}</span></div>
         </div>
 
       </div>
     </div>
+
 
     <!-- main -->
     <div
@@ -52,22 +58,22 @@
 
       <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 30px; ">
 
-        <div (click)="gotopup()" style="background-color: #F0B900;width: 100px;height: 41px; font-weight: 600; border-radius: 10px; width: 100px; display: flex;
+        <div (click)="gotopup()" style="background-color: #F0B900; width: 100px; padding: 0 5px; height: 41px; font-weight: 600; border-radius: 10px; width: 100px; display: flex;
           align-items: center;justify-content: center;margin: 5px;">
-          Top up</div>
+          {{langua['Top up'][lang]}} </div>
 
-        <div (click)="goorder()" style="background-color: #F0B900;width: 100px;height: 41px; font-weight: 600; border-radius: 10px; width: 100px; display: flex;
+        <div (click)="goorder()" style="background-color: #F0B900; width: 100px; padding: 0 5px; height: 41px; font-weight: 600; border-radius: 10px; width: 100px; display: flex;
           align-items: center;justify-content: center; text-align: center;margin: 5px; ">
-          Place Order</div>
+          {{langua['Place Order'][lang]}} </div>
 
-        <div (click)="goresult()" style="background-color: #F0B900;width: 100px;height: 41px; font-weight: 600; border-radius: 10px; width: 100px; display: flex;
+        <div (click)="goresult()" style="background-color: #F0B900; width: 100px; padding: 0 5px;height: 41px; font-weight: 600; border-radius: 10px; width: 100px; display: flex;
           align-items: center;justify-content: center;margin: 5px; ">
-          Result</div>
+          {{langua['Result'][lang]}} </div>
 
 
       </div>
 
-      <div style="color:#FFFFFF; font-weight: 600; font-size: 20px;">Result</div>
+      <div style="color:#FFFFFF; font-weight: 600; font-size: 20px;"> {{langua['Result'][lang]}}</div>
 
       <div style="color:#ffffff; display: flex; align-items: center; flex-direction: column; margin:30px 0px">
 
@@ -77,19 +83,19 @@
             <div id="hours" style="background-color: #F0B900;height: 53px; width:64px; border-radius: 20px;
             font-size: 28px; display: flex; align-items: center;justify-content: center; margin-bottom: 5px;">-
             </div>
-            <div style="color: #FFFFFF; text-align: center;font-weight: 600;">Hour</div>
+            <div style="color: #FFFFFF; text-align: center;font-weight: 600;"> {{langua['Hour'][lang]}}</div>
           </div>
 
           <div>
             <div id="minutes" style="background-color: #F0B900;height: 53px; width:64px; border-radius: 20px;
             font-size: 28px;display: flex; align-items: center;justify-content: center; margin-bottom: 5px;">-</div>
-            <div style="color: #FFFFFF; text-align: center;font-weight: 600;">Minutes</div>
+            <div style="color: #FFFFFF; text-align: center;font-weight: 600;"> {{langua['Minutes'][lang]}}</div>
           </div>
 
           <div style="align-items: center;">
             <div id="seconds" style="background-color: #F0B900;height: 53px; width:64px; border-radius: 20px;
             font-size: 28px;display: flex; align-items: center;justify-content: center; margin-bottom: 5px;">-</div>
-            <div style="color: #FFFFFF; text-align: center; font-weight: 600;">Sec</div>
+            <div style="color: #FFFFFF; text-align: center; font-weight: 600;"> {{langua['Sec'][lang]}}</div>
           </div>
 
 
@@ -138,16 +144,18 @@
           style="width: 150px; height: 90px;display: flex; margin: 10px 10px 20px 10px;  ">
 
 
-          <div (click)=" godetails(eve)" style='height: 90px;width: 150px; background: #504f4f;
-          border-radius:5px;color: #ffffff; padding: 5px; display: flex; flex-direction: column;'>
+          <div (click)=" godetails(eve)"
+            style='height: 90px;width: 150px; background: #504f4f;
+          border-radius:5px;color: #ffffff; padding: 5px; display: flex; flex-direction: column; align-items: flex-start;'>
 
-            <div style="display:flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+            <div
+              style="display:flex; align-items: center; justify-content: space-between; padding: 5px 8px; margin-bottom: 12px;  width: 100%;">
 
-              <div style="display: flex ;">
+              <div style="display: flex; align-items: center;">
 
-                <img style="width: 35px; height: 35px; margin-right: 5px;" src="{{eve.picture}}" alt="">
+                <img style="width: 30px; height: 30px; margin-right: 5px;" src="{{eve.picture}}" alt="">
 
-                <div style="margin-top: 10px">
+                <div>
                   <div style="font-size: 13px;font-weight: 500;">{{eve.cryptocurrency}}</div>
                   <div style="font-size: 13px;font-weight: 500; color: #888888;">{{eve.name}}</div>
                 </div>
@@ -159,17 +167,15 @@
 
             </div>
 
-            <div style="display: flex; justify-content: space-evenly; align-items: center;">
+            <div style="display: flex; justify-content: space-evenly; align-items: center; padding: 0 8px;">
 
-              <div style="font-size: 18px;font-weight: 600;">{{eve.current_value | number : '.2'}}</div>
+              <div style="font-size: 18px;font-weight: 600;">{{eve.current_value | number : '.2-2'}}</div>
 
-              <div style="font-size: 13px; font-weight: 500; color: #FC6A6A;">{{eve.rates | number : '.2'}}</div>
+              <div style="font-size: 13px; font-weight: 500; color: #FC6A6A;">{{eve.rates | number : '.2-2'}}</div>
             </div>
 
 
           </div>
-
-
 
         </div>
 
@@ -177,12 +183,12 @@
 
       <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
 
-        <div style="color:#ffffff; font-weight: 5q00;font-size: 19px;">Total Pool Funds</div>
+        <div style="color:#ffffff; font-weight: 5q00;font-size: 19px;"> {{langua['Total Pool Funds'][lang]}}</div>
 
         <div (click)="picker.open()"
           style="background-color: #FFF4D1;padding: 5px 12px; border-radius: 20px; display: flex; align-items: center;">
           <input matInput readonly="true" [(ngModel)]="selectedDate" (dateChange)="getChartData()"
-            style="cursor: pointer; font-size: 12px; outline: none; width: 70px; background-color: transparent; border: none;  color: black; font-weight: 550;"
+            style="cursor: pointer; font-size: 12px; outline: none; width: 80px; background-color: transparent; border: none;  color: black; font-weight: 550;"
             [matDatepicker]="picker" placeholder="Choose a date">
           <ion-icon style="font-size: 12px;" name="caret-down-sharp"></ion-icon>
           <mat-datepicker #picker></mat-datepicker>
@@ -209,9 +215,9 @@
         
             transform: translate(-50%, -50%);
              width: 80px; height: 40px; display: flex; align-items: center; justify-content: center;flex-direction: column;">
-            <div style="color: #666666; margin-bottom: 5px; font-size: 16px;">Daily Pool</div>
+            <div style="color: #666666; margin-bottom: 5px; font-size: 16px;">{{langua['Daily Pool'][lang]}}</div>
             <div *ngIf="chartInfo.length > 0" style="font-weight: 600; color: #ffffff;">${{ totalInvestment / 100 |
-              number}}
+              number : '.2-2'}}
             </div>
             <div *ngIf="chartInfo.length == 0" style="font-weight: 600; font-size: 12px; color: #ffffff;">No pool yet
             </div>
@@ -220,8 +226,8 @@
         </div>
 
 
-        <div *ngIf=" platformwidth() > 300 "
-          style=" width:100%; height:100%;display: flex;align-content:center; flex-direction: column; padding: 10px; ">
+        <div
+          style=" width:100%; height:100%;display: flex; align-content:center; flex-direction: column; padding: 10px; flex-wrap: wrap;">
 
           <div *ngFor="let x of chartInfo;" style="display: flex; margin-bottom: 4px;">
 
@@ -245,7 +251,7 @@
 
               <div style="width: 100%; display: flex; flex-direction: row-reverse; color: #F0B900;">
 
-                <div>${{x.sum / 100 | number : '.2'}}</div>
+                <div>${{x.sum / 100 | number : '.2-2'}}</div>
 
               </div>
 
@@ -260,7 +266,7 @@
       </div>
 
 
-      <div *ngIf=" platformwidth() < 300" style="color: #FFFFFF; position: relative;width: 100%;">
+      <!-- <div *ngIf=" platformwidth() < 300" style="color: #FFFFFF; position: relative;width: 100%;">
 
         <div style=" width:100%; height:100%;display: flex;padding: 10px 0px; overflow-y: auto;">
 
@@ -296,19 +302,9 @@
 
         </div>
 
-        <!-- <canvas id="myChart" style=" width: 100%; height: 100%;">
+    
 
-
-        </canvas> -->
-
-        <!-- <div
-          style="position: absolute; left: 65px;bottom: 80px; display: flex; align-items: center; justify-content: center;flex-direction: column;">
-          <div style="color: #666666; margin-bottom: 5px; font-size: 15px;">Daily Pool</div>
-          <div style="font-weight: 600; color: #ffffff;">$1,000,000</div>
-        </div> -->
-
-
-      </div>
+      </div> -->
 
 
     </div>

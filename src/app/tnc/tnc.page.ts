@@ -7,7 +7,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TncPage implements OnInit {
 
-  text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eleifend, elit in efficitur posuere, sem felis rhoncus neque, at rutrum lacus massa non diam. Sed lectus neque, viverra ut cursus sit amet, rhoncus quis metus. Praesent quis ultricies erat. Maecenas non sem euismod, luctus quam nec, ornare eros. Morbi posuere mauris a commodo vulputate. Nam scelerisque, neque sit amet placerat molestie, nisl tortor commodo massa, sed gravida augue arcu nec lectus. Aliquam erat volutpat. In dolor magna, aliquam in vehicula pharetra, efficitur vitae arcu. Sed in risus est. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus quam lectus, at semper ligula pellentesque nec. Curabitur mattis, orci sit amet eleifend maximus, eros elit condimentum diam, non consequat tellus nunc vulputate justo. Fusce id enim sit amet dolor mattis rutrum.'
+  text = `Information we collect
+  The personal information that you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your personal information.
+  
+  If you contact us directly, we may receive additional information about you such as your name, email address, phone number, the contents of the message and/or attachments you may send us, and any other information you may choose to provide.
+  
+  When you register for an Account, we may ask for your contact information, including items such as name, company name, address, email address, and telephone number.
+  
+  How we use your information
+  We use the information we collect in various ways, including to:
+  
+  Provide, operate, and maintain our website
+  Improve, personalize, and expand our website
+  Understand and analyze how you use our website
+  Develop new products, services, features, and functionality
+  Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the website, and for marketing and promotional purposes
+  Send you emails
+  Find and prevent fraud`
 
   constructor() { }
 
