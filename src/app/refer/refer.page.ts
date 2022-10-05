@@ -40,6 +40,7 @@ export class ReferPage implements OnInit {
 
   referralCode = ''
   selectedDate;
+  amount = 0;
 
   lang = localStorage.getItem('coinpool_language') || 'English'
 
@@ -63,6 +64,7 @@ export class ReferPage implements OnInit {
     }
   }
   logs = []
+  totalCommisionAmount = 0
   ngOnInit() {
 
     var cutOff = new Date(firebase.firestore.Timestamp.now().toMillis()).setHours(16, 0, 0, 0)
@@ -87,9 +89,18 @@ export class ReferPage implements OnInit {
             .groupBy(g => this.datePipe.transform(g['date'], 'dd MMM yyyy'))
             // `key` is group's name (color), `value` is the array of objects
             .map((value, key) => ({ date: key, lists: value }))
-            .value()
+            .value().reverse()
           console.log(this.logs)
         })
+
+        this.http.post(baseUrl + '/getTotalCommision', { userid: user.uid }).subscribe((a) => {
+          console.log(user.uid)
+          this.totalCommisionAmount = a['amount']
+          console.log(a)
+        })
+
+
+        
 
         this.http.post(baseUrl + '/getReferralList', { userid: user.uid, date: this.selectedDate }).subscribe((a) => {
           this.referralList = a['data']
@@ -100,6 +111,28 @@ export class ReferPage implements OnInit {
 
   back() {
     this.outlet.canGoBack() ? this.nav.pop() : this.router.navigate(['profile'], { replaceUrl: true });
+  }
+
+  withdraw() {
+
+    if(this.amount <= 0){
+      alert('Amount must be greater than 0 !')
+      return
+    }
+
+
+    this.carpoolService.swal_button('Confirmation', 'Do you want to proceed?', 'warning').then((ans) => {
+      if (ans == 'Confirm') {
+        this.http.post(baseUrl + '/withdrawReferral', { userid: this.currentUser['userid'], amount: (this.amount * 100) }).subscribe((a) => {
+          if(a['success'] == true){
+            this.carpoolService.showMessage('Success', '', 'success')
+            this.nav.pop()
+          }else{
+            this.carpoolService.showMessage('Error', 'Something went wrong! Please try again!', 'error')
+          }
+        })
+      }
+    })
   }
 
   async shareLink() {

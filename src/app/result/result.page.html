@@ -109,6 +109,16 @@
         </ion-toggle>
       </div>
 
+      <div style="display: flex; width: 100%; justify-content: flex-end; color: white; margin-bottom: 15px; ">
+        <div style="width: fit-content; background-color: #23232b; display: flex; ">
+          <div (click)="level = 'low';"
+            [ngStyle]="{'background-color': level == 'low' ? '#F0B900' : 'transparent', 'color': level == 'low' ? 'black' : 'white'}"
+            style="margin-right: 10px; padding: 5px 15px; font-weight: 550;"> x5 Leverage </div>
+          <div (click)="level = 'high';"
+            [ngStyle]="{'background-color': level == 'high' ? '#F0B900' : 'transparent' , 'color': level == 'high' ? 'black' : 'white'}"
+            style="padding: 5px 15px; background-color: #F0B900; font-weight: 550;"> x50 Leverage </div>
+        </div>
+      </div>
 
 
       <div

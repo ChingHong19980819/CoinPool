@@ -39,6 +39,7 @@ export class ResultPage implements OnInit {
   selectedDate
   earnedAmount = 0;
   notradeOrders;
+  level = 'low'
 
   lang = localStorage.getItem('coinpool_language') || 'English'
 

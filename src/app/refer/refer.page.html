@@ -4,7 +4,8 @@
 
     <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
     <div style="font-size: 20px; font-weight: 600;">{{langua['Refer Friends'][lang]}}</div>
-    <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
+    <ion-icon (click)="copyToClipboard(('https://appcoinpool.web.app/signup?code=' + referralCode))"
+      style="font-size: 24px; color: #F0B900" slot="start" name="share-social"></ion-icon>
 
   </div>
 
@@ -19,47 +20,65 @@
     <div style=" width: 100%; ">
 
       <div style="position: relative; height: 120px; padding: 0 20px;">
-        <div style="font-size: 14px; color: #6E5015;"> YOur referral wallet</div>
-        <div style="font-size: 32px; color: white; font-size: 16px;">$ 1000 USDT</div>
+        <div style="font-size: 14px; color: #6E5015;"> Total Referral Amount</div>
+        <div style="font-size: 32px; color: white; font-size: 16px;">$ {{ totalCommisionAmount / 100 | number : '1.2-2' }} USDT</div>
+
+        <div style="font-size: 14px; color: #6E5015;"> Available Amount</div>
+        <div style="font-size: 32px; color: white; font-size: 16px;">$ {{ currentUser['referralwallet'] / 100 | number : '1.2-2' }} USDT</div>
         <img style="position: absolute; right: 20px; margin-bottom: 25px; width: 180px; top: 0;"
           src="/assets/icon/Refer.png" alt="">
 
       </div>
 
-      <!-- <div
-        style=" border: 1.5px solid #F0B900; border-radius: 20px; padding: 10px; font-size: 12px; color: #F0B900;font-weight: 500; margin-right: 10px; text-align: center;">
-        {{ 'https://appcoinpool.web.app/signup?code=' + referralCode }}</div> -->
+      <div style="display: flex; align-items: center;justify-content: space-between; width: 100%; margin-top: 5px; padding: 0 20px;">
+        <div
+          style="width: 100%; height: 40px; border: 1px solid #F0B900;border-radius: 10px;padding: 10px; display: flex; align-items:center; justify-content: space-between; ">
 
-      <div
-        style=" display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding: 0 20px;">
+          <div style="color: #F0B900; font-size: 12px; font-weight: 500; margin-right: 10px">Custom Amount</div>
 
-        <div (click)="copyToClipboard(('https://appcoinpool.web.app/signup?code=' + referralCode))"
-          style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 10px; text-align: center; margin-left: 5px; width: 47%;">
-          Withdraw</div>
-        <div (click)="copyToClipboard(('https://appcoinpool.web.app/signup?code=' + referralCode))"
-          style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 10px; text-align: center; margin-left: 5px; width: 47%;">
-          Copy your linK </div>
+          <ion-input type="number" [(ngModel)]="amount" (ionChange)="changePercentage($event)" step=".01"
+            style="border: none; outline : 0; width: 50%; font-size: 16px; background-color: transparent; color: white; text-align: end;"
+            placeholder="0"></ion-input>
+        </div>
 
+        <div (click)="withdraw()"
+        style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 10px; text-align: center; margin-left: 5px; width: 47%;">
+        Withdraw</div>
       </div>
 
     </div>
 
 
-    <div style="display: flex;">
-      <div style="width: 50%; color: white; text-align: center;"> Available </div>
-      <div style="width: 50%; color: white; text-align: center;">Withdraw</div>
-    </div>
-    <div style="color: #ffffff; width: 100%; display: flex;flex-wrap: wrap;">
+    <div style="color: #ffffff; width: 100%; padding: 15px 20px;">
 
-      <div *ngFor="let item of logs">
-        <div>{{ item['date']}}</div>
+      <div *ngFor="let item of logs" style="margin-bottom: 15px;">
+        <div style="font-weight: 550; font-size: 16px; margin-bottom: 10px;">{{ item['date']}}</div>
 
+        <div style="width: 100%;">
+          <div *ngFor="let void of item['lists']" style="margin-bottom: 3px; display: flex; justify-content: space-between; align-items: center;">
+           
 
-        <div *ngFor="let void of item['lists']">
-          {{void['amount'] / 100}}
-          {{void['downlinename']}}
-          {{void['date'] | date : 'HH:mm a'}}
+            <div>
+              <div>
+                {{void['downlinename']}}
+
+              </div>
+             
+              <div>
+                {{void['date'] | date : 'HH:mm a'}}
+              </div>
+            </div>
+
+            <div>
+
+              {{(void['amount'] / 100)  | number : '1.2-2'}} USDT
+
+            </div>
+            
+          </div>
         </div>
+
+        
       </div>
       <!-- <div *ngFor="let x of referralList"
         style="border-radius: 10px; width: calc(( 100%/2) - 20px );height: 162px; background: #9797972B; 
