@@ -178,20 +178,22 @@ export class LoginPage implements OnInit {
       this.carpoolService.pleasewait('Authenticating..', 'Please wait...')
 
       if (user) {
-        if (user.emailVerified == false) {
-          setTimeout(() => {
-            this.carpoolService.swal_button2('Account Verification', 'Your account is not verified yet. Click RESEND and check your inbox to verify your account!', 'warning').then((a) => {
-              if (a == 'Confirm') {
-                user.sendEmailVerification()
-                this.presentToast('Verification email has been sent!')
-              }
-            })
-          }, 0);
+        this.nav.navigateRoot('home')
+        this.carpoolService.swalclose()
 
-        } else {
-          this.nav.navigateRoot('home')
-          this.carpoolService.swalclose()
-        }
+        // if (user.emailVerified == false) {
+        //   setTimeout(() => {
+        //     this.carpoolService.swal_button2('Account Verification', 'Your account is not verified yet. Click RESEND and check your inbox to verify your account!', 'warning').then((a) => {
+        //       if (a == 'Confirm') {
+        //         user.sendEmailVerification()
+        //         this.presentToast('Verification email has been sent!')
+        //       }
+        //     })
+        //   }, 0);
+
+        // } else {
+
+        // }
         // this.http.post(baseUrl + '/checkUserStatus', { userid: user.uid }).subscribe((b) => {
 
         // })

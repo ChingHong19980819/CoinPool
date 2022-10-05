@@ -11,6 +11,7 @@ import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { DatePipe } from '@angular/common';
 import { IonRouterOutlet } from '@ionic/angular';
 import { Router } from '@angular/router';
+import * as lodash from 'lodash';
 
 @Component({
   selector: 'app-refer',
@@ -61,7 +62,7 @@ export class ReferPage implements OnInit {
       English: "Total Trade Today",
     }
   }
-
+  logs = []
   ngOnInit() {
 
     var cutOff = new Date(firebase.firestore.Timestamp.now().toMillis()).setHours(16, 0, 0, 0)
@@ -77,7 +78,17 @@ export class ReferPage implements OnInit {
         this.http.post(baseUrl + '/getUserInfo', { userid: user.uid }).subscribe((a) => {
           this.currentUser = a['data']
           this.referralCode = this.carpoolService.encodeIds(parseInt(this.currentUser['id']))
+        })
 
+        this.http.post(baseUrl + '/getCommisionLogs', { uid: user.uid }).subscribe((res) => {
+          let records = res['data']
+          this.logs = lodash.chain(records)
+            // Group the elements of Array based on `color` property
+            .groupBy(g => this.datePipe.transform(g['date'], 'dd MMM yyyy'))
+            // `key` is group's name (color), `value` is the array of objects
+            .map((value, key) => ({ date: key, lists: value }))
+            .value()
+          console.log(this.logs)
         })
 
         this.http.post(baseUrl + '/getReferralList', { userid: user.uid, date: this.selectedDate }).subscribe((a) => {

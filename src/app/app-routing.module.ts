@@ -151,7 +151,11 @@ const routes: Routes = [
   {
     path: 'language',
     loadChildren: () => import('./language/language.module').then(m => m.LanguagePageModule)
+  },  {
+    path: 'referral-wallet',
+    loadChildren: () => import('./referral-wallet/referral-wallet.module').then( m => m.ReferralWalletPageModule)
   },
+
 
 
 ];

@@ -70,6 +70,8 @@ export class OrderPage implements OnInit {
     }
   }
 
+  level = 'low'
+
 
   constructor(private nav: NavController, private datePipe: DatePipe, private http: HttpClient, private outlet: IonRouterOutlet, private router: Router) { }
 
@@ -108,13 +110,12 @@ export class OrderPage implements OnInit {
           this.passOrders = res['data']
           this.passOrders = lodash.chain(this.passOrders)
             // Group the elements of Array based on `color` property
-            .groupBy("coinid")
+            .groupBy(g => g['coinid'] + g['level'])
             // `key` is group's name (color), `value` is the array of objects
-            .map((value, key) => ({ coinid: key, coinname: value[0]['coinname'], coinpicture: value[0]['coinpicture'], percentage: value[0]['percentage'], investamount: value[0]['sum'] / 100 }))
+            .map((value, key) => ({ coinid: value[0]['coinid'], level: value[0]['level'], coinname: value[0]['coinname'], coinpicture: value[0]['coinpicture'], percentage: value[0]['percentage'], investamount: value[0]['sum'] / 100 }))
             .value()
 
           console.log(this.passOrders)
-
         })
       }
     })
@@ -142,7 +143,7 @@ export class OrderPage implements OnInit {
   }
 
   godetails(x) {
-    this.nav.navigateForward('order-details?id=' + x)
+    this.nav.navigateForward('order-details?id=' + x + '&level=' + this.level)
   }
 
   resultCountDown() {
@@ -196,7 +197,7 @@ export class OrderPage implements OnInit {
   }
 
   summaryById(coinid) {
-    return ((this.passOrders.find(x => x['coinid'] == coinid) || {}).investamount || 0)
+    return ((this.passOrders.find(x => x['coinid'] == coinid && x['level'] == this.level) || {}).investamount || 0)
   }
 
 }

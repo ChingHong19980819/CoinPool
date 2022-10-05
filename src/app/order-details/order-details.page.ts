@@ -9,7 +9,6 @@ import { baseUrl } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { CarpoolService } from '../carpool.service';
-import * as lodash from 'lodash'
 import { PlaceorderPage } from '../placeorder/placeorder.page';
 import { IonRouterOutlet } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,7 +27,6 @@ export class OrderDetailsPage implements OnInit {
   rangevalue = [] as any;
   currentUser: any = {}
   coinList = []
-  passOrders = []
   start
   interval4
   orderCountDownDate
@@ -64,6 +62,12 @@ export class OrderDetailsPage implements OnInit {
     }
   }
 
+  type;
+
+  level = {
+    'low': 'x5 Leverage',
+    'high': 'x50 Leverage'
+  }
 
   constructor(private nav: NavController,
     private http: HttpClient,
@@ -72,6 +76,16 @@ export class OrderDetailsPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private carpoolService: CarpoolService, private modal: ModalController) { }
+
+
+  news = []
+
+  slideOpts = {
+    initialSlide: 1,
+    speed: 400
+  };
+
+  show = true;
 
   ngOnInit() {
 
@@ -85,7 +99,14 @@ export class OrderDetailsPage implements OnInit {
         })
 
         this.activatedRoute.queryParams.subscribe((params) => {
+          this.type = params['level']
+          this.show = this.type == 'high'
           this.coinId = params['id']
+
+          this.http.get(baseUrl + '/usergetannouncement').subscribe((res) => {
+            this.news = res['data']
+          })
+
           this.http.post(baseUrl + '/getCoinList', {}).subscribe((a) => {
             this.coinList = a['data'].filter(d => d['id'] == this.coinId)
             this.selected['name'] = this.coinList[0]['name']
@@ -95,6 +116,7 @@ export class OrderDetailsPage implements OnInit {
           })
 
           this.showCalendar(this.currentMonth, this.currentYear);
+
         })
 
 
@@ -177,7 +199,7 @@ export class OrderDetailsPage implements OnInit {
           tradeInDate = cutOff
         }
 
-        this.http.post(baseUrl + '/buyOrders', { orders: [{ transactionid: this.selected['transactionid'], tradeindate: this.datePipe.transform(tradeInDate, 'dd-MM-yyyy'), coinid: this.coinId, date: firebase.firestore.Timestamp.now().toMillis(), coin: this.selected['name'], amount: (this.roundTo(this.amount, 2) * 100), userid: firebase.auth().currentUser.uid }] }).subscribe((res) => {
+        this.http.post(baseUrl + '/buyOrders', { orders: [{ transactionid: this.selected['transactionid'], tradeindate: this.datePipe.transform(tradeInDate, 'dd-MM-yyyy'), coinid: this.coinId, date: firebase.firestore.Timestamp.now().toMillis(), coin: this.selected['name'], amount: (this.roundTo(this.amount, 2) * 100), userid: firebase.auth().currentUser.uid, level: this.type }] }).subscribe((res) => {
           this.carpoolService.swalclose()
           if (res['success'] == true) {
             // this.currentUser['amount'] -= this.selected.amount
@@ -242,17 +264,6 @@ export class OrderDetailsPage implements OnInit {
     } else {
       date = this.datePipe.transform(new Date(cutOff), 'dd-MM-yyyy')
     }
-
-    this.http.post(baseUrl + '/getOrdersByUid', { userid: firebase.auth().currentUser.uid, date: date }).subscribe((res) => {
-      this.passOrders = res['data']
-
-      this.passOrders = lodash.chain(this.passOrders)
-        // Group the elements of Array based on `color` property
-        .groupBy("coinid")
-        // `key` is group's name (color), `value` is the array of objects
-        .map((value, key) => ({ coinid: key, coinname: value[0]['coinname'], coinpicture: value[0]['coinpicture'], percentage: value[0]['percentage'], investamount: value[0]['sum'] / 100 }))
-        .value()
-    })
 
   }
 
@@ -348,7 +359,8 @@ export class OrderDetailsPage implements OnInit {
 
   getResult() {
     return new Promise((resolve, reject) => {
-      this.http.post(baseUrl + '/getResultByMonth', { coinid: this.coinId, month: (this.returnTwoDigits(this.currentMonth + 1) + '-' + this.currentYear) }).subscribe((res) => {
+      console.log({ level: this.type, coinid: this.coinId, month: (this.returnTwoDigits(this.currentMonth + 1) + '-' + this.currentYear) })
+      this.http.post(baseUrl + '/getResultByMonth', { level: this.type, coinid: this.coinId, month: (this.returnTwoDigits(this.currentMonth + 1) + '-' + this.currentYear) }).subscribe((res) => {
         if (res['success'] == true) {
           this.results = res['data']
           this.totalUp = this.results.filter(rs => rs['percentage'] >= 0).length

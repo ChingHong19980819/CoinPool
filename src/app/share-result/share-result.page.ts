@@ -64,11 +64,11 @@ export class ShareResultPage implements OnInit {
             // Group the elements of Array based on `color` property
             .groupBy("coinid")
             // `key` is group's name (color), `value` is the array of objects
-            .map((value, key) => ({ result: value[0]['result'], coinid: key, coinname: value[0]['coinname'], coinpicture: value[0]['coinpicture'], percentage: value[0]['percentage'], investamount: value[0]['sum'] / 100 }))
+            .map((value, key) => ({ result: value[0]['result'], amount_eanred: value[0]['earned'] / 100, coinid: key, coinname: value[0]['coinname'], coinpicture: value[0]['coinpicture'], percentage: value[0]['percentage'], investamount: value[0]['sum'] / 100 }))
             .value()
 
 
-          this.earnedAmount = this.result == true ? ((this.results.filter(a => a['percentage'] >= 0).reduce((s, d) => s + ((((d['investamount']) * d['percentage'] / 100))), 0) / 2) + this.results.filter(a => a['percentage'] < 0).reduce((s, d) => s + ((((d['investamount']) * d['percentage'] / 100))), 0)) : 0
+          this.earnedAmount = this.result == true ? this.results.reduce((s, d) => s + (d['amount_eanred'] - d['investamount']), 0) : 0
 
         })
 

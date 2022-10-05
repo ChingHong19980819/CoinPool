@@ -11,36 +11,57 @@
 </ion-header>
 <ion-content>
 
+
+
   <div
-    style="background:black;width: 100%; height: 100%; flex-direction: column; justify-content: center;padding: 20px; overflow-y: auto;">
+    style="background:black;width: 100%; height: 100%; flex-direction: column; justify-content: center;padding: 20px 0; overflow-y: auto;">
 
-    <div style="display: flex; width: 100%; justify-content: center;align-items: center; flex-direction: column;">
+    <div style=" width: 100%; ">
 
-      <img style=" width: 90% ; max-width:450px; margin-bottom: 25px;" src="/assets/icon/Refer.png" alt="">
+      <div style="position: relative; height: 120px; padding: 0 20px;">
+        <div style="font-size: 14px; color: #6E5015;"> YOur referral wallet</div>
+        <div style="font-size: 32px; color: white; font-size: 16px;">$ 1000 USDT</div>
+        <img style="position: absolute; right: 20px; margin-bottom: 25px; width: 180px; top: 0;"
+          src="/assets/icon/Refer.png" alt="">
+
+      </div>
+
+      <!-- <div
+        style=" border: 1.5px solid #F0B900; border-radius: 20px; padding: 10px; font-size: 12px; color: #F0B900;font-weight: 500; margin-right: 10px; text-align: center;">
+        {{ 'https://appcoinpool.web.app/signup?code=' + referralCode }}</div> -->
 
       <div
-        style=" border: 1.5px solid #F0B900; border-radius: 20px; padding: 10px; font-size: 12px; color: #F0B900;font-weight: 500; margin-right: 10px; text-align: center;">
-        {{ 'https://appcoinpool.web.app/signup?code=' + referralCode }}</div>
-
-      <div style=" display: flex; justify-content: center; align-items: center; margin-top: 10px;">
-
-        <!-- <div (click)="shareLink()"
-          style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 20px; text-align: center;">
-          SHARE</div> -->
+        style=" display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding: 0 20px;">
 
         <div (click)="copyToClipboard(('https://appcoinpool.web.app/signup?code=' + referralCode))"
-          style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 20px; text-align: center; margin-left: 5px;">
-          {{langua['Copy'][lang]}} </div>
+          style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 10px; text-align: center; margin-left: 5px; width: 47%;">
+          Withdraw</div>
+        <div (click)="copyToClipboard(('https://appcoinpool.web.app/signup?code=' + referralCode))"
+          style="background:#F0B900; color: #000000; padding: 10px 15px; border-radius: 10px; text-align: center; margin-left: 5px; width: 47%;">
+          Copy your linK </div>
 
       </div>
 
     </div>
 
-    <div>{{langua['Your Friends'][lang]}}</div>
 
+    <div style="display: flex;">
+      <div style="width: 50%; color: white; text-align: center;"> Available </div>
+      <div style="width: 50%; color: white; text-align: center;">Withdraw</div>
+    </div>
     <div style="color: #ffffff; width: 100%; display: flex;flex-wrap: wrap;">
 
-      <div *ngFor="let x of referralList"
+      <div *ngFor="let item of logs">
+        <div>{{ item['date']}}</div>
+
+
+        <div *ngFor="let void of item['lists']">
+          {{void['amount'] / 100}}
+          {{void['downlinename']}}
+          {{void['date'] | date : 'HH:mm a'}}
+        </div>
+      </div>
+      <!-- <div *ngFor="let x of referralList"
         style="border-radius: 10px; width: calc(( 100%/2) - 20px );height: 162px; background: #9797972B; 
         display: flex; justify-content: center; margin: 10px;padding: 10px; flex-direction: column;align-items: center; padding: 10px;">
 
@@ -62,7 +83,7 @@
           </div>
         </div>
 
-      </div>
+      </div> -->
 
     </div>
 

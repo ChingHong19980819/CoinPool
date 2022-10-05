@@ -110,8 +110,9 @@ export class HomePage {
 
   }
 
-
-
+  news = [] as any
+  newactivate = false
+  level = 'low'
 
 
   constructor(private nav: NavController,
@@ -121,6 +122,45 @@ export class HomePage {
   ngOnInit() {
     cc.setApiKey('f5e033a36d80db094b3cf8414214f67a2fc84b4ff1c1010161cd7865955ae4ea')
 
+    let arr = [1, 2, 3, 4, 5, 5, 7, 8, 8, 10, 11, 12, 13]
+
+    let positivenegative = ''
+    let number = 0;
+    let toPutColumns = 0
+
+    for (let rows = 0; rows < 2; rows++) {
+      for (let columns = 0; columns < 7; columns++) {
+        let currentValue = arr[columns + (rows * 7)]
+        if (currentValue) {
+
+          if (columns + (rows * 7) == 0) {
+            positivenegative = currentValue > 0 ? 'positive' : 'negative'
+          }
+
+          let newPositivenegative = currentValue > 0 ? 'positive' : 'negative'
+
+          number++
+
+          if (positivenegative != newPositivenegative) {
+            positivenegative = newPositivenegative
+            number = 0
+            toPutColumns++
+          }
+
+          // console.log(number)
+
+          if (number > 6) {
+            console.log((((number - 6) + 1) * 7) - 1)
+          } else {
+            console.log(number)
+          }
+
+          // console.log(toPutColumns, 'nooo')
+
+        }
+      }
+    }
+
     // this.lang = !localStorage.getItem('language') ? 'English' : localStorage.getItem('language')
 
     var cutOff = new Date(firebase.firestore.Timestamp.now().toMillis()).setHours(16, 0, 0, 0)
@@ -129,7 +169,6 @@ export class HomePage {
       this.selectedDate = this.datePipe.transform(new Date(cutOff).setDate(new Date(cutOff).getDate() + 1), 'yyyy-MM-dd');
     } else {
       this.selectedDate = this.datePipe.transform(cutOff, 'yyyy-MM-dd')
-
     }
 
     firebase.auth().onAuthStateChanged((user) => {
@@ -164,6 +203,26 @@ export class HomePage {
       }
     })
 
+    // this.http.get(baseUrl + '/usergetannouncement').subscribe((res) => {
+
+    //   // console.log(res)
+    //   this.news = res['data']
+
+    //   if(this.lengthof(this.news)){
+
+    //     this.newactivate = true
+
+    //   }
+
+    //   console.log(this.news)
+
+    // })
+
+  }
+
+  lengthof(x) {
+
+    return Object.values(x || {}).length
 
   }
 
@@ -233,7 +292,7 @@ export class HomePage {
 
     this.http.post(baseUrl + '/getOrdersDailyChart', { date: date }).subscribe((res) => {
       this.carpoolService.swalclose()
-      this.chartInfo = res['data']
+      this.chartInfo = res['data'].filter(r => r['level'] == this.level)
 
       this.totalInvestment = this.chartInfo.reduce((a, b) => a + b['sum'], 0)
 

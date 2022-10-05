@@ -56,7 +56,7 @@
 
         <div style="width: 80%; display: flex; flex-wrap: wrap;">
           <div *ngIf="show == true" [ngStyle]="{'color': earnedAmount >= 0 ? '#2DFF84' : '#F07A7A' }"
-            style="font-size: 24px; font-weight: 900; width: 100%;"> {{ earnedAmount >= 0 ? '+' : '-' }}
+            style="font-size: 24px; font-weight: 900; width: 100%;">
             $ {{ earnedAmount | number : '.2-2' }}</div>
 
           <div *ngIf="show == false" [ngStyle]="{'color': earnedAmount >= 0 ? '#2DFF84' : '#F07A7A' }"
@@ -99,7 +99,7 @@
 
         <div style="width: 80%; ">
           <div *ngIf="show == true" [ngStyle]="{'color': earnedAmount >= 0 ? '#2DFF84' : '#F07A7A' }"
-            style="font-size: 24px; font-weight: 900; width: 100%;"> {{ earnedAmount >= 0 ? '+' : '-' }}
+            style="font-size: 24px; font-weight: 900; width: 100%;">
             $ {{ earnedAmount | number : '.2-2' }}</div>
 
           <div *ngIf="show == false" [ngStyle]="{'color': earnedAmount >= 0 ? '#2DFF84' : '#F07A7A' }"
@@ -221,11 +221,11 @@
             <div *ngIf="show == true && x.percentage >= 0"
               [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
               style="font-weight: 700; font-size: 14px;"> $ {{
-              returnShortNum((((x.investamount * x.percentage) / 100) / 2) || 0) }} </div>
+              returnShortNum((((x.amount_eanred - x.investamount))) || 0) }} </div>
             <div *ngIf="show == true && x.percentage < 0"
               [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
               style="font-weight: 700; font-size: 14px;"> $ {{
-              returnShortNum((((x.investamount * x.percentage) / 100)) || 0) }} </div>
+              returnShortNum((((x.amount_eanred - x.investamount))) || 0) }} </div>
 
             <div *ngIf="show == false" [ngStyle]="{'color': x.percentage >= 0 ? '#2DFF84' : '#F07A7A' }"
               style="font-weight: 700; font-size: 16px;"> $ {{

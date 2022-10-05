@@ -109,7 +109,7 @@ export class CalendarPage implements OnInit {
 
   getResult() {
     return new Promise((resolve, reject) => {
-      this.http.post(baseUrl + '/getResultByMonth', { coinid: this.coinId, month: (this.returnTwoDigits(this.currentMonth + 1) + '-' + this.currentYear) }).subscribe((res) => {
+      this.http.post(baseUrl + '/getResultByMonth', { level: 'low', coinid: this.coinId, month: (this.returnTwoDigits(this.currentMonth + 1) + '-' + this.currentYear) }).subscribe((res) => {
         if (res['success'] == true) {
           this.results = res['data']
           this.totalUp = this.results.filter(rs => rs['percentage'] >= 0).length

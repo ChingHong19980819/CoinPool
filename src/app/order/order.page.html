@@ -116,7 +116,19 @@
 
     </div>
 
-    <div style="width: calc(100% - 40px);  margin: 20px 20px 0 20px; ">
+    <div style="width: calc(100% - 40px);  margin: 20px 0 0 20px; ">
+
+      <div style="display: flex; width: 100%; justify-content: flex-end; color: white; margin-bottom: 15px; ">
+        <div style="width: fit-content; background-color: #23232b; display: flex; ">
+          <div (click)="level = 'low'"
+            [ngStyle]="{'background-color': level == 'low' ? '#F0B900' : 'transparent', 'color': level == 'low' ? 'black' : 'white'}"
+            style="margin-right: 10px; padding: 5px 15px; font-weight: 550;"> x5 Leverage </div>
+          <div (click)="level = 'high'"
+            [ngStyle]="{'background-color': level == 'high' ? '#F0B900' : 'transparent' , 'color': level == 'high' ? 'black' : 'white'}"
+            style="padding: 5px 15px; background-color: #F0B900; font-weight: 550;"> x50 Leverage </div>
+        </div>
+
+      </div>
 
       <div (click)="godetails(eve.id)" *ngFor='let eve of coinList; let i = index; let last = last'
         style="width:calc(100% ); height: calc(70px - 10px); border-radius: 15px; background-color: #23232b; padding: 15px 10px 15px 20px; margin-bottom: 10px; display: flex; display: flex; justify-content: center; align-items: center;   ">

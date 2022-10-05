@@ -17,13 +17,19 @@
 
     <div style="padding: 20px;">
 
-      <div style="display: flex; margin-bottom: 10px; align-items: center;">
-        <img style="width: 30px; margin-right: 6px; " src="{{ picture }}" alt="">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; margin-bottom: 10px; align-items: center;">
+          <img style="width: 30px; margin-right: 6px; " src="{{ picture }}" alt="">
 
-        <div style="font-size: 14px; color:#b3b3b3; text-align: center; font-weight: 550;"> {{ selected['name'] }}
+          <div style="font-size: 14px; color:#b3b3b3; text-align: center; font-weight: 550;"> {{ selected['name'] }}
+          </div>
         </div>
 
+        <div [ngStyle]="{'color': type == 'low' ? '#20ba22' : 'tomato'}" style="color: white; font-weight: 550;"> {{
+          level[type]
+          }} </div>
       </div>
+
 
 
       <div style="color:#888888; font-weight: 500;font-size: 12px; margin-bottom: 10px;">{{langua['Available
@@ -259,3 +265,25 @@
 
   </div>
 </ion-content>
+
+<div *ngIf="news.length > 0" [ngClass]="show ? 'bottom' : 'bottomx'" style="width: 100%; height: 100%; display: flex;
+ align-items: center; justify-content: center; position: fixed; left: 0;
+   background-color: rgba(0, 0, 0, 0.7); transition: .2s;">
+  <ion-slides [options]="slideOpts" style="width: 100%; height: 100%;">
+    <ion-slide *ngFor="let x of news">
+      <div style="max-width: 400px; width: 90%;  border-radius: 5px; background-color: white; position: relative;">
+        <div (click)="show = !show" style="color: white; background-color: red; z-index: 100; width: 25px; position: absolute; top: -10px; right: -10px;
+        border-radius: 100px; display: flex; align-items: center; justify-content: center; height: 25px; ">
+          <ion-icon style="font-size: 20px;" name="close-outline"></ion-icon>
+        </div>
+        <img src="{{lang == 'English' ? x.photo_en : x.photo_cn }}"
+          style="width: 100%; border-radius: 5px 5px 0px 0px;">
+        <div style="margin-top: 10px; font-size: 16px; font-weight: bold; padding: 15px; width: 100%;">
+          {{ lang == 'English' ? x.title_en : x.title_cn }}</div>
+        <div style="margin-top: 10px; font-size: 14px; font-weight: 400; padding: 15px; width: 100%;">
+          {{ lang == 'English' ? x.description_en : x.description_cn}}</div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+
+</div>
