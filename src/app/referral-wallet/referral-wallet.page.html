@@ -1,0 +1,70 @@
+<ion-header style=" background:#000000;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px; color: #ffffff;">
+
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 18px; font-weight: 600;">{{langua['My Referral Wallets'][lang]}}</div>
+    <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
+
+  </div>
+
+</ion-header>
+
+<ion-content style="--background:#000000;">
+
+  <div style="width: 100%; flex-direction: column; justify-content: center;padding: 20px; overflow-y: auto;">
+
+
+
+
+    <div
+      style="background: rgba(77, 63, 63, 0.896); height: 80vh; overflow-y: auto; width: 100%; padding: 20px; border-radius: 10px;">
+
+      <!-- <div *ngFor="let x of logs"
+        style="display: flex;flex-direction: column; align-items: center; margin-bottom: 20px; ">
+
+
+        <div style="display:flex; justify-content: space-between; width: 100%; align-items: center;">
+
+          <div style="display: flex; align-items: center;">
+
+            <img style="width: 50px; height: 50px; margin-right: 10px;" src="assets/icon/commission.png" alt="">
+
+            <div>
+              <div style="color:#ffffff;">{{langua['Ranking Commission'][lang]}}</div>
+              <div style="color: #ffffff; margin-top: 2px;"> From : {{ x.downlinename }}</div>
+
+
+              <div style="color: #888888;">{{ x.date | date : 'HH:mm a' }}</div>
+            </div>
+
+
+          </div>
+
+          <div style="color: white;"> $ {{ x.amount / 100 | number : '.2-2' }} USD </div>
+
+        </div>
+
+
+
+
+
+
+
+        <div style="display: flex; justify-content: space-between;width: 100%; align-items: center; margin: 20px 0px;">
+
+          <div style="background: #888888; width: 10px; height: 10px; border-radius: 100%; "></div>
+          <div style="width: 100%; height: 2px; background: #888888;"></div>
+          <div style="background: #888888; width: 10px; height: 10px; border-radius: 100%;"></div>
+
+        </div>
+
+
+      </div> -->
+
+    </div>
+
+
+
+  </div>
+</ion-content>

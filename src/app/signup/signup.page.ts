@@ -29,16 +29,16 @@ export class SignupPage implements OnInit {
 
   ngOnInit() {
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log(user);
+      if (user && user.emailVerified) {
+
       }
     });
   }
 
   ionViewWillEnter() {
-    this.slides.lockSwipes(true);
+    // this.slides.lockSwipes(true);
     this.activatedRoute.queryParams.subscribe((b) => {
-      this.user['code'] = b['code']
+      this.user['code'] = b['code'] || ''
     })
   }
 
@@ -47,7 +47,8 @@ export class SignupPage implements OnInit {
       this.carpoolService.isNullOrEmpty(this.user, [
         'name',
         'password',
-        'email'
+        'email',
+        'phone'
       ])
     ) {
       this.carpoolService.showMessage('Please fill in all information!', '', 'error')
@@ -64,9 +65,28 @@ export class SignupPage implements OnInit {
       return;
     }
 
-    this.slides.lockSwipes(false)
-    this.slides.slideNext()
-    this.slides.lockSwipes(true)
+    if (this.user['code'] != '') {
+      this.http.post(baseUrl + '/checkReferral', { code: this.user['code'] }).subscribe(
+        (res) => {
+          if (res['success'] == true) {
+            this.slides.lockSwipes(false)
+            this.slides.slideNext()
+            this.slides.lockSwipes(true)
+          } else {
+            this.carpoolService.showMessage('Fail', res['message'], 'error')
+          }
+
+        })
+
+    } else {
+      this.slides.lockSwipes(false)
+      this.slides.slideNext()
+      this.slides.lockSwipes(true)
+    }
+
+
+
+
 
   }
 
@@ -77,7 +97,8 @@ export class SignupPage implements OnInit {
       this.carpoolService.isNullOrEmpty(this.user, [
         'name',
         'password',
-        'email'
+        'email',
+        'phone'
       ])
     ) {
       this.carpoolService.showMessage('Please fill in all information!', '', 'error')
@@ -96,30 +117,78 @@ export class SignupPage implements OnInit {
 
     this.carpoolService.pleasewait('Please wait..', 'Registering your account!')
 
-    firebase.auth().createUserWithEmailAndPassword(this.user.email, this.user.password).then((user) => {
-      this.user['userid'] = user.user.uid
+    this.http.post('https://coinpoolapi.coinpoolfund.com/checkerusername', { user_name: this.user['user_name'] }).subscribe(user => {
 
-      this.http.post(baseUrl + '/registerUser', this.user).subscribe(
-        (res) => {
+      if (user['data'].length > 0) {
+
+        this.carpoolService.swalclose()
+
+        Swal.fire({
+          icon: 'error',
+          title: 'User Name Already Taken',
+          text: 'Please Change a user name',
+          showCancelButton: false, // There won't be any cancel button
+          showConfirmButton: false,
+          timer: 2000
+        })
+
+      } else {
+
+        firebase.auth().createUserWithEmailAndPassword(this.user.email, this.user.password).then((user) => {
+          firebase.auth().currentUser.sendEmailVerification().then(() => {
+            this.user['userid'] = user.user.uid
+
+
+            if (this.user['code'] != '') {
+              this.http.post(baseUrl + '/registerUser', this.user).subscribe(
+                (res) => {
+                  this.carpoolService.swalclose()
+                  if (res['success'] == true) {
+                    this.carpoolService.showMessage('Success', res['message'], 'success')
+                    this.nav.navigateRoot('login')
+                    this.user = {}
+                  } else {
+                    this.carpoolService.showMessage('Fail', res['message'], 'error')
+                  }
+                },
+                (error) => {
+                  this.carpoolService.swalclose()
+                  this.carpoolService.showMessage('Fail', error['message'], 'error')
+                }
+              );
+            } else {
+              this.http.post(baseUrl + '/registerUser2', this.user).subscribe(
+                (res) => {
+                  this.carpoolService.swalclose()
+                  if (res['success'] == true) {
+                    this.carpoolService.showMessage('Success', res['message'], 'success')
+                    this.nav.navigateRoot('login')
+                    this.user = {}
+                  } else {
+                    this.carpoolService.showMessage('Fail', res['message'], 'error')
+                  }
+                },
+                (error) => {
+                  this.carpoolService.swalclose()
+                  this.carpoolService.showMessage('Fail', error['message'], 'error')
+                }
+              );
+            }
+
+
+          })
+
+        }).catch((error) => {
           this.carpoolService.swalclose()
-          if (res['success'] == true) {
-            this.carpoolService.showMessage('Success', res['message'], 'success')
-            this.navBack()
-            this.user = {}
-          } else {
-            this.carpoolService.showMessage('Fail', res['message'], 'error')
-          }
-        },
-        (error) => {
-          this.carpoolService.swalclose()
+
           this.carpoolService.showMessage('Fail', error['message'], 'error')
-        }
-      );
-    }).catch((error) => {
-      this.carpoolService.swalclose()
+        })
 
-      this.carpoolService.showMessage('Fail', error['message'], 'error')
+      }
+
     })
+
+
 
 
   }

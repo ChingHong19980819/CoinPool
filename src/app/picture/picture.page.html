@@ -4,14 +4,13 @@
      <img style="width: 100vw;height: 100vh;object-fit:cover" src="https://family.disney.com/wp-content/uploads/2020/01/BabyGirlNames_630.jpg" alt="">
   </div> -->
 
-  <div (click)="close()" style=" position: fixed; top: 0; right: 0; z-index: 3000; background-color: black;">
-    <iocn-ion name="close" style="color: white; font-size: 30px; margin: 20px; z-index: 3000;"></ion-icon>
+  <div (click)="close()" style=" position: fixed; top: 15px; right: 10px; z-index: 3000; background-color: black;">
+    <ion-icon style="color: white; font-size: 25px;" name="close">
+    </ion-icon>
   </div>
 
   <div style="display: flex; justify-content: center; align-items: center;width: 100vw;height: 100vh;">
-    <pinch-zoom style="height: 100%; width: 100%; display: flex; align-items: center; justify-content: center;">
-      <img style="width: 100%" src="{{img}}" alt="">
-    </pinch-zoom>
+    <img style="width: 100%; object-fit: contain;" src="{{img}}" alt="">
   </div>
 
 

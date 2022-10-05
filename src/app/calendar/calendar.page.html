@@ -1,0 +1,112 @@
+<ion-header style=" background:#000000;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px;color: #ffffff;">
+
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 18px; font-weight: 600;">{{langua['Result History'][lang]}}</div>
+    <div style="width: 1px;"></div>
+    <!-- <ion-icon (click)="goprofile()" style="font-size: 25px;" name="menu-outline"></ion-icon> -->
+  </div>
+
+</ion-header>
+
+<ion-content style="--background: black;">
+
+  <!-- <div
+    style="display: flex; justify-content:space-between; padding: 10px; align-items: center; margin-bottom: 10px; margin-top: 15px; margin-bottom: 15px;">
+    <ion-icon style="color: #F0B900; font-size: 30px;" (click)="previous()" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 25px; font-weight: 550; color: #F0B900;">{{ monthToShow + " " + yearToShow }}</div>
+    <ion-icon style="color: #F0B900; font-size: 30px;" (click)="next()" name="chevron-forward-outline"></ion-icon>
+  </div> -->
+  <!-- <div style="display: flex; flex-wrap: wrap;">
+    <div *ngFor="let void of days"
+      style="width: calc(100% / 7); text-align: center; font-size: 12px; font-weight: 550;margin-bottom: 10px; color: #F0B900;">
+      {{ void }}
+    </div>
+
+    <div *ngFor="let void of dates"
+      style="width: calc(100% / 7); text-align: center; margin-bottom: 5px; height: 65px;">
+      <div style="font-size: 25px; font-weight: 550; color: #F0B900;">
+        {{ void['date'] }}
+      </div>
+      <div style="font-size: 11px; align-items: center; justify-content: center; width: 100%; margin-top: 4px;">
+        <ion-icon style="color: #149c41;" *ngIf="void['percentage']!= '' && void['percentage'] >= 0"
+          name="caret-up-outline"></ion-icon>
+        <ion-icon style="color: #d42c0b;" *ngIf="void['percentage']!= '' && void['percentage'] < 0"
+          name="caret-down-outline"></ion-icon>
+        <div [ngStyle]="{'color': void['percentage'] < 0 ? '#d42c0b' : '#149c41'}"> {{ void['percentage'] | number :
+          '.2-2' }} </div>
+      </div>
+    </div>
+
+
+  </div> -->
+
+
+  <div
+    style="width: calc(100% - 40px); display: flex; justify-content:space-between; padding: 10px; align-items: center; margin-bottom: 10px; margin-top: 15px; margin-bottom: 25px; margin-left: 20px; margin-right: 20px;">
+    <ion-icon style="color: #F0B900; font-size: 16px;" (click)="previous()" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 16px; font-weight: 550; color: #F0B900;">{{ monthToShow + " " + yearToShow }}</div>
+    <ion-icon style="color: #F0B900; font-size: 16px;" (click)="next()" name="chevron-forward-outline"></ion-icon>
+  </div>
+  <div style="display: flex; flex-wrap: wrap; padding: 0 20px;">
+    <sup *ngFor="let void of days"
+      style="width: calc(100% / 7); font-size: 10px; text-align: center; font-weight: 550; margin-bottom: 10px; color: #F0B900;">
+      {{ void }}
+    </sup>
+
+    <div *ngFor="let void of dates"
+      style="width: calc(100% / 7); padding: 2px 2px 2px 4px; height: 44px; border: 1px solid #23232b;">
+      <sup style="font-size: 9px; color: #F0B900;">
+        {{ void['date'] }}
+      </sup>
+      <div *ngIf="void['date'] !== ''"
+        style="font-size: 11px; display: flex; align-items: center; justify-content: center; width: 100%;">
+        <ion-icon style="color: #35CE8D; margin-right: 5px"
+          *ngIf="void['percentage'] && void['percentage'] != '' && void['percentage'] >= 0" name="caret-up-outline">
+        </ion-icon>
+        <ion-icon style="color: #FE4A49; margin-right: 5px"
+          *ngIf="void['percentage'] && void['percentage'] != '' && void['percentage'] < 0" name="caret-down-outline">
+        </ion-icon>
+        <div *ngIf="void['percentage'] && void['percentage'] != ''"
+          [ngStyle]="{'color': void['percentage'] < 0 ? '#FE4A49' : '#35CE8D'}"> {{ void['percentage'] || 0 |
+          number :
+          '.2-2' }} </div>
+      </div>
+    </div>
+
+
+  </div>
+  <div
+    style="width: 100%; display: flex; align-items: center; justify-content: space-between; margin-top: 20px; margin-bottom: 15px; padding: 0 20px">
+    <div *ngIf="dates.length > 0"
+      style="width: calc(100% / 3); display: flex; align-items: center; justify-content: flex-start; ">
+      <div style="font-size: 12px; font-weight: 500; color: #ffffff; margin-right: 10px;">{{langua['Summary'][lang]}}
+      </div>
+      <div [ngStyle]="{'color': summary < 0 ? '#FE4A49' : '#35CE8D'}"
+        style="padding: 5px 10px; background-color: #23232b; border-radius: 5px;font-size: 12px; ">
+        {{ summary || 0
+        | number : '.2-2'
+        }} </div>
+    </div>
+
+
+    <div style="width: calc(100% / 2); display: flex; align-items: center; justify-content: flex-end; ">
+
+
+      <div
+        style="width: fit-content; padding: 5px 10px; background-color: #23232b; border-radius: 5px; color: #35CE8D; font-weight: bold; font-size: 12px;  margin-right: 5px; display: flex; align-items: center; justify-content: center">
+        <ion-icon style="margin-right: 5px" name="caret-up"></ion-icon>
+        {{ totalUp }}
+      </div>
+
+      <div
+        style="width: fit-content; padding: 5px 10px; background-color: #23232b; border-radius: 5px; color: #FE4A49; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center">
+        <ion-icon style="margin-right: 5px" name="caret-down"></ion-icon>
+        {{ totalDown }}
+      </div>
+    </div>
+
+  </div>
+
+</ion-content>

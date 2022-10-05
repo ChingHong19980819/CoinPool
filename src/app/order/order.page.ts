@@ -8,6 +8,8 @@ import 'firebase/firestore';
 import { HttpClient } from '@angular/common/http';
 import { baseUrl } from 'src/environments/environment.prod';
 import * as lodash from 'lodash'
+import { IonRouterOutlet } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order',
@@ -33,12 +35,45 @@ export class OrderPage implements OnInit {
   today = new Date().getTime()
   interval3
   interval2
-  currentUser = {}
+  currentUser: any = {}
   passOrders = []
   orderCountDownDate;
   resultCountDownDate;
+  coinList = []
+  selected = { name: 'Bitcoin' } as any;
+  summaryResult = []
 
-  constructor(private nav: NavController, private datePipe: DatePipe, private http: HttpClient) { }
+
+  lang = localStorage.getItem('coinpool_language') || 'English'
+  langua = {
+    ["Order Cut-off Time"]: {
+      Chinese: "订单截止时间",
+      English: "Order Cut-off Time",
+    }, ["Hour"]: {
+      Chinese: "小时",
+      English: "Hour",
+    }, ["Minutes"]: {
+      Chinese: "分钟",
+      English: "Minutes",
+    }, ["Sec"]: {
+      Chinese: "秒",
+      English: "Sec",
+    }, ["Credit Balance"]: {
+      Chinese: "可用额度",
+      English: "Credit Balance",
+    }, ["Result"]: {
+      Chinese: "成绩倒计时",
+      English: "Result",
+    }, ["Order"]: {
+      Chinese: "下单",
+      English: "Order",
+    }
+  }
+
+  level = 'low'
+
+
+  constructor(private nav: NavController, private datePipe: DatePipe, private http: HttpClient, private outlet: IonRouterOutlet, private router: Router) { }
 
   ngOnInit() {
 
@@ -49,29 +84,38 @@ export class OrderPage implements OnInit {
 
         })
 
+        this.http.post(baseUrl + '/getCoinList', {}).subscribe((a) => {
+          this.coinList = a['data'].map(c => ({ ...c, amount: 0, percentage: 0, transactionid: user.uid + Date.now() + c['name'] })).sort((v, d) => v['orders'] - d['orders'])
+          // this.selected['name'] = this.coinList[0]['name']
+          // this.selected['id'] = this.coinList[0]['id']
+        })
+
+        this.http.post(baseUrl + '/getSummaryResult', {}).subscribe((a) => {
+          this.summaryResult = a['data']
+        })
+
+
+
+
         var cutOff = new Date(firebase.firestore.Timestamp.now().toMillis()).setHours(16, 0, 0, 0)
-        var start;
-        var end
+        var date
 
         if (parseInt(this.datePipe.transform(firebase.firestore.Timestamp.now().toMillis(), 'HHmmss')) >= 160000) {
-          start = cutOff
-          end = new Date(cutOff).setDate(new Date(cutOff).getDate() + 1);
+          date = this.datePipe.transform(new Date(cutOff).setDate(new Date(cutOff).getDate() + 1), 'dd-MM-yyyy')
         } else {
-          start = new Date(cutOff).setDate(new Date(cutOff).getDate() - 1);
-          end = cutOff
+          date = this.datePipe.transform(new Date(cutOff), 'dd-MM-yyyy')
         }
 
-
-        this.http.post(baseUrl + '/getOrdersByUid', { userid: firebase.auth().currentUser.uid, start: start, end: end, date: this.datePipe.transform(start, 'dd-MM-yyyy') }).subscribe((res) => {
+        this.http.post(baseUrl + '/getOrdersByUid', { userid: firebase.auth().currentUser.uid, date: date }).subscribe((res) => {
           this.passOrders = res['data']
-          console.log(this.passOrders)
           this.passOrders = lodash.chain(this.passOrders)
             // Group the elements of Array based on `color` property
-            .groupBy("coinid")
+            .groupBy(g => g['coinid'] + g['level'])
             // `key` is group's name (color), `value` is the array of objects
-            .map((value, key) => ({ coinid: key, coinname: value[0]['coinname'], coinpicture: value[0]['coinpicture'], percentage: 2, investamount: value[0]['sum'] }))
+            .map((value, key) => ({ coinid: value[0]['coinid'], level: value[0]['level'], coinname: value[0]['coinname'], coinpicture: value[0]['coinpicture'], percentage: value[0]['percentage'], investamount: value[0]['sum'] / 100 }))
             .value()
 
+          console.log(this.passOrders)
         })
       }
     })
@@ -83,16 +127,23 @@ export class OrderPage implements OnInit {
     this.resultCountDown()
   }
 
+  changeCoin(selected) {
+    this.selected.name = selected.name;
+    this.selected.id = selected.id
+    this.selected['amount'] = this.coinList.find(c => c['id'] == this.selected['id'])['amount'] || 0
+    // this.rangevalue = this.selected['amount'] / this.currentUser['amount'] * 100
+  }
+
   back() {
-    this.nav.pop()
+    this.outlet.canGoBack() ? this.nav.pop() : this.router.navigate(['home'], { replaceUrl: true });
   }
 
   goprofile() {
     this.nav.navigateForward('profile')
   }
 
-  godetails() {
-    this.nav.navigateForward('order-details')
+  godetails(x) {
+    this.nav.navigateForward('order-details?id=' + x + '&level=' + this.level)
   }
 
   resultCountDown() {
@@ -143,6 +194,10 @@ export class OrderPage implements OnInit {
   ionViewWillLeave() {
     clearInterval(this.interval2)
     clearInterval(this.interval3)
+  }
+
+  summaryById(coinid) {
+    return ((this.passOrders.find(x => x['coinid'] == coinid && x['level'] == this.level) || {}).investamount || 0)
   }
 
 }

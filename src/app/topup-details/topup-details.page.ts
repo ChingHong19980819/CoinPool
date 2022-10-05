@@ -8,6 +8,8 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
 import { DomSanitizer } from '@angular/platform-browser';
+import { IonRouterOutlet } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-topup-details',
@@ -16,7 +18,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class TopupDetailsPage implements OnInit {
 
-  constructor(private nav: NavController, public activatedroute: ActivatedRoute, private carPool: CarpoolService, private http: HttpClient, private sanitizer: DomSanitizer) { }
+  constructor(private nav: NavController, private outlet: IonRouterOutlet, private router: Router, public activatedroute: ActivatedRoute, private carPool: CarpoolService, private http: HttpClient, private sanitizer: DomSanitizer) { }
 
   topup = { amount: null }
   uid = ''

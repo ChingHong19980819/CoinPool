@@ -43,7 +43,6 @@ export class OTPPage implements OnInit {
   async sendCode() {
     let time = Math.floor(Math.random() * 1000000000);
     let code = time.toString().slice(0, 4)
-    console.log('+60' + this.phone)
     this.http.post(baseUrl + '/smsProvide', { phone: ('+60' + this.phone), code: code }).subscribe(async (a) => {
       // await this.loadingg.dismiss()
       this.startCountdown()
@@ -62,7 +61,6 @@ export class OTPPage implements OnInit {
       // console.log(this.counter)
       if (this.counter <= 0) {
         clearInterval(interval);
-        console.log('Ding!');
       }
     }, 1000);
   }

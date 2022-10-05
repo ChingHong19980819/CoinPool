@@ -4,7 +4,7 @@
     style="display: flex;align-items: center;justify-content: space-between;padding: 20px; color: #ffffff;padding: 20px;">
 
     <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
-    <div style="font-size: 18px; font-weight: 600;">Place Order</div>
+    <div style="font-size: 18px; font-weight: 600;">{{langua['Place Order'][lang]}}</div>
     <ion-icon (click)="toprofile()" style="font-size: 25px;" name="menu-outline"></ion-icon>
 
   </div>
@@ -13,22 +13,40 @@
 
 <ion-content style="--background:#000000;">
 
-  <div style="width: 100%; height: 100%; flex-direction: column; justify-content: center; overflow-y: auto;">
+  <div style="width: 100%;flex-direction: column; justify-content: center; overflow-y: auto;">
 
     <div style="padding: 20px;">
 
-      <div style="color:#888888; font-weight: 500;font-size: 12px; margin-bottom: 10px;">Available Balance</div>
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; margin-bottom: 10px; align-items: center;">
+          <img style="width: 30px; margin-right: 6px; " src="{{ picture }}" alt="">
+
+          <div style="font-size: 14px; color:#b3b3b3; text-align: center; font-weight: 550;"> {{ selected['name'] }}
+          </div>
+        </div>
+
+        <div [ngStyle]="{'color': type == 'low' ? '#20ba22' : 'tomato'}" style="color: white; font-weight: 550;"> {{
+          level[type]
+          }} </div>
+      </div>
+
+
+
+      <div style="color:#888888; font-weight: 500;font-size: 12px; margin-bottom: 10px;">{{langua['Available
+        Balance'][lang]}}</div>
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
 
         <div>
-          <div style="color:#ffffff; font-weight: 550;font-size: 35px;">${{ (currentUser.amount / 100 || 0) | number :
-            '.2' }}
+          <div style="color:#ffffff; font-weight: 550;font-size: 24px;">${{ (currentUser.amount / 100 || 0) | number :
+            '.2-2' }}
           </div>
         </div>
 
         <div>
 
-          <div style="background-color: #F0B900; padding: 5px 25px; border-radius: 20px; font-weight: 600;">{{start |
+          <div
+            style="background-color: #F0B900; font-size: 12px; padding: 5px 20px; border-radius: 20px; font-weight: 600;">
+            {{orderCountDownDate |
             date : 'dd.MM.yyyy' }}
           </div>
 
@@ -36,101 +54,168 @@
 
       </div>
 
-      <div style="width: 100%;display: flex; overflow-x: auto; margin-bottom: 20px; ">
 
-        <div *ngFor='let eve of coinList; let i = index; let last = last'
-          style="width: 150px; height: 90px;display: flex; margin: 10px 10px 20px 10px;  ">
 
-          <div (click)="changeCoin(eve)"
-            [ngStyle]="{'background': selected.name == eve.name ? 'linear-gradient(180deg, #FFDC66 0%, rgba(22, 23, 27, 0) 100%)' : 'linear-gradient(180deg, #595956 0%, rgba(22, 23, 27, 0) 100%)'  }"
-            style='width: 100px; height: 80px; border-radius:5px;color: #ffffff; padding: 5px; display: flex; flex-direction: column;'>
 
-            <div
-              style="display:flex;flex-direction: column; align-items: center; justify-content: space-between;  margin-bottom: 15px;">
+      <div
+        style="display: flex; justify-content:space-between; padding: 10px; align-items: center; margin-bottom: 10px; margin-top: 15px; margin-bottom: 25px;">
+        <ion-icon style="color: #F0B900; font-size: 16px;" (click)="previous()" name="chevron-back-outline"></ion-icon>
+        <div style="font-size: 16px; font-weight: 550; color: #F0B900;">{{ monthToShow + " " + yearToShow }}</div>
+        <ion-icon style="color: #F0B900; font-size: 16px;" (click)="next()" name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div style="display: flex; flex-wrap: wrap;">
+        <sup *ngFor="let void of days"
+          style="width: calc(100% / 7); font-size: 10px; text-align: center; font-weight: 550; margin-bottom: 10px; color: #F0B900;">
+          {{ void }}
+        </sup>
 
-              <img style="width: 25px; height: 25px; margin-right: 5px;" src="{{eve.picture}}" alt="">
-
-              <div style="font-size: 15px;font-weight: 700;">{{eve.cryptocurrency}}</div>
-
-              <div style="font-size: 13px;font-weight: 500; color: #888888;">{{eve.name}}</div>
-
-            </div>
-
+        <div *ngFor="let void of dates"
+          style="width: calc(100% / 7); padding: 2px 2px 2px 4px; height: 44px; border: 1px solid #23232b;">
+          <sup style="font-size: 9px; color: #F0B900;">
+            {{ void['date'] }}
+          </sup>
+          <div *ngIf="void['date'] !== ''"
+            style="font-size: 11px; display: flex; align-items: center; justify-content: center; width: 100%;">
+            <ion-icon style="color: #35CE8D; margin-right: 5px"
+              *ngIf="void['percentage'] && void['percentage'] != '' && void['percentage'] >= 0" name="caret-up-outline">
+            </ion-icon>
+            <ion-icon style="color: #FE4A49; margin-right: 5px"
+              *ngIf="void['percentage'] && void['percentage'] != '' && void['percentage'] < 0"
+              name="caret-down-outline"></ion-icon>
+            <div *ngIf="void['percentage'] && void['percentage'] != ''"
+              [ngStyle]="{'color': void['percentage'] < 0 ? '#FE4A49' : '#35CE8D'}"> {{ void['percentage'] || 0 |
+              number :
+              '.2-2' }} </div>
           </div>
         </div>
 
 
       </div>
+      <div
+        style="width: 100%; display: flex; align-items: center; justify-content: space-between; margin-top: 20px; margin-bottom: 15px;">
+        <div *ngIf="dates.length > 0"
+          style="width: calc(100% / 3); display: flex; align-items: center; justify-content: flex-start; ">
+          <div style="font-size: 12px; font-weight: 500; color: #ffffff; margin-right: 10px;">
+            {{langua['Summary'][lang]}} </div>
+          <div [ngStyle]="{'color': summary < 0 ? '#FE4A49' : '#35CE8D'}"
+            style=" padding: 5px 10px; background-color: #23232b; border-radius: 5px; font-size: 12px; ">
+            {{ summary | number : '.2-2' }} </div>
+        </div>
 
-      <div style="position: relative; display: flex; align-items: center;margin-bottom: 20px;">
 
-        <ion-range [(ngModel)]="rangevalue" (ionChange)="rangeChange($event)" class="rangeF" min="0" max="100"
-          style="width: 100%; z-index: 100;">
+        <div style="width: calc(100% / 2); display: flex; align-items: center; justify-content: flex-end; ">
 
+
+          <div
+            style="width: fit-content; padding: 5px 10px; background-color: #23232b; border-radius: 5px; color: #35CE8D; font-weight: bold; font-size: 12px;  margin-right: 5px; display: flex; align-items: center; justify-content: center">
+            <ion-icon style="margin-right: 5px" name="caret-up"></ion-icon>
+            {{ totalUp }}
+          </div>
+
+          <div
+            style="width: fit-content; padding: 5px 10px; background-color: #23232b; border-radius: 5px; color: #FE4A49; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center">
+            <ion-icon style="margin-right: 5px" name="caret-down"></ion-icon>
+            {{ totalDown }}
+          </div>
+        </div>
+
+      </div>
+      <div style="position: relative; display: flex; align-items: center; ">
+
+        <ion-range [(ngModel)]="rangevalue" (ionKnobMoveEnd)="rangeChange($event)" class="rangeF" min="0"
+          [max]="maxValue" style="width: 100%;  z-index: 100; --knob-size: 20px; --bar-height: 4px">
         </ion-range>
 
-        <div style="width: 25px; z-index: -1; height: 25px; border-radius: 100%; left: calc( 0% );
+        <div style="width: 15px; z-index: -1; height: 15px; border-radius: 100%; left: calc( 25% - 12.5px );
            background-color: #F0B900; position: absolute; z-index: 1000;">
         </div>
 
         <div [ngStyle]="{'background': rangevalue >= '25'? '#F0B900 ' : ' #ffffff' }"
-          style="width: 25px; height: 25px; border-radius: 100%;left: calc( 25% - 12.5px); position: absolute; z-index: 1000;">
+          style="width: 15px; height: 15px; border-radius: 100%;left: calc( 25% - 12.5px); position: absolute; z-index: 1000;">
         </div>
 
-        <div [ngStyle]="{'background': rangevalue >= '50'? '#F0B900 ' : ' #ffffff' }" style="width: 25px; height: 25px; border-radius: 100%; left: calc( 50% - 12.5px);
+        <div [ngStyle]="{'background': rangevalue >= '50'? '#F0B900 ' : ' #ffffff' }" style="width: 15px; height: 15px; border-radius: 100%; left: calc( 50% - 12.5px);
           background-color: #F0B900;  position: absolute; z-index: 1000;">
         </div>
 
 
-        <div [ngStyle]="{'background': rangevalue >= '75' ? '#F0B900 ' : ' #ffffff' }" style="width: 25px; height: 25px; border-radius: 100%; left: calc( 75% - 12.5px);
+        <div [ngStyle]="{'background': rangevalue >= '75' ? '#F0B900 ' : ' #ffffff' }" style="width: 15px; height: 15px; border-radius: 100%; left: calc( 75% - 12.5px);
           background-color: #F0B900;  position: absolute; z-index: 1000;">
         </div>
 
-        <div [ngStyle]="{'background': rangevalue >= '100' ? '#F0B900 ' : ' #ffffff' }" style="width: 25px; height: 25px; border-radius: 100%; left: calc( 100% - 25px); 
+        <div [ngStyle]="{'background': rangevalue >= '100' ? '#F0B900 ' : ' #ffffff' }" style="width: 15px; height: 15px; border-radius: 100%; left: calc( 100% - 25px); 
           background-color: #F0B900;position: absolute; z-index: 1000;">
         </div>
 
 
 
       </div>
-
       <div style="position: relative; display: flex; align-items: center; color: #ffffff;">
 
         <div
-          style="width: 40px ; height: 25px; border-radius: 100%; left: calc( 0% + 5px );position: absolute; z-index: 1000;">
+          style="width: 40px ; border-radius: 100%; left: calc( 0% + 5px ); font-size: 12px; position: absolute; z-index: 1000;">
           0%
         </div>
 
         <div
-          style="width: 40px; height: 25px; border-radius: 100%;left: calc( 25% - 12.5px);position: absolute; z-index: 1000;">
+          style="width: 40px; border-radius: 100%;left: calc( 25% - 12.5px); font-size: 12px;  position: absolute; z-index: 1000;">
           25%
         </div>
 
         <div
-          style="width: 40px; height: 25px; border-radius: 100%; left: calc( 50% - 12.5px);position: absolute; z-index: 1000;">
+          style="width: 40px;  border-radius: 100%; left: calc( 50% - 12.5px); font-size: 12px;  position: absolute; z-index: 1000;">
           50%
         </div>
 
 
         <div
-          style="width: 40px; height: 25px; border-radius: 100%; left: calc( 75% - 12.5px);position: absolute; z-index: 1000;">
+          style="width: 40px; border-radius: 100%; left: calc( 75% - 12.5px); font-size: 12px; position: absolute; z-index: 1000;">
           75%
         </div>
 
         <div
-          style="width: 50px; height: 25px; border-radius: 100%; left: calc( 100% - 30px); position: absolute; z-index: 1000;">
+          style="width: 50px; border-radius: 100%; left: calc( 100% - 30px); font-size: 12px; position: absolute; z-index: 1000;">
           100%
         </div>
       </div>
 
+
       <div
         style="display: flex; align-items: center; justify-content: center; flex-direction: column; margin: 20px 0px;">
 
-        <div style="color: #ffffff;margin: 20px 0px;">Amount: ${{ roundTo((selected.amount / 100), 2) || 0 | number :
-          '.2' }}</div>
+        <!-- <div style="color: #ffffff;margin: 20px 0px; font-size: 12px; ">Amount: ${{ roundTo((selected.amount / 100), 2)
+          || 0 | number :
+          '.2-2' }}</div> -->
 
-        <div (click)="goplaceorder()" style="border: 3px solid #F0B900;border-radius: 5px;padding: 5px 10px; width: 60%;font-size: 22px; color: #F0B900; display: flex;align-items: center;
-      justify-content: center; text-align: center;">Custom Amount</div>
+        <!-- <div style="padding: 5px 10px; width: 60%; font-size: 16px; margin-bottom: 10px; color: #F0B900; display: flex;align-items: center;
+      justify-content: center; text-align: start;">Custom Amount</div> -->
+
+        <div style="display: flex; align-items: center;justify-content: space-between; width: 100%; margin-top: 5px;">
+          <!-- <div style="color: #F0B900; font-size: 14px; font-weight: 500; margin-right: 10px">Custom Amount</div> -->
+          <div
+            style="width: 100%; height: 40px; border: 1px solid #F0B900;border-radius: 10px;padding: 10px; display: flex; align-items:center; justify-content: space-between; ">
+            <!-- <div
+      style="background: #F0B900; border-radius: 20px; width: 30px;display: flex;justify-content: center; align-items: center;">
+      <ion-icon name="chevron-down-outline"></ion-icon>
+    </div> -->
+            <div style="color: #F0B900; font-size: 12px; font-weight: 500; margin-right: 10px">{{langua['Custom
+              Amount'][lang]}}</div>
+
+            <ion-input type="number" [(ngModel)]="amount" (ionChange)="changePercentage($event)" step=".01"
+              style="border: none; outline : 0; width: 50%; font-size: 16px; background-color: transparent; color: white; text-align: end;"
+              placeholder="0"></ion-input>
+          </div>
+        </div>
+
+        <div style="width: 100%; display: flex; align-items: center; justify-content: space-between; margin-top: 5px;">
+          <!-- <div (click)="confirm()" style="background:#F0B900; border-radius: 5px; padding: 5px 15px;font-size: 12px; font-weight: 600; color: #000000; display: flex;align-items: center;
+          justify-content: center; ">CONFIRM</div> -->
+
+          <div
+            style="color: #e0e0e0; display: flex;justify-content: flex-end; width: 100%;  font-size: 15px; margin-top: 4px;">
+            {{langua['Min'][lang]}} : $ {{ 100 | number : '.2-2'}}
+          </div>
+        </div>
 
       </div>
 
@@ -138,9 +223,9 @@
     <div style="width:100%;display: flex; align-items: center; justify-content: center; flex-direction: column;">
 
       <div style="background: linear-gradient(180deg, rgba(50, 41, 41, 0.896) 3.65%, rgba(70, 71, 79, 0.08) 100%);
-       width: 100%;max-width: 500px; height: 100%; border-radius: 25px; padding: 20px">
+       width: 100%;max-width: 500px; border-radius: 25px; padding: 20px">
 
-        <div *ngFor="let x of coinList"
+        <!-- <div *ngFor="let x of coinList"
           style="display: flex;flex-direction: column; align-items: center; margin-bottom: 20px; ">
 
           <div style="display:flex; justify-content: space-between; width: 100%; align-items: center;">
@@ -153,11 +238,11 @@
 
             </div>
 
-            <div style="color: #ffffff;">${{roundTo((x.amount / 100), 2) || 0 | number : '.2'}}</div>
+            <div style="color: #ffffff;">${{roundTo((x.amount / 100), 2) || 0 | number : '.2-2'}}</div>
 
           </div>
 
-        </div>
+        </div> -->
 
         <!-- 
         <div *ngIf="passOrders.length == 0"
@@ -165,25 +250,40 @@
           No Transactions..
         </div> -->
 
-        <div style="width: 100%; text-align: center; color: white; font-size: 14px;"> Total: $ {{ sumAmount() | number :
-          '.2'
-          }} </div>
+        <div style="width: 100%; text-align: center; color: white; font-size: 14px;">{{langua['Total'][lang]}} : <span
+            [ngStyle]="{'color': amount > (currentUser.amount / 100) ? 'red' : 'white' }"> $ {{ amount || 0 |
+            number :
+            '.2-2'
+            }} </span> / ${{ (currentUser.amount / 100 || 0) | number :
+          '.2-2' }} </div>
 
         <div (click)="buyOrder()" style="margin-top: 15px; background:#F0B900; border-radius: 5px; padding: 10px; width: 100%;font-size: 16px; font-weight: 550; color: #000000; display: flex;align-items: center;
-        justify-content: center; margin-bottom: 15px;">Place Order</div>
+        justify-content: center; margin-bottom: 15px;">{{langua['Place Order'][lang]}}</div>
 
       </div>
-
-
-
     </div>
-
-
-
-
-
-
-
 
   </div>
 </ion-content>
+
+<div *ngIf="news.length > 0" [ngClass]="show ? 'bottom' : 'bottomx'" style="width: 100%; height: 100%; display: flex;
+ align-items: center; justify-content: center; position: fixed; left: 0;
+   background-color: rgba(0, 0, 0, 0.7); transition: .2s;">
+  <ion-slides [options]="slideOpts" style="width: 100%; height: 100%;">
+    <ion-slide *ngFor="let x of news">
+      <div style="max-width: 400px; width: 90%;  border-radius: 5px; background-color: white; position: relative;">
+        <div (click)="show = !show" style="color: white; background-color: red; z-index: 100; width: 25px; position: absolute; top: -10px; right: -10px;
+        border-radius: 100px; display: flex; align-items: center; justify-content: center; height: 25px; ">
+          <ion-icon style="font-size: 20px;" name="close-outline"></ion-icon>
+        </div>
+        <img src="{{lang == 'English' ? x.photo_en : x.photo_cn }}"
+          style="width: 100%; border-radius: 5px 5px 0px 0px;">
+        <div style="margin-top: 10px; font-size: 16px; font-weight: bold; padding: 15px; width: 100%;">
+          {{ lang == 'English' ? x.title_en : x.title_cn }}</div>
+        <div style="margin-top: 10px; font-size: 14px; font-weight: 400; padding: 15px; width: 100%;">
+          {{ lang == 'English' ? x.description_en : x.description_cn}}</div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+
+</div>

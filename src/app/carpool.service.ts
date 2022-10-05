@@ -48,7 +48,9 @@ export class CarpoolService {
     Swal.fire({
       title: title,
       text: description,
-      icon: icon
+      icon: icon,
+      showCancelButton: true,
+      timerProgressBar: false,
     })
   }
 
@@ -105,6 +107,64 @@ export class CarpoolService {
     })
   }
 
+  abbreviate(number, maxPlaces, forcePlaces, forceLetter) {
+    number = Number(number)
+    forceLetter = forceLetter || false
+    if (forceLetter !== false) {
+      return this.annotate(number, maxPlaces, forcePlaces, forceLetter)
+    }
+    var abbr
+    if (number >= 1e12) {
+      abbr = 'T'
+    }
+    else if (number >= 1e9) {
+      abbr = 'B'
+    }
+    else if (number >= 1e6) {
+      abbr = 'M'
+    }
+    else if (number >= 1e3) {
+      abbr = 'K'
+    }
+    else {
+      abbr = ''
+    }
+
+    return this.annotate(number, maxPlaces, forcePlaces, abbr)
+  }
+
+  annotate(number, maxPlaces, forcePlaces, abbr) {
+    // set places to false to not round
+    var rounded: any = 0
+    switch (abbr) {
+      case 'T':
+        rounded = number / 1e12
+        break
+      case 'B':
+        rounded = number / 1e9
+        break
+      case 'M':
+        rounded = number / 1e6
+        break
+      case 'K':
+        rounded = number / 1e3
+        break
+      case '':
+        rounded = number
+        break
+    }
+    if (maxPlaces !== false) {
+      var test = new RegExp('\\.\\d{' + (maxPlaces + 1) + ',}$')
+      if (test.test(('' + rounded))) {
+        rounded = rounded.toFixed(maxPlaces)
+      }
+    }
+    if (forcePlaces !== false) {
+      rounded = Number(rounded).toFixed(forcePlaces)
+    }
+    return rounded + abbr
+  }
+
   pictureToLink(file, folder) {
     return new Promise((resolve, reject) => {
       if (file != null && file != undefined && file != '') {
@@ -124,11 +184,8 @@ export class CarpoolService {
 
         bucket.upload(params, function (err, data) {
           if (err) {
-            console.log('There was an error uploading your file: ', err);
             reject({ success: false, message: 'Something went wrong!' })
           }
-
-          console.log(data)
 
           resolve({ success: true, link: data['Location'] })
         });
@@ -177,11 +234,8 @@ export class CarpoolService {
 
         bucket.upload(params, function (err, data) {
           if (err) {
-            console.log('There was an error uploading your file: ', err);
             reject({ success: false, message: 'Something went wrong!' })
           }
-
-          console.log(data)
 
           resolve({ success: true, link: data['Location'] })
         });
@@ -244,7 +298,30 @@ export class CarpoolService {
     })
   }
 
+  swal_button2(title, text, icon) {
+    return new Promise((resolve, reject) => {
+      Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        showCancelButton: false,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: "Resend!",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          resolve('Confirm')
+        } else {
+          resolve('No')
+        }
+      })
+    })
+  }
+
   swalclose() {
     Swal.close()
   }
+
+
 }

@@ -17,4 +17,4 @@ import { OrderDetailsPage } from './order-details.page';
   ],
   declarations: [OrderDetailsPage]
 })
-export class OrderDetailsPageModule {}
+export class OrderDetailsPageModule { }

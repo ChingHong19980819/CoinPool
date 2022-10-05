@@ -1,7 +1,7 @@
 <ion-header style=" background:#000000;">
   <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px; color: #ffffff;">
     <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
-    <div style="font-size: 18px; font-weight: 600;">Withdrawal</div>
+    <div style="font-size: 18px; font-weight: 600;">{{langua['Withdrawal'][lang]}}</div>
     <ion-icon style="font-size: 24px; color: transparent" slot="start" name="add"></ion-icon>
   </div>
 </ion-header>
@@ -15,7 +15,7 @@
 
       <div style="width: 100%; color: #ffffff; display: flex; justify-content: center;margin-bottom: 20px;">
 
-        <div style=" color: #F0B900; font-weight: 600; font-size: 18px;">Send USDT</div>
+        <div style=" color: #F0B900; font-weight: 600; font-size: 18px;">{{langua['Send USDT'][lang]}}</div>
 
       </div>
 
@@ -24,60 +24,65 @@
         <div
           style=" width:265px; height: 40px; background: #333333;border-radius: 10px; display: flex; font-weight: 600;">
 
-          <div (click)="select = 'new'" [ngClass]=" select == 'new' ? 'selected' : 'selectedx' " style=" width:50%; height: 40px; border-radius: 10px; display: flex;
-         justify-content: center;align-items: center;">New Address</div>
+          <div (click)="select = 'new'; application.address = null"
+            [ngClass]=" select == 'new' ? 'selected' : 'selectedx' " style=" width:50%; height: 40px; border-radius: 10px; display: flex;
+         justify-content: center;align-items: center;">{{langua['New Address'][lang]}}</div>
 
-          <div (click)="select = 'old'" [ngClass]=" select == 'old' ? 'selected' : 'selectedx' "
+          <div (click)="select = 'old'; application.address = null"
+            [ngClass]=" select == 'old' ? 'selected' : 'selectedx' "
             style=" width: 50%; height: 40px; display: flex;border-radius: 10px; justify-content: center;align-items: center;">
-            Address Book</div>
+            {{langua['Address Book'][lang]}}</div>
 
         </div>
 
       </div>
 
       <div style="width: 100%; color: #ffffff;">
-
-
-
-        <div style="margin: 10px 0px;">Address</div>
+        <div style="margin: 10px 0px;">{{langua['Address'][lang]}} </div>
 
         <div style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px;
        border-radius: 8px; align-items: center; height: 35px; margin-bottom: 25px;">
           <ion-input *ngIf="select == 'new'" [(ngModel)]="application.address"
             style="font-size: 14px;margin: 5px;color: #FFFFFF;" class="ion-no-padding" type="text"
-            placeholder="Enter Address">
+            [placeholder]="langua['Enter Address'][lang]">
           </ion-input>
 
-          <div (click)="onClick()" *ngIf="select != 'new'" style="color: gray; width: 100%; font-size: 14px;"> Select
-            Address </div>
+          <div *ngIf="select != 'new' && !application.address" (click)="onClick()"
+            style="color: gray; width: 100%; font-size: 14px; font-weight: 550;">{{langua['Select
+            Address'][lang]}}
+          </div>
+          <div *ngIf="select != 'new' && application.address" (click)="onClick()"
+            style="color: white; width: 100%; font-size: 14px;"> {{application.address}}
+          </div>
 
         </div>
 
-        <div style="margin: 10px 0px;">Network</div>
+        <div style="margin: 10px 0px;"> {{langua['Network'][lang]}}</div>
 
         <div (click)="tonetwork()" style="display: flex;color: #ffffff; background: #2A2B2F; padding: 10px 15px;
        border-radius: 8px; align-items: center; height: 35px; margin-bottom: 25px; ">
           <ion-input readonly="true" [(ngModel)]="application.network"
             style="font-size: 14px;margin: 5px;color: #FFFFFF;" class="ion-no-padding" type="text"
-            placeholder="Select Network">
+            [placeholder]="langua['Select Network'][lang]">
           </ion-input>
 
           <ion-icon style="color:#666666; font-size: 25px;" name="chevron-forward-outline">
           </ion-icon>
         </div>
 
-        <div style="margin: 10px 0px;">Amount</div>
+        <div style="margin: 10px 0px;">{{langua['Amount'][lang]}}</div>
 
         <div style="display: flex;  color: #ffffff; background: #2A2B2F; padding: 10px 15px;
        border-radius: 8px; align-items: center; height: 35px; margin-bottom: 25px;">
           <ion-input [(ngModel)]="application.amount"
             style="font-size: 14px; width: calc(100% - 80px); margin: 5px;color: #FFFFFF;" class="ion-no-padding"
-            type="text" placeholder="Minimum 0">
+            type="text" [placeholder]="langua['Enter your amount'][lang]">
           </ion-input>
 
           <div style="display: flex;">
 
-            <div (click)="maxwith()" style="color: #F0B900; font-weight: 700; font-size: 15px;">Max&nbsp;</div>
+            <div (click)="maxwith()" style="color: #F0B900; font-weight: 700; font-size: 15px;">
+              {{langua['Max'][lang]}}&nbsp;</div>
             <!-- <div style="color:#666666;">|</div>
             <div style="font-weight:700; font-size: 15px; color: #666666;">&nbsp;USDT</div> -->
 
@@ -96,27 +101,28 @@
       <div
         style="display: flex; width: 100%; justify-content: space-between; border-bottom: 1px solid #888888;margin-bottom: 20px;">
 
-        <div style="font-weight: 600; font-size: 18px; color: #ffffff;">Available</div>
+        <div style="font-weight: 600; font-size: 18px; color: #ffffff;">{{langua['Available'][lang]}}</div>
         <div style="font-weight: 600; font-size: 18px; color: #F0B900; margin-bottom: 20px;">{{currentUser.amount / 100
           || 0 |
-          number : '.2'}} USDT</div>
+          number : '.2-2'}} USDT</div>
 
       </div>
 
       <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
 
         <div style="color: #ffffff;">
-          <div style="font-weight: 600; font-size: 20px; color: #ffffff;">Receive Amount</div>
+          <div style="font-weight: 600; font-size: 20px; color: #ffffff;">{{langua['Receive Amount'][lang]}}</div>
           <div style="font-weight: 600; font-size: 28px; color: #F0B900; margin: 10px 0px;">{{ ((application.amount *
-            0.96) | number : '.2')
+            0.94) | number : '.2-2')
             || 0 }} USDT</div>
-          <div style="font-size: 10px; color: #888888;">*Withdrawal charges 6% of total amount</div>
-          <div style="font-size: 10px; color: #888888;">*Your request will process within 48 hour</div>
+          <div style="font-size: 10px; color: #888888;">{{langua['*Withdrawal charges 6% of total amount'][lang]}}</div>
+          <div style="font-size: 10px; color: #888888;">{{langua['*Your request will process within 48 hour'][lang]}}
+          </div>
         </div>
 
         <div (click)="newWithdraw()" style="background: #F0B900; border-radius: 8px; height: 40px; width: 110px; font-weight: 700; display: flex;
            justify-content: center;align-items: center;">
-          Withdraw
+          {{langua['Withdraw'][lang]}}
         </div>
 
 

@@ -20,14 +20,15 @@
 
       <div>
 
-        <div style="color:#ffffff; font-weight: 550;font-size: 35px;">$ {{ (currentUser['amount'] / 100) | number : '.2'
+        <!-- <div style="color:#ffffff; font-weight: 550;font-size: 35px;">$ {{ (currentUser['amount'] / 100) | number : '.2'
           }}
-        </div>
+        </div> -->
       </div>
 
       <div>
 
-        <div style="background-color: #F0B900; padding: 5px 25px; border-radius: 20px; font-weight: 600;">{{today | date
+        <div style="background-color: #F0B900; padding: 5px 25px; border-radius: 20px; font-weight: 600;">
+          {{orderCountDownDate | date
           : 'dd.M.yyyy' }}
         </div>
 
@@ -51,17 +52,12 @@
       </div>
     </div>
 
-    <div style="color: #ffffff; display: flex; flex-direction: row-reverse; margin: 30px 0px;">Min: $1000</div>
-
+    <div style="color: #ffffff; display: flex; flex-direction: row-reverse; margin: 30px 0px;">Min: $100</div>
 
     <div
       style="display: flex; align-items: center; justify-content: center; flex-direction: column; margin-bottom: 20px;">
-
       <div (click)="confirm()" style="background:#F0B900; font-weight: 600; border-radius: 10px; padding: 10px 15px; font-size: 20px; color: #000000; display: flex;align-items: center;
       justify-content: center;">Confirm</div>
-
-
-
     </div>
 
   </div>

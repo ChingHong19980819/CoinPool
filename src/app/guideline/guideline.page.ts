@@ -3,6 +3,8 @@ import { IonSlides, NavController } from '@ionic/angular';
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
+import { IonRouterOutlet } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-guideline',
@@ -12,9 +14,19 @@ import 'firebase/auth';
 export class GuidelinePage implements OnInit {
 
   @ViewChild('slides', { static: false }) slides: IonSlides;
+  lang = localStorage.getItem('coinpool_language') || 'English'
 
+  langua = {
+    ["Guideline"]: {
+      Chinese: "指南",
+      English: "Guideline",
+    }, ["Result History"]: {
+      Chinese: "历史成绩",
+      English: "Result History",
+    }
+  }
 
-  constructor(private nav: NavController) { }
+  constructor(private nav: NavController, private outlet: IonRouterOutlet, private router: Router) { }
   videos = []
   videoPath = ''
   currentStep = 0;
@@ -35,7 +47,7 @@ export class GuidelinePage implements OnInit {
 
   back() {
     if (this.currentStep == 0) {
-      this.nav.pop()
+      this.outlet.canGoBack() ? this.nav.pop() : this.router.navigate(['profile'], { replaceUrl: true });
     } else {
       let videoSrc = <HTMLVideoElement>document.getElementById('videoPlayer')
       videoSrc.pause()

@@ -1,9 +1,18 @@
-.rangeF{
+.rangeF {
     --knob-size: 35px;
     --knob-background: #F0B900;
     --bar-height: 8px;
     --bar-background-active: #F0B900;
     --bar-background: #FFFFFF;
     --bar-border-radius: 10px;
-    
+}
+
+.bottom {
+    z-index: 100;
+    top: 0;
+}
+
+.bottomx {
+    z-index: -100;
+    top: 100vh;
 }

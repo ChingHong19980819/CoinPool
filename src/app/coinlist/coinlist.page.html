@@ -1,0 +1,60 @@
+<ion-header style=" background:#000000;">
+
+  <div style="display: flex;align-items: center;justify-content: space-between;padding: 20px;color: #ffffff;">
+
+    <ion-icon (click)="back()" style="font-size: 24px" slot="start" name="chevron-back-outline"></ion-icon>
+    <div style="font-size: 18px; font-weight: 600;">{{langua['Coin List'][lang]}}</div>
+    <div style="width: 1px;"></div>
+    <!-- <ion-icon (click)="goprofile()" style="font-size: 25px;" name="menu-outline"></ion-icon> -->
+
+  </div>
+
+</ion-header>
+
+<ion-content style="--background: black;">
+  <div
+    style="width: calc(100% - 40px);  margin: 20px 20px 0 20px; display: flex; flex-wrap: wrap; justify-content: space-between; ">
+
+    <div (click)="godetails(eve.id)" *ngFor='let eve of coinList; let i = index; let last = last'
+      style="width:calc((100% - 40px) / 2); height: calc(120px - 10px); border-radius: 15px; background-color: #23232b; padding: 15px 10px 15px 20px; margin: 0 10px 35px 10px; display: flex; display: flex; justify-content: center; ">
+      <div style="width: 100%;">
+
+        <div style="display: flex; align-items: center">
+
+          <img style="width: 30px; height: 30px;" src="{{eve.picture}}" alt="">
+
+
+          <div style="display: flex; align-items: flex-start; flex-direction: column; margin-left: 10px;">
+
+            <div style="font-size: 12px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px;">
+              {{eve.cryptocurrency}}</div>
+            <div style="font-size: 12px; color: #888888; ">{{eve.name}}</div>
+          </div>
+
+        </div>
+
+        <div style="display: flex; margin-top: 15px; position: relative; width: max-content;">
+
+          <div style="color: white; font-size: 15px; margin-right: 5px;"> {{ eve.current_value }} </div>
+
+          <div *ngIf="eve.current_value"
+            style="display: flex; align-items: center; margin-right: 10px; padding-bottom: 6px; position: absolute; right: -90px; width: 80px; top: 0px;">
+
+            <ion-icon *ngIf="summaryById(eve.id) >= 0" style="color: #35CE8D; margin-right: 2px;"
+              name="caret-up-outline"></ion-icon>
+            <ion-icon *ngIf="summaryById(eve.id) < 0" style="color: #FE4A49; margin-right: 2px;"
+              name="caret-down-outline"></ion-icon>
+
+            <div [ngStyle]="{'color': summaryById(eve.id) < 0 ? '#FE4A49' : '#35CE8D'}" style="font-size: 12px;">
+              {{summaryById(eve.id) | number : '.2-2'}} % </div>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+
+  </div>
+</ion-content>
